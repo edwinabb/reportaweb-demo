@@ -125,3 +125,32 @@
 
 **Last Updated:** 2026-07-14  
 **Next Review:** After Phase 3 production deployment (2026-07-18)
+
+---
+
+## 🚨 Pendientes Post-Migración OpenNext (2026-07-13)
+
+### 1. ⚠️ CRÍTICO: Migrar cron jobs (Vercel Crons eliminados)
+`vercel.json` tenía 6 crons que YA NO CORREN al salir de Vercel:
+- `/api/cron/epp-alertas` (diario 9:00) · `/api/cron/epp-reporte-semanal` (lunes 8:00)
+- `/api/cron/documentos-vencidos` (diario 6:00) · `/api/cron/pdf-jobs` (diario 5:00)
+- `/api/cron/trial-emails` (diario 8:00) · `/api/cron/trial-expiry` (diario 7:00)
+
+**Opciones:** Cloudflare Cron Triggers (requiere handler `scheduled` en el worker
+OpenNext) o un servicio externo (cron-job.org / GitHub Actions) que haga fetch a
+las URLs con el header `Authorization: Bearer ${CRON_SECRET}`.
+
+### 2. Subir APK a Supabase Storage
+El APK (84 MB) se removió del repo (límite 25 MiB en Workers assets). El link en
+`/descargar-app` ya apunta a `apks/app-reportar-v3.9.10.apk` en Supabase Storage.
+**Acción:** subir el límite global de upload en Supabase (Settings → Storage,
+plan permite hasta 500 MB) y subir el archivo. Largo plazo: Play Store.
+
+### 3. Configurar Secrets en ambos Workers
+En cada proyecto (demo y live) → Settings → Variables and Secrets, agregar como
+**Secret**: `SUPABASE_SERVICE_ROLE_KEY`, `RESEND_API_KEY`, `CRON_SECRET`,
+`BUBBLE_API_TOKEN` (si aún se usa).
+
+### 4. Regenerar types/supabase.ts con schema v3.11
+Se restauró la versión de junio (2f0cec2). Falta `npx supabase login` y regenerar.
+El script `types:supabase` sobrescribe el archivo aunque falle — corregirlo.

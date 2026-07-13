@@ -47,7 +47,9 @@ export const metadata: Metadata = {
 
 const APK_VERSION = '3.9.10'
 const APK_FILE = `app-reportar-v${APK_VERSION}.apk`
-const APK_PATH = `/downloads/${APK_FILE}`
+// APK servido desde Supabase Storage (bucket "apks") — Cloudflare Workers
+// limita assets estáticos a 25 MiB, el APK pesa 84 MB.
+const APK_PATH = `https://fqwhagryqkkhbgznxtwf.supabase.co/storage/v1/object/public/apks/${APK_FILE}`
 
 const STEPS = [
     {

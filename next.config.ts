@@ -11,11 +11,6 @@ const nextConfig: NextConfig = {
     root: path.resolve(__dirname),
   },
 
-  // Cloudflare Pages optimization
-  experimental: {
-    webpackBuildWorker: false,
-  },
-
   async headers() {
     return [
       // Cloudflare cache headers for static assets
@@ -99,5 +94,4 @@ export default withSentryConfig(nextConfig, {
   widenClientFileUpload: true,
   sourcemaps: { disable: true },
   disableLogger: true,
-  automaticVercelMonitors: false,
 });

@@ -1,63 +1,27 @@
-# Cloudflare Pages configuration for reporta.app
-# Reference: https://developers.cloudflare.com/workers/wrangler/configuration/
+# Cloudflare Workers configuration for reporta.app (Next.js via OpenNext)
+# Docs: https://opennext.js.org/cloudflare
+#
+# Build:  npx opennextjs-cloudflare build
+# Deploy: npx wrangler deploy --name <worker-name>
+#   demo → npx wrangler deploy --name reportaweb3-demo
+#   live → npx wrangler deploy --name reportaweb3-live
 
 name = "reportaweb3"
-type = "javascript"
-account_id = "e8ccb5b6899509f1f9fdffa5cad4e615"
-workers_dev = false
+main = ".open-next/worker.js"
+compatibility_date = "2026-06-01"
+compatibility_flags = ["nodejs_compat"]
 
-# Build command for Next.js
-build = { command = "npm run build" }
+[assets]
+directory = ".open-next/assets"
+binding = "ASSETS"
 
-# Directories
-main = "out/_worker.js"
-site = { include = "out/static" }
-
-# Environment: staging (web.reportar.app)
-[env.staging]
-name = "reportaweb3-staging"
-route = "web.reportar.app/*"
-zone_name = "reportar.app"
-
-vars = {
-  ENVIRONMENT = "staging",
-  NEXT_PUBLIC_SUPABASE_URL = "https://fqwhagryqkkhbgznxtwf.supabase.co"
-}
-
-[env.staging.triggers.crons]
-# Optional: cron job for database cleanup (if needed)
-# "0 2 * * *" = daily at 2 AM UTC
-
-# Environment: demo (demo.reportar.app)
-[env.demo]
-name = "reportaweb3-demo"
-route = "demo.reportar.app/*"
-zone_name = "reportar.app"
-
-vars = {
-  ENVIRONMENT = "demo",
-  NEXT_PUBLIC_SUPABASE_URL = "https://fqwhagryqkkhbgznxtwf.supabase.co"
-}
-
-# Environment: production (live.reportar.app)
-[env.production]
-name = "reportaweb3-production"
-route = "live.reportar.app/*"
-zone_name = "reportar.app"
-
-vars = {
-  ENVIRONMENT = "production",
-  NEXT_PUBLIC_SUPABASE_URL = "https://fqwhagryqkkhbgznxtwf.supabase.co"
-}
-
-# Secrets (keep sensitive data separate, not in wrangler.toml)
-# Use: wrangler secret put SUPABASE_SERVICE_ROLE_KEY --env production
-# [env.production.secrets]
-# SUPABASE_SERVICE_ROLE_KEY
-# RESEND_API_KEY
-
-# Optional: Rate limiting (Cloudflare Pro feature)
-[env.production.routes]
-pattern = "live.reportar.app/*"
-zone_name = "reportar.app"
-custom_domain = true
+# Runtime environment variables (non-sensitive).
+# Sensitive values (SUPABASE_SERVICE_ROLE_KEY, RESEND_API_KEY, CRON_SECRET)
+# must be set as Secrets in the Cloudflare dashboard:
+# Worker → Settings → Variables and Secrets
+[vars]
+NEXT_PUBLIC_SUPABASE_URL = "https://fqwhagryqkkhbgznxtwf.supabase.co"
+NEXT_PUBLIC_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZxd2hhZ3J5cWtraGJnem54dHdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3NjU4NjIsImV4cCI6MjA5NTM0MTg2Mn0.LRvhkIl-BGYY1Ftvmgc7gazhSYn6mFj7oWTINais3x0"
+SUPABASE_API_URL = "https://fqwhagryqkkhbgznxtwf.supabase.co"
+SUPABASE_PROJECT_ID = "fqwhagryqkkhbgznxtwf"
+GOTENBERG_URL = "https://infrastructure-gotenberg.0vt9eo.easypanel.host"
