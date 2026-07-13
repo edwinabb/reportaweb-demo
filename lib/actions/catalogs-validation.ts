@@ -127,7 +127,7 @@ async function auditRubros(adminClient: any, tenantId: string): Promise<CatalogA
 
   // Check for common rubros that should exist
   const commonRubros = ['Transportes', 'Construcción', 'Minería', 'Manufactura']
-  const existingNames = (rubros || []).map(r => r.nombre.toLowerCase())
+  const existingNames = (rubros || []).map((r: { nombre: string }) => r.nombre.toLowerCase())
 
   commonRubros.forEach(rubro => {
     if (!existingNames.includes(rubro.toLowerCase())) {
@@ -135,7 +135,7 @@ async function auditRubros(adminClient: any, tenantId: string): Promise<CatalogA
     }
   })
 
-  const inactive = (rubros || []).filter(r => !r.is_active).length
+  const inactive = (rubros || []).filter((r: { is_active: boolean }) => !r.is_active).length
 
   return {
     tableName: 'rubros',
