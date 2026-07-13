@@ -10,6 +10,9 @@ name = "reportaweb3"
 main = ".open-next/worker.js"
 compatibility_date = "2026-06-01"
 compatibility_flags = ["nodejs_compat"]
+# Minifica el bundle al deployar — el build remoto genera un handler ~7x más
+# grande que el local; sin esto excede el límite de tamaño de Workers.
+minify = true
 
 [assets]
 directory = ".open-next/assets"
