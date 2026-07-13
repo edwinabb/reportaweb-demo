@@ -196,7 +196,7 @@ async function auditContactosCargo(adminClient: any, tenantId: string): Promise<
   const missingItems: string[] = []
 
   const commonCargos = ['Gerente', 'Jefe', 'Coordinador', 'Operario']
-  const existingNames = (cargos || []).map(c => c.nombre.toLowerCase())
+  const existingNames = (cargos || []).map((c: { nombre: string }) => c.nombre.toLowerCase())
 
   commonCargos.forEach(cargo => {
     if (!existingNames.includes(cargo.toLowerCase())) {
@@ -204,7 +204,7 @@ async function auditContactosCargo(adminClient: any, tenantId: string): Promise<
     }
   })
 
-  const inactive = (cargos || []).filter(c => !c.is_active).length
+  const inactive = (cargos || []).filter((c: { is_active: boolean }) => !c.is_active).length
 
   return {
     tableName: 'contactos_cargo',
