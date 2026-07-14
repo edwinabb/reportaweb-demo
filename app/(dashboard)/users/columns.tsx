@@ -6,6 +6,7 @@ import { Profile } from "@/types"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Badge } from "@/components/ui/badge"
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header"
+import { DataTableColumnFilter } from "@/components/ui/data-table-column-filter"
 import { UserActions } from "@/components/users/user-actions"
 
 export const columns: ColumnDef<Profile>[] = [
@@ -57,7 +58,15 @@ export const columns: ColumnDef<Profile>[] = [
     {
         accessorKey: "role",
         header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Rol" />
+            <DataTableColumnFilter
+                column={column}
+                title="Rol"
+                options={[
+                    { label: "Admin Tenant", value: "admin_tenant" },
+                    { label: "Supervisor", value: "supervisor" },
+                    { label: "Member", value: "member" },
+                ]}
+            />
         ),
         cell: ({ row }) => {
             const role = row.getValue("role") as string
@@ -67,11 +76,42 @@ export const columns: ColumnDef<Profile>[] = [
                 </Badge>
             )
         },
+        filterFn: (row, id, value: Array<string | boolean>) => {
+            if (!value || value.length === 0) return true
+            return value.includes(row.getValue(id))
+        },
+    },
+    {
+        id: "tercero",
+        accessorFn: (row) => (row as any).tercero?.razon_social,
+        header: ({ column }) => (
+            <DataTableColumnFilter
+                column={column}
+                title="Proveedor"
+            />
+        ),
+        cell: ({ row }) => {
+            const u = row.original as any
+            const proveedor = u.tercero?.razon_social || '—'
+            return <span>{proveedor}</span>
+        },
+        filterFn: (row, id, value: Array<string | boolean>) => {
+            if (!value || value.length === 0) return true
+            const rowValue = (row.original as any).tercero?.razon_social
+            return value.includes(rowValue)
+        },
     },
     {
         accessorKey: "is_active",
         header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Estado" />
+            <DataTableColumnFilter
+                column={column}
+                title="Estado"
+                options={[
+                    { label: "Activo", value: true },
+                    { label: "Inactivo", value: false },
+                ]}
+            />
         ),
         cell: ({ row }) => {
             const isActive = row.getValue("is_active") as boolean
@@ -80,6 +120,10 @@ export const columns: ColumnDef<Profile>[] = [
                     {isActive ? "Activo" : "Inactivo"}
                 </Badge>
             )
+        },
+        filterFn: (row, id, value: Array<string | boolean>) => {
+            if (!value || value.length === 0) return true
+            return value.includes(row.getValue(id))
         },
     },
     {

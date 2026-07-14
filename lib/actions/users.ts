@@ -26,7 +26,8 @@ export async function getProfiles(onlyActive = true): Promise<Profile[]> {
                 signature_url,
                 job_title_id,
                 job_title:job_title_id(name)
-            )
+            ),
+            tercero:tercero_id(razon_social)
         `)
         .eq('tenant_id', targetTenantId)
 
@@ -77,7 +78,8 @@ export async function getProfileById(id: string): Promise<Profile | null> {
                 signature_url,
                 job_title_id,
                 job_title:job_title_id(name)
-            )
+            ),
+            tercero:tercero_id(razon_social)
         `)
         .eq('id', id)
         .single()
