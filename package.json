@@ -64,7 +64,7 @@
     "file-saver": "^2.0.5",
     "html2canvas": "^1.4.1",
     "init": "^0.1.2",
-    "jspdf": "^4.0.0",
+    "jspdf": "^4.2.1",
     "jszip": "^3.10.1",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.556.0",

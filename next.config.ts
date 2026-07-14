@@ -108,5 +108,7 @@ export default withSentryConfig(nextConfig, {
   silent: !process.env.CI,
   widenClientFileUpload: true,
   sourcemaps: { disable: true },
-  disableLogger: true,
+  // disableLogger fue deprecado; su reemplazo (webpack.treeshake.removeDebugLogging)
+  // no funciona con Turbopack, así que se omite. Solo afecta tree-shaking de logs
+  // internos de Sentry (~1-2 KB en el bundle).
 });

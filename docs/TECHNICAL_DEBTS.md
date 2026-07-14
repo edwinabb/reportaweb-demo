@@ -74,6 +74,36 @@ Para cambiar a Opción B, se debe:
 
 ---
 
+## DUDA-DEPS-001: Migrar xlsx (SheetJS) — vulnerabilidades altas sin fix en npm
+
+**Status:** 🟡 PENDIENTE  
+**Prioridad:** MEDIA  
+**Esfuerzo:** 2-4h (depende de cuántos módulos usan xlsx)
+
+### Contexto
+
+`xlsx@0.18.5` (SheetJS) tiene vulnerabilidades altas conocidas (prototype pollution,
+ReDoS) que **no tienen fix en el registro de npm**: SheetJS dejó de publicar ahí.
+Las versiones corregidas solo se distribuyen desde su CDN propio (https://cdn.sheetjs.com).
+
+### Opciones
+
+- **A)** Instalar desde el CDN de SheetJS: `npm i https://cdn.sheetjs.com/xlsx-latest/xlsx-latest.tgz`
+  (mismo API, cambio mínimo, pero la dependencia queda fuera de npm)
+- **B)** Migrar a `exceljs` u otra librería mantenida en npm (más trabajo, API distinta)
+
+### Mitigación actual
+
+El riesgo es bajo mientras xlsx solo procese archivos generados por nosotros
+(export). Si en algún momento se usa para **importar archivos subidos por
+usuarios**, esta deuda pasa a prioridad ALTA.
+
+### Timeline sugerido
+
+Evaluar junto con DUDA-CACHE-001 (semana 2026-07-28).
+
+---
+
 ## Template para nuevas DUDAs
 
 ```markdown
