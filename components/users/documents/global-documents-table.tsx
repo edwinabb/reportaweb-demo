@@ -85,6 +85,7 @@ export function GlobalDocumentsTable({
     const searchTerm = searchParams.get('search') || ''
     const currentDocType = searchParams.get('documentTypeId') || 'all'
     const currentExpiryStatus = searchParams.get('expiryStatus') || 'all'
+    const currentStatus = searchParams.get('status') || 'all'
 
     // Handlers
     const handleSearch = (term: string) => {
@@ -107,6 +108,14 @@ export function GlobalDocumentsTable({
         const params = new URLSearchParams(searchParams)
         if (status && status !== 'all') params.set('expiryStatus', status)
         else params.delete('expiryStatus')
+        params.set('page', '1')
+        router.push(`${pathname}?${params.toString()}`)
+    }
+
+    const handleStatusFilter = (status: string) => {
+        const params = new URLSearchParams(searchParams)
+        if (status && status !== 'all') params.set('status', status)
+        else params.delete('status')
         params.set('page', '1')
         router.push(`${pathname}?${params.toString()}`)
     }
@@ -280,6 +289,16 @@ export function GlobalDocumentsTable({
                             <SelectItem value="all">Todos (Vencimiento)</SelectItem>
                             <SelectItem value="expiring">Por vencer</SelectItem>
                             <SelectItem value="expired">Vencidos</SelectItem>
+                        </SelectContent>
+                    </Select>
+                    <Select value={currentStatus} onValueChange={handleStatusFilter}>
+                        <SelectTrigger className="w-[140px]">
+                            <SelectValue placeholder="Estado" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="all">Todos (Estado)</SelectItem>
+                            <SelectItem value="active">Activos</SelectItem>
+                            <SelectItem value="inactive">Inactivos</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>
