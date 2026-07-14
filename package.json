@@ -24,7 +24,9 @@
     "types:supabase": "npx supabase gen types typescript --project-id wioozisskjjgjjybsoqo --schema public > types/supabase.ts",
     "db:local": "supabase start",
     "db:push:test": "dotenv -e .env.local -- tsx scripts/db-push.ts --env test",
-    "db:push:prod": "dotenv -e .env.local -- tsx scripts/db-push.ts --env prod"
+    "db:push:prod": "dotenv -e .env.local -- tsx scripts/db-push.ts --env prod",
+    "build:demo": "cp .env.demo .env.production && npm run build",
+    "build:live": "npm run build"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
