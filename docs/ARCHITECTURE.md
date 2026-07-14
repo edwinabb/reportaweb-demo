@@ -345,7 +345,7 @@ const tab = params.tab
 
 **Problem:** Large HTML docs take >30s to render in Gotenberg.
 
-**Symptom:** Vercel Function timeout (30s limit).
+**Symptom:** Worker request timeout (Cloudflare Workers CPU limit).
 
 **Fix:** Use async job queue; return signed URL, not PDF bytes.
 
@@ -403,19 +403,40 @@ WHERE tc.constraint_type = 'FOREIGN KEY'
 4. DB migration approved (if schema changed)
 5. No hardcoded secrets or API keys
 
-### Production Deployment (Vercel)
+### Infrastructure (Cloudflare Workers — desde 2026-07)
 
-1. Merge to `main`
-2. Vercel auto-builds + deploys to `web.reportar.app`
+| Entorno | URL | Repo GitHub | Base de datos |
+|---|---|---|---|
+| **Demo** | `demo.reportar.app` | `reportaweb-demo` | Test (`oyrokyyaeaeqzlsgxtto`, Brazil) |
+| **Producción** | `live.reportar.app` | `reportaweb-live` | Prod (`fqwhagryqkkhbgznxtwf`, Brazil) |
+| **Local** | `localhost:3000` | — | Test (via `.env.local`) |
+
+**Stack de deployment:**
+- **Adapter:** `@opennextjs/cloudflare` (Next.js 16 → Cloudflare Workers)
+- **Config:** `wrangler.toml` (worker + assets + variables) y `open-next.config.ts`
+- **Build:** `npm run build` + `npx opennextjs-cloudflare build` → `.open-next/worker.js`
+- **Límites:** worker ≤10 MiB comprimido (plan pago, `minify = true` obligatorio); assets ≤25 MiB por archivo (NO commitear APKs)
+- **Middleware:** debe ser Edge-compatible (`middleware.ts` con `updateSession` de Supabase; Node middleware NO soportado)
+- **Sentry:** solo client-side (instrumentation server-side incompatible con OpenNext worker)
+- **Secrets:** Cloudflare Dashboard → Worker → Settings → Variables and Secrets (`SUPABASE_SERVICE_ROLE_KEY`, `RESEND_API_KEY`, `CRON_SECRET`)
+
+### Production Deployment (Cloudflare)
+
+1. Push a `master` del repo `reportaweb-live`
+2. Cloudflare (GitHub integration) auto-builds + deploys a `live.reportar.app`
 3. Monitor Sentry for new errors (1h window)
-4. Check Analytics for traffic spikes
+4. Check Cloudflare Analytics (latency, cache hit ratio, errors)
 
-### Test Deployment (Vercel Preview)
+### Demo Deployment (Cloudflare)
 
-1. Push to feature branch
-2. Vercel creates preview URL
-3. Test auth + E2E flows on preview
+1. Push al repo `reportaweb-demo`
+2. Cloudflare auto-builds + deploys a `demo.reportar.app` (apunta a BD de test)
+3. Test auth + E2E flows en demo
 4. Approve PR
+
+### Cron Jobs
+
+Los 6 cron jobs que corrían en Vercel (`vercel.json`, eliminado) están **pendientes de migrar** a Cloudflare Cron Triggers o servicio externo. Ver `docs/julio13/TECHNICAL_DEBT_CLOUDFLARE.md`.
 
 ---
 
@@ -588,7 +609,7 @@ const tareasConRecursos = await db.query(`
 ### API Key Management
 
 - **NEVER** commit `.env.local` or secrets to git
-- **ALWAYS** use environment variables on Vercel
+- **ALWAYS** use environment variables (Cloudflare Worker Secrets en deploy; `.env.local`/`.dev.vars` en local)
 - **RESEND_API_KEY:** Only used on server side (never expose to client)
 - **SUPABASE_ANON_KEY:** Safe to expose (public, can't write)
 - **SUPABASE_SERVICE_ROLE_KEY:** Server-only, for admin operations
