@@ -118,3 +118,6 @@ cambios-any-registro.md
 public/downloads/
 scripts/
 .dev.vars
+
+# Papelera local (no versionar)
+papelera/

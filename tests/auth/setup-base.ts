@@ -15,6 +15,10 @@ export function createAuthSetup(opts: {
     storageFile: string
 }) {
     setup(`authenticate [${opts.emailEnvVar}]`, async ({ page }) => {
+        // Admin tenant needs more time due to multiple tenants/perms
+        if (opts.emailEnvVar === 'TEST_REPORTA_ADMIN_EMAIL') {
+            setup.setTimeout(60_000) // 60s for admin tenant
+        }
         // Skip re-login if storage state is still fresh
         try {
             const stat = fs.statSync(opts.storageFile)
@@ -46,7 +50,10 @@ export function createAuthSetup(opts: {
 
         // Después del login el action redirige a /planificacion (usuarios normales)
         // o a /select-tenant (admin_tenant de REPORTA). Cualquier URL fuera de /login es válida.
-        await page.waitForURL(url => !url.pathname.startsWith('/login'), { timeout: 15_000 })
+        // Admin tenant (info@reporta.la) tarda más por múltiples tenants/permisos
+        const isAdminTenant = email === 'info@reporta.la'
+        const timeout = isAdminTenant ? 45_000 : 15_000
+        await page.waitForURL(url => !url.pathname.startsWith('/login'), { timeout })
 
         if (page.url().endsWith('/select-tenant')) {
             const firstTenant = page.locator('[data-testid="tenant-card"], button:has-text("Entrar")').first()
