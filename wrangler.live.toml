@@ -1,8 +1,8 @@
 # Cloudflare Workers configuration for live.reportar.app (PRODUCTION database)
-# Build:  npx opennextjs-cloudflare build
-# Deploy: npx wrangler deploy --name reportaweb3-live --config wrangler.live.toml
+# Build:  npm run build && npx opennextjs-cloudflare build
+# Deploy: npx wrangler deploy --config wrangler.live.toml
 
-name = "reportaweb3-live"
+name = "reportaweb-live"
 main = ".open-next/worker.js"
 compatibility_date = "2026-06-01"
 compatibility_flags = ["nodejs_compat"]

@@ -1,8 +1,8 @@
 # Cloudflare Workers configuration for demo.reportar.app (TEST database)
-# Build:  npx opennextjs-cloudflare build
-# Deploy: npx wrangler deploy --name reportaweb3-demo --config wrangler.demo.toml
+# Build:  npm run build:demo && npx opennextjs-cloudflare build
+# Deploy: npx wrangler deploy --config wrangler.demo.toml
 
-name = "reportaweb3-demo"
+name = "reportaweb-demo"
 main = ".open-next/worker.js"
 compatibility_date = "2026-06-01"
 compatibility_flags = ["nodejs_compat"]
