@@ -1,5 +1,6 @@
 import { getProfiles } from "@/lib/actions/users"
 import { UsersClientPage } from "./client-page"
+import { PageDescription } from "@/components/ui/page-description"
 
 export default async function UsersPage({
     searchParams,
@@ -15,7 +16,10 @@ export default async function UsersPage({
 
     return (
         <div className="flex flex-col gap-4">
-            <h1 className="text-2xl font-semibold tracking-tight sr-only">Usuarios</h1>
+            <h1 className="sr-only">Usuarios</h1>
+            <PageDescription>
+                Listado del personal de la empresa. Desde aquí gestionas usuarios, sus datos y descargas masivas.
+            </PageDescription>
             <UsersClientPage users={users} isTrash={isTrash} />
         </div>
     )

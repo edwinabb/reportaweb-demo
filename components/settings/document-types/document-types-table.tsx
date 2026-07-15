@@ -2,7 +2,7 @@
 
 import { useState, useTransition, useMemo } from 'react'
 import { toast } from 'sonner'
-import { Edit2, MoreHorizontal, FileText, AlertCircle, Shield, File, Loader2, Power, PowerOff, Filter, X } from 'lucide-react'
+import { Edit2, MoreHorizontal, FileText, AlertCircle, Shield, File, Power, PowerOff, Trash, Plus } from 'lucide-react'
 
 import {
     Table,
@@ -16,7 +16,6 @@ import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuCheckboxItem,
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
@@ -24,31 +23,52 @@ import {
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
+import { cn } from '@/lib/utils'
+import { ColumnFilterHeader } from '@/components/ui/column-filter-header'
+import { TablePaginationBar } from '@/components/ui/table-pagination-bar'
+import { exportToExcel } from '@/lib/utils/export-excel'
 import { DocumentType } from '@/types/user-documents'
 import { toggleDocumentTypeStatus } from '@/lib/actions/document-types'
 import { DocumentTypeDialog } from './document-type-dialog'
 
 interface DocumentTypesTableProps {
     data: DocumentType[]
+    onNew?: () => void
 }
 
-export function DocumentTypesTable({ data }: DocumentTypesTableProps) {
+const CATEGORY_LABELS: Record<string, string> = {
+    con_vencimiento: 'Con Vencimiento',
+    seguro: 'Seguro',
+    sin_vencimiento: 'Sin Vencimiento',
+}
+
+export function DocumentTypesTable({ data, onNew }: DocumentTypesTableProps) {
     const [isPending, startTransition] = useTransition()
     const [editingDoc, setEditingDoc] = useState<DocumentType | undefined>(undefined)
     const [dialogOpen, setDialogOpen] = useState(false)
-    const [categoryFilter, setCategoryFilter] = useState<Set<string>>(new Set())
-    const [statusFilter, setStatusFilter] = useState<Set<boolean>>(new Set())
+    const [categoryFilter, setCategoryFilter] = useState<string[]>([])
+    const [statusFilter, setStatusFilter] = useState<string[]>([])
     const [searchTerm, setSearchTerm] = useState('')
+    const [isTrash, setIsTrash] = useState(false)
+    const [page, setPage] = useState(1)
+    const [pageSize, setPageSize] = useState(10)
 
     const filteredData = useMemo(() => {
         const search = searchTerm.trim().toLowerCase()
         return data.filter((doc) => {
+            if (isTrash ? doc.is_active : !doc.is_active) return false
             if (search && !doc.name.toLowerCase().includes(search)) return false
-            if (categoryFilter.size > 0 && !categoryFilter.has(doc.category)) return false
-            if (statusFilter.size > 0 && !statusFilter.has(doc.is_active)) return false
+            if (categoryFilter.length > 0 && !categoryFilter.includes(doc.category)) return false
+            if (statusFilter.length > 0 && !statusFilter.includes(String(doc.is_active))) return false
             return true
         })
-    }, [data, categoryFilter, statusFilter, searchTerm])
+    }, [data, isTrash, categoryFilter, statusFilter, searchTerm])
+
+    const totalPages = Math.max(1, Math.ceil(filteredData.length / pageSize))
+    const safePage = Math.min(page, totalPages)
+    const paginatedData = filteredData.slice((safePage - 1) * pageSize, safePage * pageSize)
+
+    const resetPage = () => setPage(1)
 
     const handleToggleStatus = (doc: DocumentType) => {
         startTransition(async () => {
@@ -59,6 +79,16 @@ export function DocumentTypesTable({ data }: DocumentTypesTableProps) {
                 toast.error(result?.message || 'Error al cambiar estado')
             }
         })
+    }
+
+    const handleExcel = () => {
+        const rows = filteredData.map((doc) => ({
+            'Nombre': doc.name,
+            'Categoría': CATEGORY_LABELS[doc.category] ?? doc.category,
+            'Estado': doc.is_active ? 'Activo' : 'Inactivo',
+            'Días Alerta': doc.expiration_alert_days ?? '',
+        }))
+        if (!exportToExcel('TIPOS DE DOCUMENTOS', rows)) toast.error('No hay registros para exportar')
     }
 
     const getCategoryBadge = (cat: string) => {
@@ -73,142 +103,90 @@ export function DocumentTypesTable({ data }: DocumentTypesTableProps) {
     }
 
     return (
-        <>
-            <div className="flex items-center pb-4">
+        <div className="space-y-4">
+            {/* Toolbar estándar: buscador | Activos/Papelera | XLS | + Nuevo */}
+            <div className="flex items-center justify-between gap-2">
                 <Input
                     placeholder="Buscar tipo de documento..."
                     value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onChange={(e) => { setSearchTerm(e.target.value); resetPage() }}
                     className="h-8 w-[250px]"
                 />
+                <div className="flex items-center gap-2">
+                    <Button
+                        variant={!isTrash ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => { setIsTrash(false); resetPage() }}
+                    >
+                        Activos
+                    </Button>
+                    <Button
+                        variant={isTrash ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => { setIsTrash(true); resetPage() }}
+                    >
+                        <Trash className="w-4 h-4 mr-2" />
+                        Papelera
+                    </Button>
+                    <Button variant="outline" size="sm" title="Descargar Excel (lo filtrado)" onClick={handleExcel}>
+                        <FileText className="h-4 w-4 text-green-600" />
+                    </Button>
+                    {onNew && (
+                        <Button size="sm" className="bg-orange-600 hover:bg-orange-700 text-white" onClick={onNew}>
+                            <Plus className="mr-2 h-4 w-4" /> Nuevo Tipo
+                        </Button>
+                    )}
+                </div>
             </div>
+
             <div className="rounded-md border">
                 <Table>
                     <TableHeader>
                         <TableRow>
                             <TableHead className="w-[300px]">Nombre</TableHead>
                             <TableHead>
-                                <div className="flex items-center space-x-2">
-                                    <span>Categoría</span>
-                                    <DropdownMenu>
-                                        <DropdownMenuTrigger asChild>
-                                            <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
-                                                <Filter className={`w-4 h-4 ${categoryFilter.size > 0 ? 'text-blue-500' : ''}`} />
-                                            </Button>
-                                        </DropdownMenuTrigger>
-                                        <DropdownMenuContent align="start">
-                                            <DropdownMenuLabel className="text-xs">Filtrar por categoría</DropdownMenuLabel>
-                                            <DropdownMenuSeparator />
-                                            <DropdownMenuCheckboxItem
-                                                checked={categoryFilter.has('con_vencimiento')}
-                                                onCheckedChange={(c) => {
-                                                    const newFilter = new Set(categoryFilter)
-                                                    if (c) newFilter.add('con_vencimiento')
-                                                    else newFilter.delete('con_vencimiento')
-                                                    setCategoryFilter(newFilter)
-                                                }}
-                                            >
-                                                Con Vencimiento
-                                            </DropdownMenuCheckboxItem>
-                                            <DropdownMenuCheckboxItem
-                                                checked={categoryFilter.has('seguro')}
-                                                onCheckedChange={(c) => {
-                                                    const newFilter = new Set(categoryFilter)
-                                                    if (c) newFilter.add('seguro')
-                                                    else newFilter.delete('seguro')
-                                                    setCategoryFilter(newFilter)
-                                                }}
-                                            >
-                                                Seguro
-                                            </DropdownMenuCheckboxItem>
-                                            <DropdownMenuCheckboxItem
-                                                checked={categoryFilter.has('sin_vencimiento')}
-                                                onCheckedChange={(c) => {
-                                                    const newFilter = new Set(categoryFilter)
-                                                    if (c) newFilter.add('sin_vencimiento')
-                                                    else newFilter.delete('sin_vencimiento')
-                                                    setCategoryFilter(newFilter)
-                                                }}
-                                            >
-                                                Sin Vencimiento
-                                            </DropdownMenuCheckboxItem>
-                                            {categoryFilter.size > 0 && (
-                                                <>
-                                                    <DropdownMenuSeparator />
-                                                    <DropdownMenuItem onClick={() => setCategoryFilter(new Set())} className="text-xs">
-                                                        Limpiar filtro
-                                                    </DropdownMenuItem>
-                                                </>
-                                            )}
-                                        </DropdownMenuContent>
-                                    </DropdownMenu>
-                                </div>
+                                <ColumnFilterHeader
+                                    title="Categoría"
+                                    options={[
+                                        { label: 'Con Vencimiento', value: 'con_vencimiento' },
+                                        { label: 'Seguro', value: 'seguro' },
+                                        { label: 'Sin Vencimiento', value: 'sin_vencimiento' },
+                                    ]}
+                                    selected={categoryFilter}
+                                    onChange={(v) => { setCategoryFilter(v); resetPage() }}
+                                />
                             </TableHead>
                             <TableHead>
-                                <div className="flex items-center space-x-2">
-                                    <span>Estado</span>
-                                    <DropdownMenu>
-                                        <DropdownMenuTrigger asChild>
-                                            <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
-                                                <Filter className={`w-4 h-4 ${statusFilter.size > 0 ? 'text-blue-500' : ''}`} />
-                                            </Button>
-                                        </DropdownMenuTrigger>
-                                        <DropdownMenuContent align="start">
-                                            <DropdownMenuLabel className="text-xs">Filtrar por estado</DropdownMenuLabel>
-                                            <DropdownMenuSeparator />
-                                            <DropdownMenuCheckboxItem
-                                                checked={statusFilter.has(true)}
-                                                onCheckedChange={(c) => {
-                                                    const newFilter = new Set(statusFilter)
-                                                    if (c) newFilter.add(true)
-                                                    else newFilter.delete(true)
-                                                    setStatusFilter(newFilter)
-                                                }}
-                                            >
-                                                Activo
-                                            </DropdownMenuCheckboxItem>
-                                            <DropdownMenuCheckboxItem
-                                                checked={statusFilter.has(false)}
-                                                onCheckedChange={(c) => {
-                                                    const newFilter = new Set(statusFilter)
-                                                    if (c) newFilter.add(false)
-                                                    else newFilter.delete(false)
-                                                    setStatusFilter(newFilter)
-                                                }}
-                                            >
-                                                Inactivo
-                                            </DropdownMenuCheckboxItem>
-                                            {statusFilter.size > 0 && (
-                                                <>
-                                                    <DropdownMenuSeparator />
-                                                    <DropdownMenuItem onClick={() => setStatusFilter(new Set())} className="text-xs">
-                                                        Limpiar filtro
-                                                    </DropdownMenuItem>
-                                                </>
-                                            )}
-                                        </DropdownMenuContent>
-                                    </DropdownMenu>
-                                </div>
+                                <ColumnFilterHeader
+                                    title="Estado"
+                                    options={[
+                                        { label: 'Activo', value: 'true' },
+                                        { label: 'Inactivo', value: 'false' },
+                                    ]}
+                                    selected={statusFilter}
+                                    onChange={(v) => { setStatusFilter(v); resetPage() }}
+                                />
                             </TableHead>
                             <TableHead className="text-right">Días Alerta</TableHead>
                             <TableHead className="w-[70px]"></TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {filteredData.length === 0 ? (
+                        {paginatedData.length === 0 ? (
                             <TableRow>
-                                <TableCell colSpan={4} className="h-24 text-center text-muted-foreground">
-                                    No hay tipos de documentos configurados.
+                                <TableCell colSpan={5} className="h-24 text-center text-muted-foreground">
+                                    No hay tipos de documentos{isTrash ? ' en la papelera' : ' configurados'}.
                                 </TableCell>
                             </TableRow>
-                        ) : filteredData.map((doc) => (
+                        ) : paginatedData.map((doc) => (
                             <TableRow key={doc.id}>
                                 <TableCell className="font-medium">
                                     <div className="flex items-center gap-2">
                                         <div className="p-2 bg-muted rounded-md">
                                             <FileText className="w-4 h-4 text-muted-foreground" />
                                         </div>
-                                        <span>{doc.name}</span>
+                                        {/* Estándar: nombre en rojo cuando el registro está inactivo */}
+                                        <span className={cn(!doc.is_active && 'text-red-600')}>{doc.name}</span>
                                     </div>
                                     {doc.tenant_id === null && (
                                         <span className="text-[10px] text-muted-foreground ml-9 block">Global del Sistema</span>
@@ -266,7 +244,15 @@ export function DocumentTypesTable({ data }: DocumentTypesTableProps) {
                         ))}
                     </TableBody>
                 </Table>
-            </div >
+            </div>
+
+            <TablePaginationBar
+                totalCount={filteredData.length}
+                page={safePage}
+                pageSize={pageSize}
+                onPageChange={setPage}
+                onPageSizeChange={(size) => { setPageSize(size); resetPage() }}
+            />
 
             {/* Edit/Create Dialog (controlled by parent usually, but here by internal state for edit) */}
             {
@@ -282,6 +268,6 @@ export function DocumentTypesTable({ data }: DocumentTypesTableProps) {
                 )
             }
 
-        </>
+        </div>
     )
 }

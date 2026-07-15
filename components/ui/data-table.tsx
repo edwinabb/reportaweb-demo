@@ -40,7 +40,7 @@ interface DataTableProps<TData, TValue> {
     searchPlaceholder?: string
     newAction?: () => void
     newActionLabel?: string
-    customAction?: React.ReactNode
+    customAction?: React.ReactNode | ((table: TableType<TData>) => React.ReactNode)
     hideViewOptions?: boolean
     toolbarContent?: (table: TableType<TData>) => React.ReactNode
 }
@@ -104,7 +104,7 @@ export function DataTable<TData, TValue>({
                 </div>
                 <div className="flex items-center space-x-2">
                     {!hideViewOptions && <DataTableViewOptions table={table} />}
-                    {customAction}
+                    {typeof customAction === 'function' ? customAction(table) : customAction}
                     {newAction && (
                         <Button onClick={newAction} size="sm" className="h-8 bg-orange-600 hover:bg-orange-700 text-white">
                             <Plus className="mr-2 h-4 w-4" />
