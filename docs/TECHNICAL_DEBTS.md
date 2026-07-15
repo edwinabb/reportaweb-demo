@@ -1,6 +1,6 @@
 # Technical Debts & DUDAs — Reporta Web 3
 
-**Última revisión:** 2026-07-14 (cierre módulo 1 Usuarios)
+**Última revisión:** 2026-07-15 (auditoría Maquinaria + Planificación)
 
 | ID | Tema | Prioridad | Estado |
 |----|------|-----------|--------|
@@ -9,6 +9,7 @@
 | DUDA-CACHE-001 | Migrar cache HTML a stale-while-revalidate | MEDIA | 🟡 Pendiente |
 | DUDA-DEPS-001 | Migrar xlsx (vulns altas sin fix en npm) | MEDIA | 🟡 Pendiente |
 | DUDA-DEPS-002 | middleware.ts → proxy.ts (espera soporte OpenNext) | BAJA | 🔴 Bloqueado |
+| DUDA-MAQ-HORAS | `maquinaria_horas` sin UI propia (se usa en informes y tareas) | MEDIA | 🟡 Pendiente |
 | — | Migrar cron jobs de Vercel a Cloudflare | MEDIA | 🟡 Pendiente |
 | — | Configurar deploy de live.reportar.app (worker reportaweb-live) | ALTA | 🟡 Pendiente |
 
@@ -177,6 +178,27 @@ Cuando anuncie soporte para Node.js middleware/proxy:
 1. `git mv middleware.ts proxy.ts` + renombrar la función a `proxy`
 2. `npm i @opennextjs/cloudflare@latest`
 3. Verificar build local (`npm run build:demo && npx opennextjs-cloudflare build`) y deploy a demo
+
+---
+
+## DUDA-MAQ-HORAS: `maquinaria_horas` sin UI propia
+
+**Status:** 🟡 PENDIENTE
+**Prioridad:** MEDIA
+**Esfuerzo:** por dimensionar (auditoría módulos Informes/Planificación)
+
+### Contexto
+
+La tabla `maquinaria_horas` (1.917 filas en PROD, todas CISE; 0 GRUAS) no es
+consumida por ninguna pantalla del módulo Maquinaria. Decisión del usuario
+(2026-07-15): **se utiliza en la parte de informes y en tareas** — queda como
+deuda para cubrirla al auditar esos módulos, no se elimina.
+
+### Acción
+
+Al auditar los módulos Informes (#9) y Planificación (#7), mapear dónde debe
+mostrarse/alimentarse `maquinaria_horas` (jornadas, total_horas, cant_servicios)
+y crear los tickets de UI correspondientes.
 
 ---
 

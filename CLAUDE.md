@@ -6,7 +6,7 @@
 
 | Repo | Ruta | Stack | Versión |
 |------|------|-------|---------|
-| Web admin | `c:\Proyectos\reportaweb3` | Next.js 16, React 19, TypeScript, Tailwind, Radix | **3.11.0** |
+| Web admin | `c:\Proyectos\reportaweb3` | Next.js 16, React 19, TypeScript, Tailwind, Radix | **3.11.1** |
 | App móvil | `c:\Proyectos\reporta-app` | Expo 54, expo-router, SQLite/Drizzle, React Native | **1.8.14** |
 | DB / Backend | Supabase test `oyrokyyaeaeqzlsgxtto` (Brazil) / prod `fqwhagryqkkhbgznxtwf` (Brazil) | PostgreSQL + Auth + Storage | — |
 
@@ -20,10 +20,10 @@
 
 ## Estado Actual
 
-**Date:** 2026-07-14  
-**Web Version:** v3.11.0 — ✅ DESPLEGADA en demo.reportar.app (BD TEST + seed sintético)  
+**Date:** 2026-07-15  
+**Web Version:** v3.11.1 — 🔄 en deploy a demo.reportar.app (fix editar tarea + docs maquinaria server-side/Depurar)  
 **App Version:** v1.8.14  
-**Auditoría UI:** Módulo 1/15 (Usuarios) ✅ CERRADO — tracker en [docs/UI-TEMPLATE-LISTADOS.md](./docs/UI-TEMPLATE-LISTADOS.md)  
+**Auditoría UI:** Módulo 2/15 (Maquinaria) 🔄 EN CURSO — matriz en [docs/auditoria-ui/02-maquinaria.md](./docs/auditoria-ui/02-maquinaria.md) · pre-audit + DUDA-PLAN-001 en [PRE-AUDIT-2026-07-15](./docs/auditoria-ui/PRE-AUDIT-2026-07-15-maquinaria-planificacion.md)  
 **Template listados:** v1.2 DEFINIDO (aplicar a los demás módulos)  
 **E2E Suite:** ⚠️ desactualizada tras template v1.2 (DUDA-E2E-001)
 

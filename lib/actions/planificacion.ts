@@ -195,6 +195,7 @@ export async function saveTareaBorradorBasic(payload: {
     const fechaFin = sorted[sorted.length - 1]
 
     let tareaId = payload.tareaId ?? null
+    let oldFechaIds: string[] = []
 
     if (tareaId) {
         const { error: errUpd } = await adminClient.from('tareas').update({
@@ -207,8 +208,14 @@ export async function saveTareaBorradorBasic(payload: {
             descripcion: payload.descripcion ?? null,
         }).eq('id', tareaId).eq('tenant_id', tenantId)
         if (errUpd) return { success: false, message: `Error al actualizar: ${errUpd.message}` }
-        // Reemplazar el intervalo básico (CASCADE borra tareas_recursos si hubiera)
-        await adminClient.from('tareas_fechas').delete().eq('tarea_id', tareaId)
+        // Los intervalos previos (y sus recursos, por CASCADE) se eliminan recién
+        // después de insertar el nuevo — un fallo a mitad no destruye nada.
+        const { data: prevFechas } = await adminClient
+            .from('tareas_fechas')
+            .select('id')
+            .eq('tarea_id', tareaId)
+            .eq('tenant_id', tenantId)
+        oldFechaIds = (prevFechas ?? []).map((f) => f.id)
     } else {
         const year = new Date().getFullYear()
         const { count } = await adminClient.from('tareas')
@@ -231,11 +238,23 @@ export async function saveTareaBorradorBasic(payload: {
         tareaId = tarea.id
     }
 
-    await adminClient.from('tareas_fechas').insert({
+    const { data: nuevaFecha, error: errFecha } = await adminClient.from('tareas_fechas').insert({
         tenant_id: tenantId, tarea_id: tareaId, is_active: true,
         fecha_inicio: fechaInicio, fecha_fin: fechaFin,
         fechas_multiples: sorted,
-    })
+    }).select('id').single()
+    if (errFecha || !nuevaFecha) return { success: false, message: `Error al guardar fechas: ${errFecha?.message}` }
+
+    if (oldFechaIds.length > 0) {
+        // Re-vincular los recursos ya asignados al intervalo nuevo ANTES de borrar
+        // los intervalos viejos — si no, el CASCADE los eliminaría y un usuario que
+        // abandona el wizard a mitad perdería las asignaciones de la tarea.
+        await adminClient
+            .from('tareas_recursos')
+            .update({ tarea_fecha_id: nuevaFecha.id })
+            .in('tarea_fecha_id', oldFechaIds)
+        await adminClient.from('tareas_fechas').delete().in('id', oldFechaIds)
+    }
 
     revalidatePath('/planificacion')
     return { success: true, tareaId: tareaId! }
@@ -262,9 +281,14 @@ export async function createTarea(payload: CreateTareaPayload) {
 
     let tareaDbId: string
     const isExisting = Boolean(payload.header.id)
+    // En edición NO se borra nada por adelantado: primero se insertan los
+    // intervalos nuevos y, solo si TODO salió bien, se eliminan los previos
+    // (CASCADE limpia sus tareas_recursos). Así un fallo a mitad de camino
+    // nunca deja la tarea sin fechas/recursos.
+    let oldFechaIds: string[] = []
 
     if (payload.header.id) {
-        // Tarea guardada como BORRADOR — actualizar header y limpiar intervalos previos
+        // Tarea existente (borrador o reedición) — actualizar header
         const { error: errUpd } = await adminClient.from('tareas').update({
             titulo: payload.header.titulo,
             descripcion: payload.header.descripcion ?? null,
@@ -280,8 +304,13 @@ export async function createTarea(payload: CreateTareaPayload) {
             hora_fin: payload.header.hora_fin ?? null,
         }).eq('id', payload.header.id).eq('tenant_id', tenantId)
         if (errUpd) return { success: false as const, message: `Error al actualizar tarea: ${errUpd.message}` }
-        // CASCADE borra tareas_recursos también
-        await adminClient.from('tareas_fechas').delete().eq('tarea_id', payload.header.id)
+        const { data: prevFechas, error: errPrev } = await adminClient
+            .from('tareas_fechas')
+            .select('id')
+            .eq('tarea_id', payload.header.id)
+            .eq('tenant_id', tenantId)
+        if (errPrev) return { success: false as const, message: `Error al leer intervalos previos: ${errPrev.message}` }
+        oldFechaIds = (prevFechas ?? []).map((f) => f.id)
         tareaDbId = payload.header.id
     } else {
         // 1) código consecutivo T-YYYY-XXXX (por tenant + año)
@@ -322,7 +351,16 @@ export async function createTarea(payload: CreateTareaPayload) {
         tareaDbId = tarea.id
     }
 
-    // 3) insert cada intervalo + sus recursos
+    // 3) insert cada intervalo + sus recursos (los previos siguen intactos)
+    const insertedFechaIds: string[] = []
+    const undoInserts = async () => {
+        // Deshacer lo insertado en esta llamada; los intervalos previos quedan como estaban.
+        if (insertedFechaIds.length > 0) {
+            await adminClient.from('tareas_fechas').delete().in('id', insertedFechaIds)
+        }
+        if (!isExisting) await rollbackTarea(adminClient, tareaDbId)
+    }
+
     for (const intervalo of payload.intervalos) {
         // Si solo hay fechas_multiples (sin rango), derivar fecha_inicio/fecha_fin como min/max
         // para que el filtro de overlap en getTareas() las encuentre correctamente.
@@ -344,9 +382,10 @@ export async function createTarea(payload: CreateTareaPayload) {
             .single()
 
         if (errFecha || !fecha) {
-            if (!isExisting) await rollbackTarea(adminClient, tareaDbId)
+            await undoInserts()
             return { success: false as const, message: `Error al crear intervalo: ${errFecha?.message}` }
         }
+        insertedFechaIds.push(fecha.id)
 
         if (intervalo.recursos && intervalo.recursos.length > 0) {
             const rows = intervalo.recursos.map((r) => {
@@ -368,9 +407,22 @@ export async function createTarea(payload: CreateTareaPayload) {
             })
             const { error: errRec } = await adminClient.from('tareas_recursos').insert(rows)
             if (errRec) {
-                if (!isExisting) await rollbackTarea(adminClient, tareaDbId)
+                await undoInserts()
                 return { success: false as const, message: `Error al asignar recursos: ${errRec.message}` }
             }
+        }
+    }
+
+    // 4) todo insertado OK → recién ahora se eliminan los intervalos previos
+    //    (CASCADE limpia sus tareas_recursos)
+    if (oldFechaIds.length > 0) {
+        const { error: errDelOld } = await adminClient
+            .from('tareas_fechas')
+            .delete()
+            .in('id', oldFechaIds)
+        if (errDelOld) {
+            await undoInserts()
+            return { success: false as const, message: `Error al reemplazar intervalos anteriores: ${errDelOld.message}` }
         }
     }
 
@@ -571,15 +623,22 @@ export async function updateTareaIntervals(
         return { success: false as const, message: 'Tarea no encontrada' }
     }
 
-    // Borrar intervalos — ON DELETE CASCADE limpia tareas_recursos.
-    const { error: errDelete } = await adminClient
+    // Insertar-primero, borrar-después: los intervalos previos se eliminan solo
+    // si TODOS los nuevos se insertaron bien. Un fallo a mitad no destruye nada.
+    const { data: prevFechas, error: errPrev } = await adminClient
         .from('tareas_fechas')
-        .delete()
+        .select('id')
         .eq('tarea_id', tareaId)
         .eq('tenant_id', tenantId)
-
-    if (errDelete) {
-        return { success: false as const, message: `Error al borrar intervalos: ${errDelete.message}` }
+    if (errPrev) {
+        return { success: false as const, message: `Error al leer intervalos previos: ${errPrev.message}` }
+    }
+    const oldFechaIds = (prevFechas ?? []).map((f) => f.id)
+    const insertedFechaIds: string[] = []
+    const undoInserts = async () => {
+        if (insertedFechaIds.length > 0) {
+            await adminClient.from('tareas_fechas').delete().in('id', insertedFechaIds)
+        }
     }
 
     // Insertar los nuevos.
@@ -602,26 +661,44 @@ export async function updateTareaIntervals(
             .single()
 
         if (errFecha || !fecha) {
+            await undoInserts()
             return { success: false as const, message: `Error al crear intervalo: ${errFecha?.message}` }
         }
+        insertedFechaIds.push(fecha.id)
 
         if (intervalo.recursos && intervalo.recursos.length > 0) {
-            const rows = intervalo.recursos.map((r) => ({
-                tenant_id: tenantId,
-                tarea_id: tareaId,
-                tarea_fecha_id: fecha.id,
-                tipo_recurso: r.tipo_recurso,
-                personal_id: r.tipo_recurso === 'PERSONAL' ? r.recurso_id : null,
-                maquinaria_id: r.tipo_recurso === 'MAQUINARIA' ? r.recurso_id : null,
-                recurso_externo_nombre: r.recurso_externo_nombre ?? null,
-                proveedor_id: r.proveedor_id ?? null,
-                created_by: user.id,
-                is_active: true,
-            }))
+            const rows = intervalo.recursos.map((r) => {
+                const recursoIdValido = r.recurso_id && r.recurso_id.length > 0 ? r.recurso_id : null
+                return {
+                    tenant_id: tenantId,
+                    tarea_id: tareaId,
+                    tarea_fecha_id: fecha.id,
+                    tipo_recurso: r.tipo_recurso,
+                    personal_id: r.tipo_recurso === 'PERSONAL' ? recursoIdValido : null,
+                    maquinaria_id: r.tipo_recurso === 'MAQUINARIA' ? recursoIdValido : null,
+                    recurso_externo_nombre: r.recurso_externo_nombre ?? null,
+                    proveedor_id: r.proveedor_id ?? null,
+                    created_by: user.id,
+                    is_active: true,
+                }
+            })
             const { error: errRec } = await adminClient.from('tareas_recursos').insert(rows)
             if (errRec) {
+                await undoInserts()
                 return { success: false as const, message: `Error al asignar recursos: ${errRec.message}` }
             }
+        }
+    }
+
+    // Todo insertado OK → eliminar los intervalos previos (CASCADE limpia tareas_recursos)
+    if (oldFechaIds.length > 0) {
+        const { error: errDelOld } = await adminClient
+            .from('tareas_fechas')
+            .delete()
+            .in('id', oldFechaIds)
+        if (errDelOld) {
+            await undoInserts()
+            return { success: false as const, message: `Error al reemplazar intervalos anteriores: ${errDelOld.message}` }
         }
     }
 

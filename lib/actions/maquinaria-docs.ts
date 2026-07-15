@@ -209,6 +209,7 @@ export async function deleteMaquinariaDocumento(id: string, maquinariaId: string
     if (error) return { message: 'Error al eliminar' }
 
     revalidatePath(`/maquinarias/${maquinariaId}/edit`)
+    revalidatePath('/maquinarias/documentos')
     return { message: 'Documento eliminado' }
 }
 

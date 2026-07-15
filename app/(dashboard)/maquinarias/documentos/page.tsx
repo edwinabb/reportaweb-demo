@@ -1,56 +1,54 @@
-import {
-    Breadcrumb,
-    BreadcrumbItem,
-    BreadcrumbLink,
-    BreadcrumbList,
-    BreadcrumbPage,
-    BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
-import { getMaquinarias } from "@/lib/actions/maquinarias"
-import { getMaquinariaTipos } from "@/lib/actions/maquinaria-types"
-import { getGlobalDocuments } from "@/lib/actions/maquinaria-docs"
-import { DocumentosGlobalesClientPage, type DocGlobal } from "./client-page"
+import { getMaquinarias } from '@/lib/actions/maquinarias'
+import { getMaquinariaTipos } from '@/lib/actions/maquinaria-types'
+import { getGlobalMaquinariaDocumentsPaged, MaquinariaDocExpiryStatus } from '@/lib/actions/maquinaria-docs-query'
+import { GlobalMaquinariaDocumentsTable } from '@/components/maquinaria/global-documents-table'
+import { PageDescription } from '@/components/ui/page-description'
+
+export const dynamic = 'force-dynamic'
+
+export const metadata = { title: 'Maquinaria - Documentación' }
 
 export default async function GlobalDocumentsPage({
     searchParams,
 }: {
-    searchParams: Promise<{ view?: string }>
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }) {
     const params = await searchParams
-    const isTrash = params.view === 'trash'
+    const search = typeof params.search === 'string' ? params.search : undefined
+    const tipoDocId = typeof params.tipoDocId === 'string' ? params.tipoDocId : undefined
+    const isActiveParam = typeof params.is_active === 'string' ? params.is_active : 'true'
+    const isActive = isActiveParam !== 'false'
+    const expiryStatus = typeof params.expiryStatus === 'string' ? params.expiryStatus as MaquinariaDocExpiryStatus : 'all'
+    const page = typeof params.page === 'string' ? parseInt(params.page) : 1
+    const limit = typeof params.perPage === 'string' ? Math.min(parseInt(params.perPage) || 20, 100) : 20
 
-    // getGlobalDocuments(onlyActive)
-    const OnlyActive = !isTrash
-
-    const [maquinarias, tipos, documentos] = await Promise.all([
-        getMaquinarias(),
+    const [{ data: documents, count }, tipos, maquinarias] = await Promise.all([
+        getGlobalMaquinariaDocumentsPaged({
+            search,
+            tipoDocId,
+            isActive,
+            expiryStatus,
+            page,
+            limit,
+        }),
         getMaquinariaTipos(),
-        getGlobalDocuments(OnlyActive)
+        getMaquinarias(),
     ])
 
     return (
-        <div className="flex flex-col gap-4">
-            <Breadcrumb>
-                <BreadcrumbList>
-                    <BreadcrumbItem>
-                        <BreadcrumbLink href="/">Dashboard</BreadcrumbLink>
-                    </BreadcrumbItem>
-                    <BreadcrumbSeparator />
-                    <BreadcrumbItem>
-                        <BreadcrumbLink href="/maquinarias">Equipos</BreadcrumbLink>
-                    </BreadcrumbItem>
-                    <BreadcrumbSeparator />
-                    <BreadcrumbItem>
-                        <BreadcrumbPage>Documentos Globales</BreadcrumbPage>
-                    </BreadcrumbItem>
-                </BreadcrumbList>
-            </Breadcrumb>
+        <div className="flex-1 space-y-4 p-8 pt-6">
+            <h1 className="sr-only">Maquinaria - Documentación</h1>
+            <PageDescription>
+                Listado de documentos de los equipos. Desde aquí puedes realizar gestiones y descargas masivas.
+            </PageDescription>
 
-            <DocumentosGlobalesClientPage
-                documentos={documentos as unknown as DocGlobal[]}
-                maquinarias={maquinarias}
-                tipos={tipos}
-                isTrash={isTrash}
+            <GlobalMaquinariaDocumentsTable
+                documents={documents || []}
+                tipos={tipos || []}
+                maquinarias={maquinarias || []}
+                totalCount={count || 0}
+                currentPage={page}
+                pageSize={limit}
             />
         </div>
     )

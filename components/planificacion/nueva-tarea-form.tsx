@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -60,6 +60,24 @@ interface DetailedAssignment {
 }
 
 interface AvailSlot { resourceId: string; tipo: 'PERSONAL' | 'MAQUINARIA'; date: string; tarea: { id: string; titulo: string; sitio: string; codigo: string } }
+
+// YYYY-MM-DD → Date local anclada a mediodía (evita off-by-one por huso horario)
+const ymdToLocalNoon = (ymd: string) => new Date(ymd + 'T12:00:00')
+
+/** Expande un intervalo de tareas_fechas a su lista de días YYYY-MM-DD. */
+function expandIntervaloYmd(f: { fecha_inicio: string | null; fecha_fin: string | null; fechas_multiples: string[] | null }): string[] {
+    if (f.fechas_multiples && f.fechas_multiples.length > 0) return [...f.fechas_multiples].sort()
+    if (!f.fecha_inicio) return []
+    const out: string[] = []
+    let cursor = ymdToLocalNoon(f.fecha_inicio)
+    const end = ymdToLocalNoon(f.fecha_fin ?? f.fecha_inicio)
+    // tope defensivo ante rangos corruptos (400 días ≈ 13 meses)
+    while (cursor <= end && out.length < 400) {
+        out.push(format(cursor, 'yyyy-MM-dd'))
+        cursor = addDays(cursor, 1)
+    }
+    return out
+}
 
 const TIPO_TAREA_OPTIONS = [
     'MANTENIMIENTO', 'MERCADEO', 'OPERACIONES', 'PERSONAL', 'PROYECTOS',
@@ -160,7 +178,10 @@ export function NuevaTareaForm({ personalList = [], maquinariaList = [], cliente
     const [availabilityFilterP, setAvailabilityFilterP] = useState<'ALL' | 'DISPONIBLE' | 'PARCIAL' | 'OCUPADO'>('ALL')
     const [availabilityFilterM, setAvailabilityFilterM] = useState<'ALL' | 'DISPONIBLE' | 'PARCIAL' | 'OCUPADO'>('ALL')
 
-    // Edit mode: initialize form from existing tarea
+    // Edit mode: initialize form from existing tarea.
+    // Rehidrata TODO: header, todas las fechas de todos los intervalos y todos
+    // los recursos asignados. Es crítico porque createTarea en edición hace
+    // replace-all: lo que no esté en el estado del form se pierde al guardar.
     useEffect(() => {
         if (!tareaToEdit) return
         setSavedTareaId(tareaToEdit.id)
@@ -173,6 +194,7 @@ export function NuevaTareaForm({ personalList = [], maquinariaList = [], cliente
             prioridad:      (tareaToEdit.prioridad ?? 'MEDIA') as 'BAJA' | 'MEDIA' | 'ALTA',
             cliente_id:     tareaToEdit.cliente_id ?? '',
             cliente_nombre: tareaToEdit.cliente_nombre ?? '',
+            contacto_id:    tareaToEdit.contacto_id ?? '',
             cotizacion:     tareaToEdit.cotizacion_ref ?? '',
             sitio:          tareaToEdit.sitio ?? '',
             confirmada:     tareaToEdit.estado === 'CONFIRMADA',
@@ -185,14 +207,114 @@ export function NuevaTareaForm({ personalList = [], maquinariaList = [], cliente
         if (tareaToEdit.cotizacion_item_id) {
             setCotizacionItemIdSeleccionado(tareaToEdit.cotizacion_item_id)
         }
-        // Pre-fill fecha_inicio from prop or tarea's first fecha
-        const primeraFecha = tareaToEdit.fechas?.[0]
-        const fechaStr = fechaInicio ?? primeraFecha?.fecha_inicio ?? (primeraFecha?.fechas_multiples?.[0])
-        if (fechaStr) {
-            const d = new Date(fechaStr + 'T12:00:00')
-            setFormData(prev => ({ ...prev, fecha_inicio: d, fechas_multiples: [d] }))
+
+        // 1) Fechas: unión de los días de TODOS los intervalos activos
+        const intervalos = (tareaToEdit.fechas ?? []).filter(f => f.is_active !== false)
+        const diasPorIntervalo = new Map<string, string[]>()
+        const allDates = new Set<string>()
+        for (const f of intervalos) {
+            const dias = expandIntervaloYmd(f)
+            diasPorIntervalo.set(f.id, dias)
+            dias.forEach(d => allDates.add(d))
         }
+        // ?fecha= de la URL solo aplica cuando la tarea aún no tiene fechas propias
+        if (allDates.size === 0 && fechaInicio) allDates.add(fechaInicio)
+        const sortedYmd = [...allDates].sort()
+        if (sortedYmd.length > 0) {
+            const asDates = sortedYmd.map(ymdToLocalNoon)
+            setFormData(prev => ({
+                ...prev,
+                fecha_inicio: asDates[0],
+                fecha_fin: asDates[asDates.length - 1],
+                fechas_multiples: asDates,
+            }))
+        }
+
+        // 2) Recursos: reconstruir asignaciones fusionando por recurso los días
+        //    de todos sus intervalos. Externo = proveedor_id != null (misma
+        //    semántica que el guardado).
+        const byKey = new Map<string, DetailedAssignment>()
+        for (const f of intervalos) {
+            const dias = diasPorIntervalo.get(f.id) ?? []
+            for (const r of f.recursos ?? []) {
+                if (r.is_active === false) continue
+                const esExterno = r.proveedor_id != null
+                const proveedor = esExterno ? proveedores.find(p => p.id === r.proveedor_id) : undefined
+                let assignment: DetailedAssignment
+                if (r.tipo_recurso === 'PERSONAL') {
+                    const p = r.personal_id ? personalList.find(x => x.id === r.personal_id) : undefined
+                    const cargoNombre = p?.cargo_id ? cargos.find(c => c.id === p.cargo_id)?.nombre : undefined
+                    assignment = {
+                        resourceId: r.personal_id ?? `ext-personal-${r.id}`,
+                        resourceType: 'PERSONAL',
+                        resourceName: p?.nombre ?? r.recurso_externo_nombre ?? 'Personal',
+                        resourceDetail: esExterno
+                            ? [cargoNombre, proveedor?.razon_social ? `Proveedor: ${proveedor.razon_social}` : 'Externo'].filter(Boolean).join(' · ')
+                            : (cargoNombre || 'Personal interno'),
+                        dates: dias,
+                        tipo_contratacion: esExterno ? 'EXTERNO' : 'INTERNO',
+                        proveedor_id: r.proveedor_id,
+                        proveedor_nombre: proveedor?.razon_social ?? null,
+                        recurso_externo_nombre: r.recurso_externo_nombre,
+                    }
+                } else {
+                    const m = r.maquinaria_id ? maquinariaList.find(x => x.id === r.maquinaria_id) : undefined
+                    assignment = {
+                        resourceId: r.maquinaria_id ?? `ext-maquinaria-${r.id}`,
+                        resourceType: 'MAQUINARIA',
+                        resourceName: m?.nombre ?? r.recurso_externo_nombre ?? 'Equipo externo',
+                        resourceDetail: esExterno
+                            ? (proveedor?.razon_social ? `Proveedor: ${proveedor.razon_social}` : 'Externo')
+                            : [m?.categoria, m?.codigo].filter(Boolean).join(' · '),
+                        dates: dias,
+                        tipo_contratacion: esExterno ? 'EXTERNO' : 'INTERNO',
+                        proveedor_id: r.proveedor_id,
+                        proveedor_nombre: proveedor?.razon_social ?? null,
+                        recurso_externo_nombre: r.recurso_externo_nombre,
+                    }
+                }
+                // Recursos reales se fusionan por su id; externos sin id de catálogo,
+                // por proveedor + nombre (así el mismo equipo externo en 2 intervalos
+                // queda como una sola asignación con todas sus fechas).
+                const realId = r.tipo_recurso === 'PERSONAL' ? r.personal_id : r.maquinaria_id
+                const key = realId
+                    ? `${r.tipo_recurso}:${realId}`
+                    : `${r.tipo_recurso}:EXT:${r.proveedor_id ?? ''}:${r.recurso_externo_nombre ?? ''}`
+                const existente = byKey.get(key)
+                if (existente) {
+                    existente.dates = [...new Set([...existente.dates, ...dias])].sort()
+                } else {
+                    byKey.set(key, assignment)
+                }
+            }
+        }
+        const rehidratados = [...byKey.values()]
+        setAssignedPersonal(rehidratados.filter(a => a.resourceType === 'PERSONAL'))
+        setAssignedMaquinaria(rehidratados.filter(a => a.resourceType === 'MAQUINARIA'))
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tareaToEdit?.id]) // only on mount / tarea change
+
+    // Si el usuario cambia las fechas de la tarea en el calendario, las
+    // asignaciones que cubrían TODAS las fechas anteriores pasan a cubrir todas
+    // las nuevas; las que tenían días específicos se intersectan con las fechas
+    // vigentes (y si quedan vacías, pasan a todas — el recurso no se pierde).
+    const prevFullSetRef = useRef<string>('')
+    useEffect(() => {
+        const full = formData.fechas_multiples.map(d => format(d, 'yyyy-MM-dd')).sort()
+        const fullSig = full.join(',')
+        const prevSig = prevFullSetRef.current
+        prevFullSetRef.current = fullSig
+        if (!prevSig || !fullSig || prevSig === fullSig) return
+        const remap = (list: DetailedAssignment[]) => list.map(a => {
+            const sig = [...a.dates].sort().join(',')
+            if (sig === prevSig) return { ...a, dates: full }
+            const inter = a.dates.filter(d => full.includes(d))
+            return { ...a, dates: inter.length > 0 ? inter : full }
+        })
+        setAssignedPersonal(prev => remap(prev))
+        setAssignedMaquinaria(prev => remap(prev))
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [formData.fechas_multiples])
 
     // Split personal by tipo (externo = proveedor RH, interno = propio)
     const personalInterno = personalList.filter(p => !p.personal_externo)
@@ -470,11 +592,22 @@ export function NuevaTareaForm({ personalList = [], maquinariaList = [], cliente
             proveedor_id?: string | null
             recurso_externo_nombre?: string | null
         }
+        // Invariante: ningún recurso puede quedar asignado a un día que ya no es
+        // parte de la tarea. Se intersecta con las fechas vigentes del calendario;
+        // si la intersección queda vacía, el recurso pasa a todas las fechas.
+        const fullDates = [...formData.fechas_multiples]
+            .sort((a, b) => a.getTime() - b.getTime())
+            .map((d) => format(d, 'yyyy-MM-dd'))
+        const clampDates = (dates: string[]) => {
+            const inter = dates.filter((d) => fullDates.includes(d))
+            return inter.length > 0 ? inter : fullDates
+        }
+
         const allAssignments: AssignmentFlat[] = [
             ...assignedPersonal.map<AssignmentFlat>((a) => ({
                 tipo_recurso: 'PERSONAL',
                 id: a.resourceId,
-                dates: a.dates,
+                dates: clampDates(a.dates),
                 tipo_contratacion: a.tipo_contratacion,
                 proveedor_id: a.proveedor_id ?? null,
                 recurso_externo_nombre: a.recurso_externo_nombre ?? null,
@@ -482,7 +615,7 @@ export function NuevaTareaForm({ personalList = [], maquinariaList = [], cliente
             ...assignedMaquinaria.map<AssignmentFlat>((a) => ({
                 tipo_recurso: 'MAQUINARIA',
                 id: a.resourceId,
-                dates: a.dates,
+                dates: clampDates(a.dates),
                 tipo_contratacion: a.tipo_contratacion,
                 proveedor_id: a.proveedor_id ?? null,
                 recurso_externo_nombre: a.recurso_externo_nombre ?? null,
@@ -496,11 +629,13 @@ export function NuevaTareaForm({ personalList = [], maquinariaList = [], cliente
             if (!groupsByDateSig.has(sig)) groupsByDateSig.set(sig, { dates: sortedDates, recursos: [] })
             // Personal EXTERNO tiene un profile UUID real → siempre lo pasamos para que
             // tareas_recursos.personal_id quede vinculado y getAvailability lo detecte.
-            // Maquinaria EXTERNO usa un synthetic UUID (no FK real) → seguimos pasando ''.
-            const isExternoMaquinaria = a.tipo_contratacion === 'EXTERNO' && a.tipo_recurso === 'MAQUINARIA'
+            // Ids sintéticos "ext-..." (maquinaria externa manual, o recursos legacy
+            // rehidratados sin FK) no son UUID reales → se pasa '' (el server lo
+            // convierte en NULL y el recurso se identifica por proveedor + nombre).
+            const isSynthetic = a.id.startsWith('ext-')
             groupsByDateSig.get(sig)!.recursos.push({
                 tipo_recurso: a.tipo_recurso,
-                recurso_id: isExternoMaquinaria ? '' : a.id,
+                recurso_id: isSynthetic ? '' : a.id,
                 proveedor_id: a.proveedor_id ?? null,
                 recurso_externo_nombre: a.recurso_externo_nombre ?? null,
             })
