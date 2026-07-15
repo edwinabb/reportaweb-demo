@@ -1,5 +1,49 @@
 # Technical Debts & DUDAs — Reporta Web 3
 
+**Última revisión:** 2026-07-14 (cierre módulo 1 Usuarios)
+
+| ID | Tema | Prioridad | Estado |
+|----|------|-----------|--------|
+| DUDA-SEC-001 | Rotar SERVICE_ROLE_KEY de PROD (estuvo en git) | ALTA | 🟡 Pendiente |
+| DUDA-E2E-001 | Actualizar suite E2E a la UI del template v1.2 | ALTA | 🟡 Pendiente |
+| DUDA-CACHE-001 | Migrar cache HTML a stale-while-revalidate | MEDIA | 🟡 Pendiente |
+| DUDA-DEPS-001 | Migrar xlsx (vulns altas sin fix en npm) | MEDIA | 🟡 Pendiente |
+| DUDA-DEPS-002 | middleware.ts → proxy.ts (espera soporte OpenNext) | BAJA | 🔴 Bloqueado |
+| — | Migrar cron jobs de Vercel a Cloudflare | MEDIA | 🟡 Pendiente |
+| — | Configurar deploy de live.reportar.app (worker reportaweb-live) | ALTA | 🟡 Pendiente |
+
+---
+
+## DUDA-SEC-001: Rotar SERVICE_ROLE_KEY de PROD
+
+**Status:** 🟡 PENDIENTE
+**Prioridad:** ALTA
+**Esfuerzo:** 15 min
+
+El `SUPABASE_SERVICE_ROLE_KEY` de PROD (fqwhagryqkkhbgznxtwf) estuvo committeado
+brevemente en `.env.production` (commits del 2026-07-14, repos privados). Ya se
+retiró del archivo, pero queda en el historial de git.
+
+**Acción:** Supabase Dashboard → proyecto PROD → Settings → API → Reset
+`service_role` key, y actualizar el Secret en Cloudflare (worker reportaweb-live)
+y `.env.local` (PROD_SUPABASE_SERVICE_ROLE_KEY).
+
+---
+
+## DUDA-E2E-001: Suite E2E desactualizada tras template v1.2
+
+**Status:** 🟡 PENDIENTE
+**Prioridad:** ALTA (antes del próximo release a live)
+**Esfuerzo:** 2-4h
+
+Los cambios del template v1.2 (búsqueda multicampo, columnas nuevas, botones
+Activos/Papelera/XLS, columna Estado eliminada, títulos removidos) muy
+probablemente rompen tests de `tests/flows/17-usuarios.spec.ts` y relacionados.
+
+**Acción:** correr `npm run test:e2e:grupo-c` contra la BD test, actualizar
+selectores/asserts al nuevo estándar, y de paso crear helpers reutilizables
+para validar el template en los próximos módulos.
+
 ## DUDA-CACHE-001: Migrar a stale-while-revalidate (Opción B)
 
 **Status:** 🟡 PENDIENTE  

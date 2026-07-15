@@ -20,23 +20,22 @@
 
 ## Estado Actual
 
-**Date:** 2026-07-13  
-**Web Version:** v3.11.0 (PROD) ✅ — **READY FOR DEPLOYMENT**  
+**Date:** 2026-07-14  
+**Web Version:** v3.11.0 — ✅ DESPLEGADA en demo.reportar.app (BD TEST + seed sintético)  
 **App Version:** v1.8.14  
-**E2E Suite:** 347/374 tests passing (92.8%)  
-**Cutover:** 2026-05-30 ✅  
-**v3.11 Status:** ✅ COMPLETADO (all 6 tickets done)
+**Auditoría UI:** Módulo 1/15 (Usuarios) ✅ CERRADO — tracker en [docs/UI-TEMPLATE-LISTADOS.md](./docs/UI-TEMPLATE-LISTADOS.md)  
+**Template listados:** v1.2 DEFINIDO (aplicar a los demás módulos)  
+**E2E Suite:** ⚠️ desactualizada tras template v1.2 (DUDA-E2E-001)
 
-**Environment Status:**
-- ✅ Production (master): v3.11 ready
-- ⚠️ Development: Temporarily unavailable
-- ✅ Database: 100% tareas_recursos coverage, 0 orphans
+**Deploy demo (pipeline funcionando):**
+- Push a `demo/master` → Cloudflare Workers Builds (worker `reportaweb-demo`)
+- Build: `npm run build:demo && npx opennextjs-cloudflare build` (usa `.env.demo` → BD TEST)
+- Deploy: `npx wrangler deploy --config wrangler.demo.toml`
+- Secrets del worker (dashboard): `SUPABASE_SERVICE_ROLE_KEY` (TEST)
+- live.reportar.app: ⚠️ deploy AÚN NO configurado (usar `wrangler.live.toml` + build normal)
 
-**Release Notes (v3.11):**
-- ✅ tareas_recursos: 100% coverage (14,511/14,511 tareas)
-- ✅ FK Integrity: 0 orphans, 0 duplicates
-- ✅ CISE + GRUAS tenant cleanup
-- ✅ See [DEPLOYMENT_v3.11.md](./DEPLOYMENT_v3.11.md) for deploy instructions
+**Próximo paso:** Módulo 2 (Maquinaria) — plan en [docs/auditoria-ui/PLAN-2026-07-15-MAQUINARIA.md](./docs/auditoria-ui/PLAN-2026-07-15-MAQUINARIA.md)  
+**Deudas técnicas:** [docs/TECHNICAL_DEBTS.md](./docs/TECHNICAL_DEBTS.md) (rotar key PROD = ALTA)
 
 ---
 
