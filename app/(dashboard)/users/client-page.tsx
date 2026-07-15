@@ -179,7 +179,7 @@ export function UsersClientPage({ users, isTrash = false }: UsersClientProps) {
     return (
         <div className="flex flex-col gap-4">
 
-            <div className="rounded-lg border p-6 bg-background">
+            <div>
                 <DataTable
                     columns={columns}
                     data={filteredUsers}
@@ -189,7 +189,7 @@ export function UsersClientPage({ users, isTrash = false }: UsersClientProps) {
                             placeholder="Buscar por nombre, documento o email..."
                             value={globalSearch}
                             onChange={(e) => setGlobalSearch(e.target.value)}
-                            className="h-8 w-[250px]"
+                            className="h-8 w-full md:w-[280px]"
                         />
                     )}
                     customAction={(table) => (

@@ -88,8 +88,9 @@ export function DataTable<TData, TValue>({
 
     return (
         <div className="space-y-4">
-            <div className="flex items-center justify-between">
-                <div className="flex flex-1 items-center space-x-2">
+            {/* Sección de buscador y botones — estándar UI-TEMPLATE-LISTADOS */}
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-4 rounded-lg border shadow-sm">
+                <div className="flex flex-wrap items-center gap-2 w-full md:w-auto md:flex-1">
                     {searchKey && (
                         <Input
                             placeholder={searchPlaceholder}
@@ -97,12 +98,12 @@ export function DataTable<TData, TValue>({
                             onChange={(event) =>
                                 table.getColumn(searchKey)?.setFilterValue(event.target.value)
                             }
-                            className="h-8 w-[150px] lg:w-[250px]"
+                            className="h-8 w-full md:w-[250px]"
                         />
                     )}
                     {toolbarContent && toolbarContent(table)}
                 </div>
-                <div className="flex items-center space-x-2">
+                <div className="flex flex-wrap items-center gap-2">
                     {!hideViewOptions && <DataTableViewOptions table={table} />}
                     {typeof customAction === 'function' ? customAction(table) : customAction}
                     {newAction && (
@@ -113,9 +114,9 @@ export function DataTable<TData, TValue>({
                     )}
                 </div>
             </div>
-            <div className="rounded-md border">
+            <div className="rounded-md border bg-white shadow-sm overflow-x-auto">
                 <Table>
-                    <TableHeader>
+                    <TableHeader className="bg-muted/50">
                         {table.getHeaderGroups().map((headerGroup) => (
                             <TableRow key={headerGroup.id}>
                                 {headerGroup.headers.map((header) => {

@@ -261,7 +261,7 @@ export function GlobalDocumentsTable({
             </div>
 
             {/* Table */}
-            <div className="rounded-md border bg-white shadow-sm overflow-hidden">
+            <div className="rounded-md border bg-white shadow-sm overflow-x-auto">
                 <Table>
                     <TableHeader className="bg-muted/50">
                         <TableRow>

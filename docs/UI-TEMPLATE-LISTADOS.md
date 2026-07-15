@@ -1,7 +1,7 @@
 # UI Template — Páginas de Listado (estándar)
 
-**Versión:** 1.1 — 2026-07-14
-**Estado:** ⏳ En revisión con usuario (aplicado a Usuarios, Tipos de Documento, Documentación)
+**Versión:** 1.2 — 2026-07-14
+**Estado:** ✅ DEFINIDO (validado con usuario en módulo Usuarios)
 **Objetivo:** Aplicar a TODOS los módulos de listado (Maquinaria, Terceros, Sitios, EPP, etc.)
 
 ---
@@ -58,6 +58,21 @@
    (ej. Documentación), filtros + búsqueda + paginación van por URL params y se
    resuelven en el servidor. La URL filtrada debe ser copiable/compartible.
 
+9. **Sección de buscador y botones (tarjeta):** la barra va en su propia
+   tarjeta: `bg-white p-4 rounded-lg border shadow-sm`, con
+   `flex flex-col md:flex-row md:items-center justify-between gap-4`.
+   *(v1.2)*
+
+10. **Barra de títulos de tabla en gris:** `<TableHeader className="bg-muted/50">`.
+    La tabla va en `rounded-md border bg-white shadow-sm overflow-x-auto`. *(v1.2)*
+
+11. **Responsive (tablet/celular):** *(v1.2)*
+    - El contenedor de la tabla lleva `overflow-x-auto` (scroll horizontal
+      propio; la página nunca scrollea de lado).
+    - La barra de buscador/botones apila en columna en móvil
+      (`flex-col md:flex-row`) y los botones envuelven (`flex-wrap`).
+    - Inputs de búsqueda: `w-full md:w-[250px]`.
+
 ## Componentes compartidos
 
 | Pieza | Archivo |
@@ -75,9 +90,33 @@
 - **Servidor (URL params):** `/users/documents` → `components/users/documents/global-documents-table.tsx`
 - **Vista especial (depuración en lote):** `/users/documents/depurar`
 
+## Control de avance — Auditoría UI por módulos
+
+**Avance: 1 de 15 módulos (6.7%) — faltan 14**
+
+| # | Módulo | Status | Fecha |
+|---|--------|--------|-------|
+| 1 | Usuarios (Directorio · Tipos de Documento · Documentación · Depurar) | ✅ COMPLETADO | 2026-07-14 |
+| 2 | Maquinaria | 🔲 Pendiente | — |
+| 3 | Terceros | 🔲 Pendiente | — |
+| 4 | Sitios | 🔲 Pendiente | — |
+| 5 | Gestión EPP | 🔲 Pendiente | — |
+| 6 | Cotizaciones | 🔲 Pendiente | — |
+| 7 | Planificación | 🔲 Pendiente | — |
+| 8 | Gestión Formatos | 🔲 Pendiente | — |
+| 9 | Informes | 🔲 Pendiente | — |
+| 10 | Planes de Acción | 🔲 Pendiente | — |
+| 11 | Ventas | 🔲 Pendiente | — |
+| 12 | Compras | 🔲 Pendiente | — |
+| 13 | Configuración | 🔲 Pendiente | — |
+| 14 | Perfil de Usuario | 🔲 Pendiente | — |
+| 15 | Opciones Internas | 🔲 Pendiente | — |
+
+> Actualizar esta tabla al cerrar cada módulo (status + fecha + % de avance).
+
 ## Pendientes de decisión
 
 - Confirmar orden de grupos en Depurar vencidos (hoy: +6 meses primero → +1 al final;
   dentro de cada grupo, del vencimiento más reciente al más antiguo).
-- Al validar módulo 2 (Maquinaria), revisar si el template necesita ajustes antes
+- Al auditar módulo 2 (Maquinaria), revisar si el template necesita ajustes antes
   de replicarlo al resto.

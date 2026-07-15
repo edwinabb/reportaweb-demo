@@ -102,15 +102,15 @@ export function DocumentTypesTable({ data, onNew }: DocumentTypesTableProps) {
 
     return (
         <div className="space-y-4">
-            {/* Toolbar estándar: buscador | Activos/Papelera | XLS | + Nuevo */}
-            <div className="flex items-center justify-between gap-2">
+            {/* Sección de buscador y botones — estándar UI-TEMPLATE-LISTADOS */}
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-4 rounded-lg border shadow-sm">
                 <Input
                     placeholder="Buscar tipo de documento..."
                     value={searchTerm}
                     onChange={(e) => { setSearchTerm(e.target.value); resetPage() }}
-                    className="h-8 w-[250px]"
+                    className="h-8 w-full md:w-[250px]"
                 />
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                     <Button
                         variant={!isTrash ? 'default' : 'outline'}
                         size="sm"
@@ -137,9 +137,9 @@ export function DocumentTypesTable({ data, onNew }: DocumentTypesTableProps) {
                 </div>
             </div>
 
-            <div className="rounded-md border">
+            <div className="rounded-md border bg-white shadow-sm overflow-x-auto">
                 <Table>
-                    <TableHeader>
+                    <TableHeader className="bg-muted/50">
                         <TableRow>
                             <TableHead className="w-[300px]">Nombre</TableHead>
                             <TableHead>

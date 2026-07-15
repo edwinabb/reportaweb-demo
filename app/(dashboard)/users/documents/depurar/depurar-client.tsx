@@ -112,7 +112,7 @@ export function DepurarClient({ documents, totalCount, currentPage, pageSize }: 
     return (
         <div className="space-y-4">
             {/* Toolbar */}
-            <div className="flex items-center justify-between gap-2">
+            <div className="flex flex-wrap items-center justify-between gap-2 bg-white p-4 rounded-lg border shadow-sm">
                 <Button variant="outline" size="sm" onClick={() => router.push('/users/documents')}>
                     <ArrowLeft className="h-4 w-4 mr-1" /> Volver a Documentación
                 </Button>
@@ -142,7 +142,7 @@ export function DepurarClient({ documents, totalCount, currentPage, pageSize }: 
                                 Documentos con +{months} {months === 1 ? 'mes' : 'meses'} de vencimiento
                                 <Badge variant="secondary" className="ml-2">{docs.length}</Badge>
                             </h2>
-                            <div className="rounded-md border bg-white shadow-sm overflow-hidden">
+                            <div className="rounded-md border bg-white shadow-sm overflow-x-auto">
                                 <Table>
                                     <TableHeader className="bg-muted/50">
                                         <TableRow>
