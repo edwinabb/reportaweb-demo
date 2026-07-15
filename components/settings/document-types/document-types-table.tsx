@@ -22,6 +22,7 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { DocumentType } from '@/types/user-documents'
 import { toggleDocumentTypeStatus } from '@/lib/actions/document-types'
@@ -37,14 +38,17 @@ export function DocumentTypesTable({ data }: DocumentTypesTableProps) {
     const [dialogOpen, setDialogOpen] = useState(false)
     const [categoryFilter, setCategoryFilter] = useState<Set<string>>(new Set())
     const [statusFilter, setStatusFilter] = useState<Set<boolean>>(new Set())
+    const [searchTerm, setSearchTerm] = useState('')
 
     const filteredData = useMemo(() => {
+        const search = searchTerm.trim().toLowerCase()
         return data.filter((doc) => {
+            if (search && !doc.name.toLowerCase().includes(search)) return false
             if (categoryFilter.size > 0 && !categoryFilter.has(doc.category)) return false
             if (statusFilter.size > 0 && !statusFilter.has(doc.is_active)) return false
             return true
         })
-    }, [data, categoryFilter, statusFilter])
+    }, [data, categoryFilter, statusFilter, searchTerm])
 
     const handleToggleStatus = (doc: DocumentType) => {
         startTransition(async () => {
@@ -70,6 +74,14 @@ export function DocumentTypesTable({ data }: DocumentTypesTableProps) {
 
     return (
         <>
+            <div className="flex items-center pb-4">
+                <Input
+                    placeholder="Buscar tipo de documento..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="h-8 w-[250px]"
+                />
+            </div>
             <div className="rounded-md border">
                 <Table>
                     <TableHeader>

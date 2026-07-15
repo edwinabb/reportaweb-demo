@@ -1,32 +1,17 @@
 'use client'
 
+import { useMemo, useState } from "react"
 import { Profile } from "@/types"
 import { DataTable } from "@/components/ui/data-table"
 import { ColumnDef } from "@tanstack/react-table"
 import { Trash, RotateCcw, Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Badge } from "@/components/ui/badge"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
-import { Badge } from "@/components/ui/badge"
-// import {
-//     AlertDialog,
-//     AlertDialogAction,
-//     AlertDialogCancel,
-//     AlertDialogContent,
-//     AlertDialogDescription,
-//     AlertDialogFooter,
-//     AlertDialogHeader,
-//     AlertDialogTitle,
-// } from "@/components/ui/alert-dialog"
-// Users usually aren't deleted via simple API in this project?
-// lib/actions/users.ts usually has create/update but maybe not delete/restore exposed yet?
-// I checked users.ts, it only had getProfiles. 
-// I need to check if deleteProfile exists or if I need to create it.
-// Assuming for now I need to standardise UI, I'll allow "View" or "Edit" if available.
-// If delete is not clear, I won't implement it yet or I will add it to users.ts.
-// User requested: "funcionalidad editar, borrar, restaurar funcionando correctamente" for Usuarios too.
-// So I MUST implement these actions in users.ts.
-
+import { DataTableColumnHeader } from "@/components/ui/data-table-column-header"
+import { DataTableColumnFilter } from "@/components/ui/data-table-column-filter"
 import { restoreProfile } from "@/lib/actions/users"
 import { UserActions } from "@/components/users/user-actions"
 
@@ -37,36 +22,124 @@ interface UsersClientProps {
 
 export function UsersClientPage({ users, isTrash = false }: UsersClientProps) {
     const router = useRouter()
+    const [globalSearch, setGlobalSearch] = useState("")
 
-    const filteredUsers = isTrash
-        ? users.filter(u => !u.is_active)
-        : users.filter(u => u.is_active)
+    // Búsqueda multicampo: nombre completo o nro de documento,
+    // case-insensitive y con coincidencia en cualquier posición.
+    const filteredUsers = useMemo(() => {
+        const byView = isTrash
+            ? users.filter(u => !u.is_active)
+            : users.filter(u => u.is_active)
+
+        const search = globalSearch.trim().toLowerCase()
+        if (!search) return byView
+
+        return byView.filter((user) => {
+            const name = (user.full_name || `${user.first_name || ''} ${user.last_name || ''}`).toLowerCase()
+            const doc = user.doc_number?.toLowerCase() ?? ''
+            return name.includes(search) || doc.includes(search)
+        })
+    }, [users, isTrash, globalSearch])
 
     const columns: ColumnDef<Profile>[] = [
         {
-            accessorKey: "full_name",
-            header: "Nombre",
+            accessorKey: "doc_number",
+            header: ({ column }) => (
+                <DataTableColumnHeader column={column} title="Nro. Documento" />
+            ),
+            cell: ({ row }) => row.original.doc_number
+                ? <span>{row.original.doc_number}</span>
+                : <span className="text-muted-foreground text-xs">—</span>
         },
         {
             accessorKey: "email",
-            header: "Email",
+            header: ({ column }) => (
+                <DataTableColumnHeader column={column} title="Email" />
+            ),
+        },
+        {
+            accessorKey: "full_name",
+            header: ({ column }) => (
+                <DataTableColumnHeader column={column} title="Nombre" />
+            ),
+            cell: ({ row }) => {
+                const u = row.original
+                return <span>{u.full_name || `${u.first_name || ''} ${u.last_name || ''}`.trim() || u.email || '—'}</span>
+            }
         },
         {
             accessorKey: "cargo",
-            header: "Cargo",
+            header: ({ column }) => (
+                <DataTableColumnHeader column={column} title="Cargo" />
+            ),
             cell: ({ row }) => row.original.cargo
                 ? <span className="text-sm">{row.original.cargo}</span>
                 : <span className="text-muted-foreground text-xs">—</span>
         },
         {
             accessorKey: "role",
-            header: "Rol",
-            cell: ({ row }) => <Badge variant="outline">{row.getValue("role")}</Badge>
+            header: ({ column }) => (
+                <DataTableColumnFilter
+                    column={column}
+                    title="Rol"
+                    options={[
+                        { label: "Admin Tenant", value: "admin_tenant" },
+                        { label: "Supervisor", value: "supervisor" },
+                        { label: "Planner", value: "planner" },
+                        { label: "Member", value: "member" },
+                        { label: "Viewer", value: "viewer" },
+                    ]}
+                />
+            ),
+            cell: ({ row }) => {
+                const role = row.getValue("role") as string
+                return (
+                    <Badge variant="outline" className="capitalize">
+                        {role?.replace('_', ' ') || 'N/A'}
+                    </Badge>
+                )
+            },
+            filterFn: (row, id, value: Array<string | boolean>) => {
+                if (!value || value.length === 0) return true
+                return value.includes(row.getValue(id))
+            },
         },
         {
-            accessorKey: "status",
-            header: "Estado",
-            cell: ({ row }) => row.original.is_active ? <Badge className="bg-green-500">Activo</Badge> : <Badge variant="destructive">Inactivo</Badge>
+            id: "tercero",
+            accessorFn: (row) => (row as any).tercero?.razon_social,
+            header: ({ column }) => (
+                <DataTableColumnFilter column={column} title="Proveedor" />
+            ),
+            cell: ({ row }) => {
+                const proveedor = (row.original as any).tercero?.razon_social
+                return proveedor
+                    ? <span>{proveedor}</span>
+                    : <span className="text-muted-foreground text-xs">—</span>
+            },
+            filterFn: (row, id, value: Array<string | boolean>) => {
+                if (!value || value.length === 0) return true
+                return value.includes((row.original as any).tercero?.razon_social)
+            },
+        },
+        {
+            accessorKey: "is_active",
+            header: ({ column }) => (
+                <DataTableColumnFilter
+                    column={column}
+                    title="Estado"
+                    options={[
+                        { label: "Activo", value: true },
+                        { label: "Inactivo", value: false },
+                    ]}
+                />
+            ),
+            cell: ({ row }) => row.original.is_active
+                ? <Badge className="bg-green-500">Activo</Badge>
+                : <Badge variant="destructive">Inactivo</Badge>,
+            filterFn: (row, id, value: Array<string | boolean>) => {
+                if (!value || value.length === 0) return true
+                return value.includes(row.getValue(id))
+            },
         },
         {
             id: "actions",
@@ -111,7 +184,14 @@ export function UsersClientPage({ users, isTrash = false }: UsersClientProps) {
                 <DataTable
                     columns={columns}
                     data={filteredUsers}
-                    searchKey="email"
+                    toolbarContent={() => (
+                        <Input
+                            placeholder="Buscar por nombre o nro documento..."
+                            value={globalSearch}
+                            onChange={(e) => setGlobalSearch(e.target.value)}
+                            className="h-8 w-[250px]"
+                        />
+                    )}
                     customAction={
                         <div className="flex items-center gap-2">
                             <Button
