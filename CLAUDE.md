@@ -23,7 +23,7 @@
 **Date:** 2026-07-18  
 **Web Version:** v3.11.4 — ✅ demo · live: worker `reportaweb-live` desplegado vía GitHub pero **dominio live.reportar.app SIN enrutar al worker (522)** — entorno live aún no listo (falta binding de dominio + secret `SUPABASE_SERVICE_ROLE_KEY` + rotar key)  
 **App Version:** v1.8.14  
-**Foco activo:** 🚀 **Growth Engine** (leads→trial→cliente) — diseño en curso. Ver [HANDOFF-2026-07-18.md](./docs/HANDOFF-2026-07-18.md) para retomar. Playbook portable (reuso en Impulsar, agosto) en [docs/PLAYBOOK-GROWTH-ENGINE.md](./docs/PLAYBOOK-GROWTH-ENGINE.md). Sub-proyecto A: spec + plan listos; B: spec listo; C/D/E pendientes.  
+**Foco activo:** 🚀 **Growth Engine** (leads→trial→cliente) — diseño en curso. Ver [HANDOFF-2026-07-18.md](./docs/HANDOFF-2026-07-18.md) para retomar. Playbook portable (reuso en Impulsar, agosto) en [docs/PLAYBOOK-GROWTH-ENGINE.md](./docs/PLAYBOOK-GROWTH-ENGINE.md). **Specs A–E ✅ escritos** (A también con plan de implementación); faltan planes de B/C/D/E. Precios C cerrados (STANDARD $29.99 / OWN BRAND $49.99 por asiento, mín. 10, USD; semestral −10% / anual −20%).  
 **Auditoría UI:** Módulo 3/15 (Terceros) ✅ template v1.2 + fixes de revisión aplicados (personal externo migrado a `profiles` — DUDA-TER-006); matriz en [docs/auditoria-ui/03-terceros.md](./docs/auditoria-ui/03-terceros.md) — pausada por foco en Growth Engine  
 **Template listados:** v1.2 aplicado a Usuarios, Maquinaria y Terceros  
 **E2E Suite:** ⚠️ desactualizada tras template v1.2 + cambio personal externo (DUDA-E2E-001 · TESTING.md § TEST-003)

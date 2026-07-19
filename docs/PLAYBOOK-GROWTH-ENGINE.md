@@ -18,9 +18,9 @@ sub-proyecto (`docs/superpowers/specs/`), que cada proyecto adapta.
 |---|--------------|-----|-------------|
 | **A** | Ciclo de vida del trial v2 | Estados, fases, onboarding adaptativo, auto-borrado | ✅ spec + plan (`2026-07-18-trial-lifecycle-v2-*`) |
 | **B** | Alta sales-led + aprobación/notificaciones | Crear cuenta demo del lead, aprobación 1-clic, Telegram | ✅ spec (`2026-07-18-lead-provisioning-telegram-design.md`) |
-| **C** | Cobro self-service (Stripe) | Checkout → convertir trial a pago, webhooks | ⬜ pendiente |
-| **D** | Onboarding definitivo post-pago | Onboarding completo tras el pago | ⬜ pendiente |
-| **E** | Asistente virtual (ventas + soporte) | Chat web pre-venta + soporte 1er nivel | ⬜ pendiente |
+| **C** | Cobro self-service (Stripe) | Checkout → convertir trial a pago, webhooks | ✅ spec (`2026-07-19-stripe-self-service-design.md`) |
+| **D** | Onboarding definitivo post-pago | Onboarding completo tras el pago | ✅ spec (`2026-07-19-onboarding-post-pago-design.md`) |
+| **E** | Asistente virtual (ventas + soporte) | Chat web pre-venta + soporte 1er nivel | ✅ spec (`2026-07-19-asistente-virtual-design.md`) |
 
 **Orden de construcción:** A (base de estados) → B (alta) → C (cobro) → D (post-pago) →
 E (asistente, cuando ya hay leads a quien atender).
