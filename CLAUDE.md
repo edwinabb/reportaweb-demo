@@ -20,10 +20,11 @@
 
 ## Estado Actual
 
-**Date:** 2026-07-17  
+**Date:** 2026-07-18  
 **Web Version:** v3.11.4 — ✅ demo · live: worker `reportaweb-live` desplegado vía GitHub pero **dominio live.reportar.app SIN enrutar al worker (522)** — entorno live aún no listo (falta binding de dominio + secret `SUPABASE_SERVICE_ROLE_KEY` + rotar key)  
 **App Version:** v1.8.14  
-**Auditoría UI:** Módulo 3/15 (Terceros) ✅ template v1.2 + fixes de revisión aplicados (personal externo migrado a `profiles` — DUDA-TER-006); matriz en [docs/auditoria-ui/03-terceros.md](./docs/auditoria-ui/03-terceros.md)  
+**Foco activo:** 🚀 **Growth Engine** (leads→trial→cliente) — diseño en curso. Ver [HANDOFF-2026-07-18.md](./docs/HANDOFF-2026-07-18.md) para retomar. Playbook portable (reuso en Impulsar, agosto) en [docs/PLAYBOOK-GROWTH-ENGINE.md](./docs/PLAYBOOK-GROWTH-ENGINE.md). Sub-proyecto A: spec + plan listos; B: spec listo; C/D/E pendientes.  
+**Auditoría UI:** Módulo 3/15 (Terceros) ✅ template v1.2 + fixes de revisión aplicados (personal externo migrado a `profiles` — DUDA-TER-006); matriz en [docs/auditoria-ui/03-terceros.md](./docs/auditoria-ui/03-terceros.md) — pausada por foco en Growth Engine  
 **Template listados:** v1.2 aplicado a Usuarios, Maquinaria y Terceros  
 **E2E Suite:** ⚠️ desactualizada tras template v1.2 + cambio personal externo (DUDA-E2E-001 · TESTING.md § TEST-003)
 
