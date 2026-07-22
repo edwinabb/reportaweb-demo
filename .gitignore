@@ -10,6 +10,10 @@
 !.yarn/releases
 !.yarn/versions
 
+# tooling / analysis artifacts (no trackear)
+/graphify-out
+/.superpowers
+
 # testing
 /coverage
 
