@@ -165,7 +165,7 @@ GRÚAS del PACIFICO SAC: 6f4c923a-c3b7-47c2-9dea-2a187f274f73
 Ver: config_credentials_supabase.md
 - ANON_KEY: En .env.local
 - SERVICE_ROLE_KEY: En .env.local
-- Bubble Token: 5532c3bb4891ccf5c49e69a6cf30b8e7
+- Bubble Token: <BUBBLE_API_TOKEN — ver .env.local>
 ```
 
 ### Queries SQL (Copiar/pega)

@@ -14,8 +14,6 @@
       "Bash(node -e \"const d = require\\('./bubble_full_schema.json'\\); console.log\\(Object.keys\\(d\\).join\\('\\\\n'\\)\\)\")",
       "Bash(node -e \"const d = require\\('./bubble_full_schema.json'\\); console.log\\(Object.keys\\(d.schema\\).join\\('\\\\n'\\)\\); console.log\\('---TOTAL:', Object.keys\\(d.schema\\).length\\)\")",
       "Bash(node -e ':*)",
-      "Bash(curl -s -H \"Authorization: Bearer 2539208d3baeaade6295225eac0edbd9\" \"https://reporta.la/version-test/api/1.1/obj/cotizaciones?limit=1&cursor=0&constraints=%5B%7B%22key%22%3A%22tenant_id%22%2C%22constraint_type%22%3A%22equals%22%2C%22value%22%3A%221596035803087x371442079041323000%22%7D%5D\")",
-      "Bash(curl -s -H \"Authorization: Bearer 2539208d3baeaade6295225eac0edbd9\" \"https://reporta.la/version-test/api/1.1/obj/cotizaciones?limit=1&cursor=0&constraints=%5B%7B%22key%22%3A%22tenant_id%22%2C%22constraint_type%22%3A%22equals%22%2C%22value%22%3A%221691779382086x534175713862630160%22%7D%5D\")",
       "Bash(npm run *)",
       "Bash(echo \"PID=$!\")",
       "Bash(TEST_NO_SERVER=1 npx playwright test tests/flows/21-pre-cutover-usuarios-crud.spec.ts tests/flows/22-pre-cutover-maquinaria-crud.spec.ts tests/flows/23-pre-cutover-terceros-crud.spec.ts --project=chromium-admin --reporter=list)",

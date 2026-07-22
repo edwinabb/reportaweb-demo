@@ -1,25 +1,28 @@
 # Technical Debts & DUDAs — Reporta Web 3
 
-**Última revisión:** 2026-07-15 (auditoría Maquinaria + Planificación)
+**Última revisión:** 2026-07-22 (remediación de secretos expuestos — ver [plan-2026-07-22.md](./plan-2026-07-22.md))
 
 | ID | Tema | Prioridad | Estado |
 |----|------|-----------|--------|
-| DUDA-SEC-001 | Rotar SERVICE_ROLE_KEY de PROD (estuvo en git) | ALTA | 🟡 Pendiente |
+| DUDA-SEC-001 | Rotar SERVICE_ROLE_KEY de PROD (estuvo en git) | ALTA | 🟢 En progreso (anon→`sb_publishable` ✅ v3.11.5; falta `sb_secret_` en worker + deshabilitar legacy) |
+| DUDA-SEC-002 | Tokens Bubble filtrados a git + 4 docs (rotar + limpiar) | ALTA | 🟡 Pendiente |
+| DUDA-SEC-003 | Revocar en dashboard PATs Supabase ya removidos de settings | ALTA | 🟡 Pendiente |
 | DUDA-E2E-001 | Actualizar suite E2E a la UI del template v1.2 | ALTA | 🟡 Pendiente |
 | DUDA-CACHE-001 | Migrar cache HTML a stale-while-revalidate | MEDIA | 🟡 Pendiente |
 | DUDA-DEPS-001 | Migrar xlsx (vulns altas sin fix en npm) | MEDIA | 🟡 Pendiente |
 | DUDA-DEPS-002 | middleware.ts → proxy.ts (espera soporte OpenNext) | BAJA | 🔴 Bloqueado |
 | DUDA-MAQ-HORAS | `maquinaria_horas` sin UI propia (se usa en informes y tareas) | MEDIA | 🟡 Pendiente |
 | — | Migrar cron jobs de Vercel a Cloudflare | MEDIA | 🟡 Pendiente |
-| — | Configurar deploy de live.reportar.app (worker reportaweb-live) | ALTA | 🟡 Pendiente |
+| — | Crear entorno Cloudflare de prod (`reportar.app` apex) + rebind `demo`→`dev.reportar.app` (estándar dominios 2026-07-22) | ALTA | 🟡 Pendiente |
+| — | Plan Workers Paid ($5/mes, por cuenta) — worker remoto 4.86 MB gzip > Free 1 MB. Opt. a Free: matar source maps de CI (ver ARCHITECTURE) | BAJA | 🟡 Pendiente |
 
 ---
 
 ## DUDA-SEC-001: Rotar SERVICE_ROLE_KEY de PROD
 
-**Status:** 🟡 PENDIENTE
+**Status:** 🟢 EN PROGRESO
 **Prioridad:** ALTA
-**Esfuerzo:** 15 min
+**Esfuerzo:** 15 min (restante: cargar secret + verificar + deshabilitar legacy)
 
 El `SUPABASE_SERVICE_ROLE_KEY` de PROD (fqwhagryqkkhbgznxtwf) estuvo committeado
 brevemente en `.env.production` (commits del 2026-07-14, repos privados). Ya se
@@ -32,6 +35,17 @@ retiró del archivo, pero queda en el historial de git.
 - Se retiró la key de `.claude/settings.local.json` y de `.env - copia.local`.
 - Queda una copia comentada en `.env.local` línea 20 (reemplazar al rotar).
 
+**Update 2026-07-22 (rotación anon + deploy v3.11.5):**
+- ✅ Usuario creó `sb_secret_` y `sb_publishable_` en PROD (sistema nuevo de API keys).
+- ✅ **anon → `sb_publishable_`** aplicado en `.env.production` **y** `wrangler.live.toml:18`
+  (la anon vivía en 2 archivos) — commit del release v3.11.5. `git grep sb_secret_` vacío.
+- ✅ Release v3.11.5 pusheado a `origin`/`demo`/`live`.
+- ⏳ **Falta (dashboard, usuario):** cargar el secret `SUPABASE_SERVICE_ROLE_KEY=sb_secret_`
+  en el worker `reportaweb-live` → verificar login + acción admin sin 401/403 → recién ahí
+  **deshabilitar las legacy keys** en Supabase. **El orden importa** (verificar ANTES de
+  deshabilitar). Runbook: [RUNBOOK-ROTAR-SERVICE-ROLE-PROD.md](./RUNBOOK-ROTAR-SERVICE-ROLE-PROD.md).
+- 🔗 Acoplado a crear el entorno Cloudflare de prod (`reportar.app` apex) — ver fila de deploy.
+
 **Acción:** rotar en Supabase Dashboard → proyecto PROD → Settings → API keys,
 y actualizar el Secret en Cloudflare (worker reportaweb-live) y `.env.local`
 (PROD_SUPABASE_SERVICE_ROLE_KEY).
@@ -41,6 +55,66 @@ mismo secret, y un reset invalida también la anon key embebida en los APKs
 instalados de reporta-app. Ruta segura: migrar a las API keys nuevas (crear
 secret key `sb_secret_…` para uso server-side y deshabilitar solo la legacy
 `service_role`), verificando en el Dashboard que el proyecto ya ofrece esa opción.
+
+---
+
+## DUDA-SEC-002: Tokens de Bubble filtrados a git + docs
+
+**Status:** 🟡 PENDIENTE
+**Prioridad:** ALTA
+**Esfuerzo:** 20 min (rotar en Bubble + swap `.env.local` + limpiar 4 docs)
+
+### Contexto
+
+Durante la limpieza de secretos (2026-07-22) se detectaron **dos** tokens de la API de
+Bubble (`reporta.la`), ambos comprometidos:
+
+- `2539…dbd9` — estaba hardcodeado en `reportaweb3/.claude/settings.json` (curls a
+  `reporta.la/version-test`). Ya removido del árbol; queda en historia de git
+  (commits `eae2fbb`, `5463816`).
+- `5532c3bb…` — el que usa la migración (`.env.local` → `BUBBLE_API_TOKEN`, URL live).
+  **Hardcodeado en 4 docs trackeados** y en historia de git (`162a503`, `5463816`):
+  `docs/migracion-mapeo-bubble-supabase.md`, `docs/julio12/migracion-mapeo-bubble-supabase.md`,
+  `docs/julio12/README.md`, `docs/julio12/KICKOFF_v3.11_2026-07-15.md`.
+
+Ningún código lee `BUBBLE_API_TOKEN` desde el entorno: el acceso a Bubble se hacía con el
+token **inline en curls**, por eso terminó copiado en tantos lugares.
+
+### Acción
+
+1. Bubble (`reporta.la` → Settings → API → API Tokens): generar **uno nuevo**, revocar
+   los dos viejos (`2539…`, `5532c3bb…`).
+2. Poner el nuevo **solo** en `.env.local` (`BUBBLE_API_TOKEN`), nunca inline.
+3. Limpiar `5532c3bb…` de los 4 docs trackeados (placeholder → `.env.local`).
+4. Consumir siempre por env: `curl -H "Authorization: Bearer $BUBBLE_API_TOKEN"
+   "$BUBBLE_API_URL/..."` (cargar con `npx dotenvx run -f .env.local -- …`).
+
+> Historia de git: rotados los tokens, las copias en commits quedan inertes. Con repos
+> privados alcanza; reescribir historia solo si algún repo pasa a público.
+
+---
+
+## DUDA-SEC-003: Revocar PATs Supabase expuestos (ya removidos de settings)
+
+**Status:** 🟡 PENDIENTE
+**Prioridad:** ALTA
+**Esfuerzo:** 5 min (dashboard)
+
+### Contexto
+
+Se removieron de `~/.claude/settings.json` (2026-07-22) dos PAT de Supabase que estaban
+en texto plano: `sbp_2135…c4fa0` (bloque MCP, sin uso) y `sbp_bd7c…b370d2` (regla de
+permiso de `gen types`). **Sacarlos del archivo no los invalida** — siguen vivos hasta
+revocarlos.
+
+Ya rotados en esta ronda: `sbp_6fb2…` (CLI, reemplazado en `.env.local` y verificado) y
+`sbp_4832…` (huérfano, revocado).
+
+### Acción
+
+Supabase Dashboard → Account → Access Tokens → **Revoke** `sbp_2135…` y `sbp_bd7c…`.
+Verificación: `grep sbp_ ~/.claude/settings.json` sin resultados (ya cumplido) + los
+tokens dejan de aparecer en la lista del dashboard.
 
 ---
 

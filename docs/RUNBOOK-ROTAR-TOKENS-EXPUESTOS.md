@@ -134,10 +134,17 @@ higiene, sin urgencia).
 
 ## Checklist rápido
 
-- [ ] #1/#2 PATs Supabase revocados + MCP actualizado con token nuevo (por env preferible)
-- [ ] Regla con PAT viejo (`sbp_bd7c…`) borrada del allowlist global
+> Estado al 2026-07-22 — ejecución del día en [plan-2026-07-22.md](./plan-2026-07-22.md).
+
+- [x] Bloque MCP (`sbp_2135…`) y regla con PAT viejo (`sbp_bd7c…`) **borrados** del allowlist global
+- [ ] #1/#2 PATs Supabase **revocados en dashboard** (`sbp_2135…`, `sbp_bd7c…`) — DUDA-SEC-003
+- [x] CLI Supabase rotado: `sbp_6fb2…` revocado + reemplazado en `.env.local` + verificado
+- [x] `sbp_4832…` revocado (huérfano)
 - [ ] #3 Password BD SerIA reseteado + 4 reglas `DATABASE_URL` borradas del allowlist global
-- [ ] #4 Token Bubble regenerado + 2 reglas curl borradas del allowlist del proyecto
+- [x] #4 Reglas curl con token Bubble (`2539…`) borradas del allowlist del proyecto
+- [ ] #4 **Ampliado (DUDA-SEC-002):** hay 2 tokens Bubble y ambos en git. Rotar en Bubble
+      (`2539…` + `5532c3bb…`), poner el nuevo solo en `.env.local`, y limpiar `5532c3bb…`
+      de los 4 docs trackeados (ver DUDA-SEC-002 en TECHNICAL_DEBTS.md)
 - [ ] #5 (opcional) reglas con `apikey:` anon borradas
-- [ ] `grep` de verificación sin resultados + JSON válidos + MCP probado
-- [ ] Confirmado estado de git de `reportaweb3/.claude/settings.json`
+- [x] `grep` de verificación sin secretos `sbp_`/Bubble/`BcJ` en settings + JSON válidos
+- [x] Confirmado: `reportaweb3/.claude/settings.json` **SÍ trackeado en git** (token Bubble en historia)

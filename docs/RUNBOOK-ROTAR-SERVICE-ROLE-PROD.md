@@ -9,6 +9,25 @@ sin romper la `anon` key embebida en los APKs instalados de reporta-app.
 
 ---
 
+## 📍 Estado actual (2026-07-22)
+
+- [x] **Paso 1** — proyecto ofrece el sistema nuevo de API keys ✅
+- [x] **Paso 2** — `sb_secret_` creada por el usuario ✅ · `sb_publishable_` también ✅
+- [x] **anon → `sb_publishable_`** aplicada en `.env.production` **y** `wrangler.live.toml`
+      (la anon vivía en 2 archivos) — release **v3.11.5** pusheado a `origin`/`demo`/`live`
+- [ ] **Paso 3** — cargar `SUPABASE_SERVICE_ROLE_KEY=sb_secret_` en el worker `reportaweb-live`
+      *(dashboard, usuario)* — **acoplado a crear el entorno Cloudflare de prod** (`reportar.app`
+      apex aún no existe en Cloudflare; ver TECHNICAL_DEBTS)
+- [ ] **Paso 4** — verificar login + acción admin server-side sin 401/403
+- [ ] **Paso 5** — deshabilitar las legacy keys (⚠️ solo DESPUÉS del Paso 4)
+- [ ] **Paso 6** — cerrar DUDA-SEC-001 ✅ + `git grep sb_secret_` vacío (ya está vacío)
+
+> **Nota:** como no hay clientes en prod, si el dashboard no deja deshabilitar solo la
+> `service_role`, es seguro deshabilitar las legacy en bloque (Ruta B no requiere esperar
+> adopción de APK). Confirmar con el usuario antes de ejecutar.
+
+---
+
 ## ⚠️ Regla de oro (leer antes de tocar nada)
 
 **NUNCA uses "Reset JWT secret" / "Legacy JWT Secret → Roll".**

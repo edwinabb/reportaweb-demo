@@ -214,7 +214,7 @@ SERVICE_ROLE: eyJhbGciOiJIUzI1NiIs...
 
 **Bubble API:**
 ```
-Token: 5532c3bb4891ccf5c49e69a6cf30b8e7
+Token: <BUBBLE_API_TOKEN — ver .env.local>
 URL: https://reporta.la/api/1.1/obj
 ```
 

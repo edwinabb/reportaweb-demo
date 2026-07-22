@@ -10,10 +10,1228 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "14.1"
+    PostgrestVersion: "14.5"
   }
   public: {
     Tables: {
+      _bk_cotizaciones: {
+        Row: {
+          anio: number | null
+          aprobado_por: string | null
+          aprobado_por_id: string | null
+          bubble_id: string | null
+          cliente_id: string | null
+          comentarios_cliente: string | null
+          condiciones_id: string | null
+          contacto_id: string | null
+          cotizacion_padre_id: string | null
+          created_at: string | null
+          created_by: string | null
+          descripcion_requerimiento: string | null
+          dias_validez: number | null
+          estado: string | null
+          fecha_aprobacion: string | null
+          fecha_emision: string | null
+          fecha_envio: string | null
+          fecha_inicio_estimada: string | null
+          fecha_solicitud: string | null
+          fecha_vencimiento: string | null
+          forma_pago: string | null
+          id: string | null
+          igv: number | null
+          is_active: boolean | null
+          maquinaria_id: string | null
+          mes: number | null
+          moneda: string | null
+          notas_internas: string | null
+          notas_precios: string | null
+          numero: string | null
+          observaciones_cliente: string | null
+          pdf_generado_at: string | null
+          pdf_url: string | null
+          periodo: string | null
+          periodo_cantidad: number | null
+          periodo_unidad: string | null
+          pin_aprobacion: string | null
+          pin_attempts: number | null
+          pin_locked_until: string | null
+          plazo_pago: string | null
+          sitio_id: string | null
+          subtotal: number | null
+          tarea_id: string | null
+          tasa_cambio_id: string | null
+          tenant_id: string | null
+          terminos_condiciones: string | null
+          token_aprobacion: string | null
+          total: number | null
+          updated_at: string | null
+          updated_by: string | null
+          vendedor_id: string | null
+          version: number | null
+        }
+        Insert: {
+          anio?: number | null
+          aprobado_por?: string | null
+          aprobado_por_id?: string | null
+          bubble_id?: string | null
+          cliente_id?: string | null
+          comentarios_cliente?: string | null
+          condiciones_id?: string | null
+          contacto_id?: string | null
+          cotizacion_padre_id?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          descripcion_requerimiento?: string | null
+          dias_validez?: number | null
+          estado?: string | null
+          fecha_aprobacion?: string | null
+          fecha_emision?: string | null
+          fecha_envio?: string | null
+          fecha_inicio_estimada?: string | null
+          fecha_solicitud?: string | null
+          fecha_vencimiento?: string | null
+          forma_pago?: string | null
+          id?: string | null
+          igv?: number | null
+          is_active?: boolean | null
+          maquinaria_id?: string | null
+          mes?: number | null
+          moneda?: string | null
+          notas_internas?: string | null
+          notas_precios?: string | null
+          numero?: string | null
+          observaciones_cliente?: string | null
+          pdf_generado_at?: string | null
+          pdf_url?: string | null
+          periodo?: string | null
+          periodo_cantidad?: number | null
+          periodo_unidad?: string | null
+          pin_aprobacion?: string | null
+          pin_attempts?: number | null
+          pin_locked_until?: string | null
+          plazo_pago?: string | null
+          sitio_id?: string | null
+          subtotal?: number | null
+          tarea_id?: string | null
+          tasa_cambio_id?: string | null
+          tenant_id?: string | null
+          terminos_condiciones?: string | null
+          token_aprobacion?: string | null
+          total?: number | null
+          updated_at?: string | null
+          updated_by?: string | null
+          vendedor_id?: string | null
+          version?: number | null
+        }
+        Update: {
+          anio?: number | null
+          aprobado_por?: string | null
+          aprobado_por_id?: string | null
+          bubble_id?: string | null
+          cliente_id?: string | null
+          comentarios_cliente?: string | null
+          condiciones_id?: string | null
+          contacto_id?: string | null
+          cotizacion_padre_id?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          descripcion_requerimiento?: string | null
+          dias_validez?: number | null
+          estado?: string | null
+          fecha_aprobacion?: string | null
+          fecha_emision?: string | null
+          fecha_envio?: string | null
+          fecha_inicio_estimada?: string | null
+          fecha_solicitud?: string | null
+          fecha_vencimiento?: string | null
+          forma_pago?: string | null
+          id?: string | null
+          igv?: number | null
+          is_active?: boolean | null
+          maquinaria_id?: string | null
+          mes?: number | null
+          moneda?: string | null
+          notas_internas?: string | null
+          notas_precios?: string | null
+          numero?: string | null
+          observaciones_cliente?: string | null
+          pdf_generado_at?: string | null
+          pdf_url?: string | null
+          periodo?: string | null
+          periodo_cantidad?: number | null
+          periodo_unidad?: string | null
+          pin_aprobacion?: string | null
+          pin_attempts?: number | null
+          pin_locked_until?: string | null
+          plazo_pago?: string | null
+          sitio_id?: string | null
+          subtotal?: number | null
+          tarea_id?: string | null
+          tasa_cambio_id?: string | null
+          tenant_id?: string | null
+          terminos_condiciones?: string | null
+          token_aprobacion?: string | null
+          total?: number | null
+          updated_at?: string | null
+          updated_by?: string | null
+          vendedor_id?: string | null
+          version?: number | null
+        }
+        Relationships: []
+      }
+      _bk_facturas_compra: {
+        Row: {
+          bubble_id: string | null
+          codigo_factura: string | null
+          codigo_valoracion: string | null
+          cotizacion_contratista_id: string | null
+          cotizacion_id: string | null
+          created_at: string | null
+          created_by: string | null
+          detraccion_constancia: number | null
+          detraccion_constancia_bubble: string | null
+          detraccion_fecha_pago: string | null
+          detraccion_fecha_pago_bubble: string | null
+          detraccion_paga_por: string | null
+          detraccion_paga_por_bubble: string | null
+          detraccion_pago_monto_soles: number | null
+          detraccion_pago_monto_soles_bubble: number | null
+          detraccion_porcentaje: number | null
+          detraccion_soles: number | null
+          detraccion_usd: number | null
+          dias_para_pago: number | null
+          dias_para_pago_bubble: number | null
+          editor_id: string | null
+          esta_activa: boolean | null
+          estado: string | null
+          estado_pago: string | null
+          estado_pago_bubble: string | null
+          factura_paga: boolean | null
+          factura_paga_bubble: boolean | null
+          fecha_factura: string | null
+          fecha_factura_bubble: string | null
+          fecha_valorado: string | null
+          fecha_vencimiento: string | null
+          fecha_vencimiento_bubble: string | null
+          id: string | null
+          igv_monto: number | null
+          igv_porcentaje: number | null
+          lista_cobros: string[] | null
+          lista_items: string[] | null
+          maquinaria_id: string | null
+          moneda_id: string | null
+          monto_a_cobrar_soles: number | null
+          monto_a_cobrar_usd: number | null
+          monto_pagado_soles: number | null
+          monto_pagado_usd: number | null
+          pdf_factura: string | null
+          pdf_factura_url: string | null
+          pdf_valorizacion: string | null
+          pendiente_por_cobrar_sol: number | null
+          pendiente_por_cobrar_usd: number | null
+          proveedor_id: string | null
+          subtotal: number | null
+          tasa_cambio_id: string | null
+          tenant_id: string | null
+          total_cant_facturar: number | null
+          total_horas: number | null
+          total_sol: number | null
+          total_usd: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          bubble_id?: string | null
+          codigo_factura?: string | null
+          codigo_valoracion?: string | null
+          cotizacion_contratista_id?: string | null
+          cotizacion_id?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          detraccion_constancia?: number | null
+          detraccion_constancia_bubble?: string | null
+          detraccion_fecha_pago?: string | null
+          detraccion_fecha_pago_bubble?: string | null
+          detraccion_paga_por?: string | null
+          detraccion_paga_por_bubble?: string | null
+          detraccion_pago_monto_soles?: number | null
+          detraccion_pago_monto_soles_bubble?: number | null
+          detraccion_porcentaje?: number | null
+          detraccion_soles?: number | null
+          detraccion_usd?: number | null
+          dias_para_pago?: number | null
+          dias_para_pago_bubble?: number | null
+          editor_id?: string | null
+          esta_activa?: boolean | null
+          estado?: string | null
+          estado_pago?: string | null
+          estado_pago_bubble?: string | null
+          factura_paga?: boolean | null
+          factura_paga_bubble?: boolean | null
+          fecha_factura?: string | null
+          fecha_factura_bubble?: string | null
+          fecha_valorado?: string | null
+          fecha_vencimiento?: string | null
+          fecha_vencimiento_bubble?: string | null
+          id?: string | null
+          igv_monto?: number | null
+          igv_porcentaje?: number | null
+          lista_cobros?: string[] | null
+          lista_items?: string[] | null
+          maquinaria_id?: string | null
+          moneda_id?: string | null
+          monto_a_cobrar_soles?: number | null
+          monto_a_cobrar_usd?: number | null
+          monto_pagado_soles?: number | null
+          monto_pagado_usd?: number | null
+          pdf_factura?: string | null
+          pdf_factura_url?: string | null
+          pdf_valorizacion?: string | null
+          pendiente_por_cobrar_sol?: number | null
+          pendiente_por_cobrar_usd?: number | null
+          proveedor_id?: string | null
+          subtotal?: number | null
+          tasa_cambio_id?: string | null
+          tenant_id?: string | null
+          total_cant_facturar?: number | null
+          total_horas?: number | null
+          total_sol?: number | null
+          total_usd?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          bubble_id?: string | null
+          codigo_factura?: string | null
+          codigo_valoracion?: string | null
+          cotizacion_contratista_id?: string | null
+          cotizacion_id?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          detraccion_constancia?: number | null
+          detraccion_constancia_bubble?: string | null
+          detraccion_fecha_pago?: string | null
+          detraccion_fecha_pago_bubble?: string | null
+          detraccion_paga_por?: string | null
+          detraccion_paga_por_bubble?: string | null
+          detraccion_pago_monto_soles?: number | null
+          detraccion_pago_monto_soles_bubble?: number | null
+          detraccion_porcentaje?: number | null
+          detraccion_soles?: number | null
+          detraccion_usd?: number | null
+          dias_para_pago?: number | null
+          dias_para_pago_bubble?: number | null
+          editor_id?: string | null
+          esta_activa?: boolean | null
+          estado?: string | null
+          estado_pago?: string | null
+          estado_pago_bubble?: string | null
+          factura_paga?: boolean | null
+          factura_paga_bubble?: boolean | null
+          fecha_factura?: string | null
+          fecha_factura_bubble?: string | null
+          fecha_valorado?: string | null
+          fecha_vencimiento?: string | null
+          fecha_vencimiento_bubble?: string | null
+          id?: string | null
+          igv_monto?: number | null
+          igv_porcentaje?: number | null
+          lista_cobros?: string[] | null
+          lista_items?: string[] | null
+          maquinaria_id?: string | null
+          moneda_id?: string | null
+          monto_a_cobrar_soles?: number | null
+          monto_a_cobrar_usd?: number | null
+          monto_pagado_soles?: number | null
+          monto_pagado_usd?: number | null
+          pdf_factura?: string | null
+          pdf_factura_url?: string | null
+          pdf_valorizacion?: string | null
+          pendiente_por_cobrar_sol?: number | null
+          pendiente_por_cobrar_usd?: number | null
+          proveedor_id?: string | null
+          subtotal?: number | null
+          tasa_cambio_id?: string | null
+          tenant_id?: string | null
+          total_cant_facturar?: number | null
+          total_horas?: number | null
+          total_sol?: number | null
+          total_usd?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      _bk_facturas_compra_item: {
+        Row: {
+          bubble_id: string | null
+          cant_facturar: number | null
+          codigo_virtual: string | null
+          concepto: string | null
+          created_at: string | null
+          created_by: string | null
+          editor_id: string | null
+          estado: string | null
+          factura_id: string | null
+          horas_total: number | null
+          id: string | null
+          maquinaria_reporte_id: string | null
+          precio_unitario: number | null
+          servicio_id: string | null
+          subtotal: number | null
+          tenant_id: string | null
+          total_soles: number | null
+          total_usd: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          bubble_id?: string | null
+          cant_facturar?: number | null
+          codigo_virtual?: string | null
+          concepto?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          editor_id?: string | null
+          estado?: string | null
+          factura_id?: string | null
+          horas_total?: number | null
+          id?: string | null
+          maquinaria_reporte_id?: string | null
+          precio_unitario?: number | null
+          servicio_id?: string | null
+          subtotal?: number | null
+          tenant_id?: string | null
+          total_soles?: number | null
+          total_usd?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          bubble_id?: string | null
+          cant_facturar?: number | null
+          codigo_virtual?: string | null
+          concepto?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          editor_id?: string | null
+          estado?: string | null
+          factura_id?: string | null
+          horas_total?: number | null
+          id?: string | null
+          maquinaria_reporte_id?: string | null
+          precio_unitario?: number | null
+          servicio_id?: string | null
+          subtotal?: number | null
+          tenant_id?: string | null
+          total_soles?: number | null
+          total_usd?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      _bk_facturas_venta: {
+        Row: {
+          bubble_id: string | null
+          cliente_id: string | null
+          codigo_factura: string | null
+          codigo_valoracion: string | null
+          cotizacion_id: string | null
+          created_at: string | null
+          created_by: string | null
+          deshabilitada: boolean | null
+          detraccion_a_cargo_de: string | null
+          detraccion_constancia: string | null
+          detraccion_fecha_pago: string | null
+          detraccion_monto_sol: number | null
+          detraccion_numero_constancia: string | null
+          detraccion_paga_por: string | null
+          detraccion_porcentaje: number | null
+          detraccion_soles: number | null
+          detraccion_usd: number | null
+          dias_para_pago: number | null
+          editor_id: string | null
+          esta_activa: boolean | null
+          estado: string | null
+          estado_pago: string | null
+          fecha_factura: string | null
+          fecha_valorado: string | null
+          fecha_vencimiento: string | null
+          id: string | null
+          igv_monto: number | null
+          igv_porcentaje: number | null
+          lista_items: string[] | null
+          margen: number | null
+          margen_porcentaje: number | null
+          monto_a_cobrar_soles: number | null
+          monto_a_cobrar_usd: number | null
+          monto_pagado_detraccion: number | null
+          monto_pagado_factura: number | null
+          pdf_factura_url: string | null
+          pdf_valorizacion: string | null
+          pendiente_por_cobrar_sol: number | null
+          pendiente_por_cobrar_usd: number | null
+          subtotal: number | null
+          tenant_id: string | null
+          total_cant_facturar: number | null
+          total_horas: number | null
+          total_usd: number | null
+          updated_at: string | null
+          varias_valoraciones: boolean | null
+          vendedor_id: string | null
+        }
+        Insert: {
+          bubble_id?: string | null
+          cliente_id?: string | null
+          codigo_factura?: string | null
+          codigo_valoracion?: string | null
+          cotizacion_id?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          deshabilitada?: boolean | null
+          detraccion_a_cargo_de?: string | null
+          detraccion_constancia?: string | null
+          detraccion_fecha_pago?: string | null
+          detraccion_monto_sol?: number | null
+          detraccion_numero_constancia?: string | null
+          detraccion_paga_por?: string | null
+          detraccion_porcentaje?: number | null
+          detraccion_soles?: number | null
+          detraccion_usd?: number | null
+          dias_para_pago?: number | null
+          editor_id?: string | null
+          esta_activa?: boolean | null
+          estado?: string | null
+          estado_pago?: string | null
+          fecha_factura?: string | null
+          fecha_valorado?: string | null
+          fecha_vencimiento?: string | null
+          id?: string | null
+          igv_monto?: number | null
+          igv_porcentaje?: number | null
+          lista_items?: string[] | null
+          margen?: number | null
+          margen_porcentaje?: number | null
+          monto_a_cobrar_soles?: number | null
+          monto_a_cobrar_usd?: number | null
+          monto_pagado_detraccion?: number | null
+          monto_pagado_factura?: number | null
+          pdf_factura_url?: string | null
+          pdf_valorizacion?: string | null
+          pendiente_por_cobrar_sol?: number | null
+          pendiente_por_cobrar_usd?: number | null
+          subtotal?: number | null
+          tenant_id?: string | null
+          total_cant_facturar?: number | null
+          total_horas?: number | null
+          total_usd?: number | null
+          updated_at?: string | null
+          varias_valoraciones?: boolean | null
+          vendedor_id?: string | null
+        }
+        Update: {
+          bubble_id?: string | null
+          cliente_id?: string | null
+          codigo_factura?: string | null
+          codigo_valoracion?: string | null
+          cotizacion_id?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          deshabilitada?: boolean | null
+          detraccion_a_cargo_de?: string | null
+          detraccion_constancia?: string | null
+          detraccion_fecha_pago?: string | null
+          detraccion_monto_sol?: number | null
+          detraccion_numero_constancia?: string | null
+          detraccion_paga_por?: string | null
+          detraccion_porcentaje?: number | null
+          detraccion_soles?: number | null
+          detraccion_usd?: number | null
+          dias_para_pago?: number | null
+          editor_id?: string | null
+          esta_activa?: boolean | null
+          estado?: string | null
+          estado_pago?: string | null
+          fecha_factura?: string | null
+          fecha_valorado?: string | null
+          fecha_vencimiento?: string | null
+          id?: string | null
+          igv_monto?: number | null
+          igv_porcentaje?: number | null
+          lista_items?: string[] | null
+          margen?: number | null
+          margen_porcentaje?: number | null
+          monto_a_cobrar_soles?: number | null
+          monto_a_cobrar_usd?: number | null
+          monto_pagado_detraccion?: number | null
+          monto_pagado_factura?: number | null
+          pdf_factura_url?: string | null
+          pdf_valorizacion?: string | null
+          pendiente_por_cobrar_sol?: number | null
+          pendiente_por_cobrar_usd?: number | null
+          subtotal?: number | null
+          tenant_id?: string | null
+          total_cant_facturar?: number | null
+          total_horas?: number | null
+          total_usd?: number | null
+          updated_at?: string | null
+          varias_valoraciones?: boolean | null
+          vendedor_id?: string | null
+        }
+        Relationships: []
+      }
+      _bk_facturas_venta_item: {
+        Row: {
+          bubble_id: string | null
+          cant_facturar: number | null
+          capacidad: string | null
+          codigo_virtual: string | null
+          concepto: string | null
+          created_at: string | null
+          created_by: string | null
+          editor_id: string | null
+          estado: string | null
+          factura_venta_id: string | null
+          horas_total: number | null
+          id: string | null
+          maquinaria_id: string | null
+          maquinaria_reporte_id: string | null
+          minimo: number | null
+          precio_unitario: number | null
+          servicio_id: string | null
+          subtotal: number | null
+          tenant_id: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          bubble_id?: string | null
+          cant_facturar?: number | null
+          capacidad?: string | null
+          codigo_virtual?: string | null
+          concepto?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          editor_id?: string | null
+          estado?: string | null
+          factura_venta_id?: string | null
+          horas_total?: number | null
+          id?: string | null
+          maquinaria_id?: string | null
+          maquinaria_reporte_id?: string | null
+          minimo?: number | null
+          precio_unitario?: number | null
+          servicio_id?: string | null
+          subtotal?: number | null
+          tenant_id?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          bubble_id?: string | null
+          cant_facturar?: number | null
+          capacidad?: string | null
+          codigo_virtual?: string | null
+          concepto?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          editor_id?: string | null
+          estado?: string | null
+          factura_venta_id?: string | null
+          horas_total?: number | null
+          id?: string | null
+          maquinaria_id?: string | null
+          maquinaria_reporte_id?: string | null
+          minimo?: number | null
+          precio_unitario?: number | null
+          servicio_id?: string | null
+          subtotal?: number | null
+          tenant_id?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      _bk_inspecciones: {
+        Row: {
+          archivo_nombre: string | null
+          archivo_pdf_url: string | null
+          bubble_id: string | null
+          cliente_id: string | null
+          codigo: string | null
+          codigo_interno: string | null
+          conductor_id: string | null
+          cotizacion_id: string | null
+          created_at: string | null
+          created_by: string | null
+          estado: string | null
+          fecha_finalizacion: string | null
+          fecha_inspeccion: string | null
+          firma_conductor_url: string | null
+          firma_supervisor_url: string | null
+          foto_horometro_final_url: string | null
+          foto_horometro_inicio_url: string | null
+          foto_odometro_final_url: string | null
+          foto_odometro_inicio_url: string | null
+          foto_tablero_fin_url: string | null
+          foto_tablero_inicio_url: string | null
+          horometro_actual: number | null
+          horometro_fin: number | null
+          horometro_final: number | null
+          horometro_inicio: number | null
+          id: string | null
+          is_active: boolean | null
+          kilometraje_actual: number | null
+          kilometraje_fin: number | null
+          kilometraje_inicio: number | null
+          km_final: number | null
+          km_inicio: number | null
+          maquinaria_id: string | null
+          nivel_tanque_gasolina: number | null
+          observaciones: string | null
+          pdf_url: string | null
+          plantilla_id: string | null
+          puntaje: number | null
+          supervisor_id: string | null
+          tarea_id: string | null
+          tenant_id: string | null
+          tiene_fallas: boolean | null
+          tiene_plan_de_accion: boolean | null
+          tiene_respuestas_criticas: boolean | null
+          tiene_respuestas_erroneas: boolean | null
+          ubicacion_gps: Json | null
+          updated_at: string | null
+          version_formato: string | null
+        }
+        Insert: {
+          archivo_nombre?: string | null
+          archivo_pdf_url?: string | null
+          bubble_id?: string | null
+          cliente_id?: string | null
+          codigo?: string | null
+          codigo_interno?: string | null
+          conductor_id?: string | null
+          cotizacion_id?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          estado?: string | null
+          fecha_finalizacion?: string | null
+          fecha_inspeccion?: string | null
+          firma_conductor_url?: string | null
+          firma_supervisor_url?: string | null
+          foto_horometro_final_url?: string | null
+          foto_horometro_inicio_url?: string | null
+          foto_odometro_final_url?: string | null
+          foto_odometro_inicio_url?: string | null
+          foto_tablero_fin_url?: string | null
+          foto_tablero_inicio_url?: string | null
+          horometro_actual?: number | null
+          horometro_fin?: number | null
+          horometro_final?: number | null
+          horometro_inicio?: number | null
+          id?: string | null
+          is_active?: boolean | null
+          kilometraje_actual?: number | null
+          kilometraje_fin?: number | null
+          kilometraje_inicio?: number | null
+          km_final?: number | null
+          km_inicio?: number | null
+          maquinaria_id?: string | null
+          nivel_tanque_gasolina?: number | null
+          observaciones?: string | null
+          pdf_url?: string | null
+          plantilla_id?: string | null
+          puntaje?: number | null
+          supervisor_id?: string | null
+          tarea_id?: string | null
+          tenant_id?: string | null
+          tiene_fallas?: boolean | null
+          tiene_plan_de_accion?: boolean | null
+          tiene_respuestas_criticas?: boolean | null
+          tiene_respuestas_erroneas?: boolean | null
+          ubicacion_gps?: Json | null
+          updated_at?: string | null
+          version_formato?: string | null
+        }
+        Update: {
+          archivo_nombre?: string | null
+          archivo_pdf_url?: string | null
+          bubble_id?: string | null
+          cliente_id?: string | null
+          codigo?: string | null
+          codigo_interno?: string | null
+          conductor_id?: string | null
+          cotizacion_id?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          estado?: string | null
+          fecha_finalizacion?: string | null
+          fecha_inspeccion?: string | null
+          firma_conductor_url?: string | null
+          firma_supervisor_url?: string | null
+          foto_horometro_final_url?: string | null
+          foto_horometro_inicio_url?: string | null
+          foto_odometro_final_url?: string | null
+          foto_odometro_inicio_url?: string | null
+          foto_tablero_fin_url?: string | null
+          foto_tablero_inicio_url?: string | null
+          horometro_actual?: number | null
+          horometro_fin?: number | null
+          horometro_final?: number | null
+          horometro_inicio?: number | null
+          id?: string | null
+          is_active?: boolean | null
+          kilometraje_actual?: number | null
+          kilometraje_fin?: number | null
+          kilometraje_inicio?: number | null
+          km_final?: number | null
+          km_inicio?: number | null
+          maquinaria_id?: string | null
+          nivel_tanque_gasolina?: number | null
+          observaciones?: string | null
+          pdf_url?: string | null
+          plantilla_id?: string | null
+          puntaje?: number | null
+          supervisor_id?: string | null
+          tarea_id?: string | null
+          tenant_id?: string | null
+          tiene_fallas?: boolean | null
+          tiene_plan_de_accion?: boolean | null
+          tiene_respuestas_criticas?: boolean | null
+          tiene_respuestas_erroneas?: boolean | null
+          ubicacion_gps?: Json | null
+          updated_at?: string | null
+          version_formato?: string | null
+        }
+        Relationships: []
+      }
+      _bk_reportes_maquinaria: {
+        Row: {
+          aceptacion: string | null
+          aceptado_por: string | null
+          autor_id: string | null
+          bubble_id: string | null
+          cargo_cliente_firmante: string | null
+          cliente_cargo: string | null
+          cliente_id: string | null
+          cliente_nombre: string | null
+          codigo_documento_interno: string | null
+          cotizacion_compra_item_id: string | null
+          cotizacion_venta_item_id: string | null
+          created_at: string | null
+          created_by: string | null
+          editor_id: string | null
+          estado_compra: string | null
+          estado_venta: string | null
+          factura_compra_item: string | null
+          factura_compra_item_id: string | null
+          factura_venta_item: string | null
+          factura_venta_item_id: string | null
+          fecha_reporte: string | null
+          firma: string | null
+          firma_cliente_url: string | null
+          foto_actividad_url: string | null
+          foto_reporte_escrito_url: string | null
+          fotos_adicionales: Json | null
+          guia_transporte: string | null
+          horas_alquiler: number | null
+          horas_facturar: number | null
+          horas_recorrido: number | null
+          horas_trabajadas: number | null
+          id: string | null
+          id_documento_interno: string | null
+          is_active: boolean | null
+          jornada1_fin: string | null
+          jornada1_inicio: string | null
+          jornada2_fin: string | null
+          jornada2_inicio: string | null
+          jornada3_fin: string | null
+          jornada3_inicio: string | null
+          maquinaria_id: string | null
+          nombre_cliente_firmante: string | null
+          operador_id: string | null
+          pdf_url: string | null
+          proveedor_id: string | null
+          rigger1_id: string | null
+          rigger2_id: string | null
+          salida_autorizada_por: string | null
+          segunda_jornada: boolean | null
+          tarea_id: string | null
+          tenant_id: string | null
+          tipo_recorrido: string | null
+          tipo_uso: string | null
+          tonelaje_solicitado: number | null
+          total_horas: number | null
+          trabajo_realizado: string | null
+          updated_at: string | null
+          updated_by: string | null
+          valorizacion_compra: string | null
+          valorizacion_compra_id: string | null
+          valorizacion_venta: string | null
+          valorizacion_venta_id: string | null
+          version_formato: string | null
+        }
+        Insert: {
+          aceptacion?: string | null
+          aceptado_por?: string | null
+          autor_id?: string | null
+          bubble_id?: string | null
+          cargo_cliente_firmante?: string | null
+          cliente_cargo?: string | null
+          cliente_id?: string | null
+          cliente_nombre?: string | null
+          codigo_documento_interno?: string | null
+          cotizacion_compra_item_id?: string | null
+          cotizacion_venta_item_id?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          editor_id?: string | null
+          estado_compra?: string | null
+          estado_venta?: string | null
+          factura_compra_item?: string | null
+          factura_compra_item_id?: string | null
+          factura_venta_item?: string | null
+          factura_venta_item_id?: string | null
+          fecha_reporte?: string | null
+          firma?: string | null
+          firma_cliente_url?: string | null
+          foto_actividad_url?: string | null
+          foto_reporte_escrito_url?: string | null
+          fotos_adicionales?: Json | null
+          guia_transporte?: string | null
+          horas_alquiler?: number | null
+          horas_facturar?: number | null
+          horas_recorrido?: number | null
+          horas_trabajadas?: number | null
+          id?: string | null
+          id_documento_interno?: string | null
+          is_active?: boolean | null
+          jornada1_fin?: string | null
+          jornada1_inicio?: string | null
+          jornada2_fin?: string | null
+          jornada2_inicio?: string | null
+          jornada3_fin?: string | null
+          jornada3_inicio?: string | null
+          maquinaria_id?: string | null
+          nombre_cliente_firmante?: string | null
+          operador_id?: string | null
+          pdf_url?: string | null
+          proveedor_id?: string | null
+          rigger1_id?: string | null
+          rigger2_id?: string | null
+          salida_autorizada_por?: string | null
+          segunda_jornada?: boolean | null
+          tarea_id?: string | null
+          tenant_id?: string | null
+          tipo_recorrido?: string | null
+          tipo_uso?: string | null
+          tonelaje_solicitado?: number | null
+          total_horas?: number | null
+          trabajo_realizado?: string | null
+          updated_at?: string | null
+          updated_by?: string | null
+          valorizacion_compra?: string | null
+          valorizacion_compra_id?: string | null
+          valorizacion_venta?: string | null
+          valorizacion_venta_id?: string | null
+          version_formato?: string | null
+        }
+        Update: {
+          aceptacion?: string | null
+          aceptado_por?: string | null
+          autor_id?: string | null
+          bubble_id?: string | null
+          cargo_cliente_firmante?: string | null
+          cliente_cargo?: string | null
+          cliente_id?: string | null
+          cliente_nombre?: string | null
+          codigo_documento_interno?: string | null
+          cotizacion_compra_item_id?: string | null
+          cotizacion_venta_item_id?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          editor_id?: string | null
+          estado_compra?: string | null
+          estado_venta?: string | null
+          factura_compra_item?: string | null
+          factura_compra_item_id?: string | null
+          factura_venta_item?: string | null
+          factura_venta_item_id?: string | null
+          fecha_reporte?: string | null
+          firma?: string | null
+          firma_cliente_url?: string | null
+          foto_actividad_url?: string | null
+          foto_reporte_escrito_url?: string | null
+          fotos_adicionales?: Json | null
+          guia_transporte?: string | null
+          horas_alquiler?: number | null
+          horas_facturar?: number | null
+          horas_recorrido?: number | null
+          horas_trabajadas?: number | null
+          id?: string | null
+          id_documento_interno?: string | null
+          is_active?: boolean | null
+          jornada1_fin?: string | null
+          jornada1_inicio?: string | null
+          jornada2_fin?: string | null
+          jornada2_inicio?: string | null
+          jornada3_fin?: string | null
+          jornada3_inicio?: string | null
+          maquinaria_id?: string | null
+          nombre_cliente_firmante?: string | null
+          operador_id?: string | null
+          pdf_url?: string | null
+          proveedor_id?: string | null
+          rigger1_id?: string | null
+          rigger2_id?: string | null
+          salida_autorizada_por?: string | null
+          segunda_jornada?: boolean | null
+          tarea_id?: string | null
+          tenant_id?: string | null
+          tipo_recorrido?: string | null
+          tipo_uso?: string | null
+          tonelaje_solicitado?: number | null
+          total_horas?: number | null
+          trabajo_realizado?: string | null
+          updated_at?: string | null
+          updated_by?: string | null
+          valorizacion_compra?: string | null
+          valorizacion_compra_id?: string | null
+          valorizacion_venta?: string | null
+          valorizacion_venta_id?: string | null
+          version_formato?: string | null
+        }
+        Relationships: []
+      }
+      _bk_reportes_personal: {
+        Row: {
+          bubble_id: string | null
+          cargo_cliente_firmante: string | null
+          created_at: string | null
+          created_by: string | null
+          domingo_al_que_corresponde: string | null
+          es_descanso_por_domingo: boolean | null
+          es_domingo_o_festivo: boolean | null
+          fecha_descanso_compensatorio: string | null
+          fecha_reporte: string | null
+          firma_cliente_url: string | null
+          firma_trabajador_url: string | null
+          firmado_por: string | null
+          foto_trabajo_url: string | null
+          gasto_almuerzo: number | null
+          gasto_cena: number | null
+          gasto_desayuno: number | null
+          gasto_movilidad: number | null
+          gasto_total: number | null
+          horas_dominicales: number | null
+          horas_extras: number | null
+          horas_extras_extraordinarias: number | null
+          id: string | null
+          id_documento_interno: string | null
+          is_active: boolean | null
+          jornada1_fin: string | null
+          jornada1_inicio: string | null
+          jornada2_fin: string | null
+          jornada2_inicio: string | null
+          jornada3_fin: string | null
+          jornada3_inicio: string | null
+          maquinaria_id: string | null
+          nombre_cliente_firmante: string | null
+          pdf_url: string | null
+          personal_id: string | null
+          tarea_id: string | null
+          tenant_id: string | null
+          tercero_personal_id: string | null
+          tiene_descanso_compensatorio: boolean | null
+          tipo_personal: string | null
+          total_horas: number | null
+          trabajo_realizado: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          bubble_id?: string | null
+          cargo_cliente_firmante?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          domingo_al_que_corresponde?: string | null
+          es_descanso_por_domingo?: boolean | null
+          es_domingo_o_festivo?: boolean | null
+          fecha_descanso_compensatorio?: string | null
+          fecha_reporte?: string | null
+          firma_cliente_url?: string | null
+          firma_trabajador_url?: string | null
+          firmado_por?: string | null
+          foto_trabajo_url?: string | null
+          gasto_almuerzo?: number | null
+          gasto_cena?: number | null
+          gasto_desayuno?: number | null
+          gasto_movilidad?: number | null
+          gasto_total?: number | null
+          horas_dominicales?: number | null
+          horas_extras?: number | null
+          horas_extras_extraordinarias?: number | null
+          id?: string | null
+          id_documento_interno?: string | null
+          is_active?: boolean | null
+          jornada1_fin?: string | null
+          jornada1_inicio?: string | null
+          jornada2_fin?: string | null
+          jornada2_inicio?: string | null
+          jornada3_fin?: string | null
+          jornada3_inicio?: string | null
+          maquinaria_id?: string | null
+          nombre_cliente_firmante?: string | null
+          pdf_url?: string | null
+          personal_id?: string | null
+          tarea_id?: string | null
+          tenant_id?: string | null
+          tercero_personal_id?: string | null
+          tiene_descanso_compensatorio?: boolean | null
+          tipo_personal?: string | null
+          total_horas?: number | null
+          trabajo_realizado?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          bubble_id?: string | null
+          cargo_cliente_firmante?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          domingo_al_que_corresponde?: string | null
+          es_descanso_por_domingo?: boolean | null
+          es_domingo_o_festivo?: boolean | null
+          fecha_descanso_compensatorio?: string | null
+          fecha_reporte?: string | null
+          firma_cliente_url?: string | null
+          firma_trabajador_url?: string | null
+          firmado_por?: string | null
+          foto_trabajo_url?: string | null
+          gasto_almuerzo?: number | null
+          gasto_cena?: number | null
+          gasto_desayuno?: number | null
+          gasto_movilidad?: number | null
+          gasto_total?: number | null
+          horas_dominicales?: number | null
+          horas_extras?: number | null
+          horas_extras_extraordinarias?: number | null
+          id?: string | null
+          id_documento_interno?: string | null
+          is_active?: boolean | null
+          jornada1_fin?: string | null
+          jornada1_inicio?: string | null
+          jornada2_fin?: string | null
+          jornada2_inicio?: string | null
+          jornada3_fin?: string | null
+          jornada3_inicio?: string | null
+          maquinaria_id?: string | null
+          nombre_cliente_firmante?: string | null
+          pdf_url?: string | null
+          personal_id?: string | null
+          tarea_id?: string | null
+          tenant_id?: string | null
+          tercero_personal_id?: string | null
+          tiene_descanso_compensatorio?: boolean | null
+          tipo_personal?: string | null
+          total_horas?: number | null
+          trabajo_realizado?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      _bk_tareas: {
+        Row: {
+          asignado_a: string | null
+          bubble_id: string | null
+          cliente_id: string | null
+          cliente_nombre: string | null
+          codigo: string | null
+          contacto_id: string | null
+          cotizacion_id: string | null
+          cotizacion_item_id: string | null
+          cotizacion_ref: string | null
+          created_at: string | null
+          created_by: string | null
+          descripcion: string | null
+          estado: string | null
+          hora_fin: string | null
+          hora_inicio: string | null
+          id: string | null
+          is_active: boolean | null
+          prioridad: string | null
+          servicio_ref: string | null
+          sitio: string | null
+          sitio_id: string | null
+          tenant_id: string | null
+          tipo_tarea: string | null
+          titulo: string | null
+          updated_at: string | null
+          updated_by: string | null
+        }
+        Insert: {
+          asignado_a?: string | null
+          bubble_id?: string | null
+          cliente_id?: string | null
+          cliente_nombre?: string | null
+          codigo?: string | null
+          contacto_id?: string | null
+          cotizacion_id?: string | null
+          cotizacion_item_id?: string | null
+          cotizacion_ref?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          descripcion?: string | null
+          estado?: string | null
+          hora_fin?: string | null
+          hora_inicio?: string | null
+          id?: string | null
+          is_active?: boolean | null
+          prioridad?: string | null
+          servicio_ref?: string | null
+          sitio?: string | null
+          sitio_id?: string | null
+          tenant_id?: string | null
+          tipo_tarea?: string | null
+          titulo?: string | null
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+        Update: {
+          asignado_a?: string | null
+          bubble_id?: string | null
+          cliente_id?: string | null
+          cliente_nombre?: string | null
+          codigo?: string | null
+          contacto_id?: string | null
+          cotizacion_id?: string | null
+          cotizacion_item_id?: string | null
+          cotizacion_ref?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          descripcion?: string | null
+          estado?: string | null
+          hora_fin?: string | null
+          hora_inicio?: string | null
+          id?: string | null
+          is_active?: boolean | null
+          prioridad?: string | null
+          servicio_ref?: string | null
+          sitio?: string | null
+          sitio_id?: string | null
+          tenant_id?: string | null
+          tipo_tarea?: string | null
+          titulo?: string | null
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
+      _migrations_applied: {
+        Row: {
+          applied_at: string
+          name: string
+        }
+        Insert: {
+          applied_at?: string
+          name: string
+        }
+        Update: {
+          applied_at?: string
+          name?: string
+        }
+        Relationships: []
+      }
       actividades_matriz: {
         Row: {
           bubble_id: string | null
@@ -60,6 +1278,33 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      apks: {
+        Row: {
+          archivo: string
+          commit: string | null
+          created_at: string
+          created_by: string | null
+          id: string
+          version: string
+        }
+        Insert: {
+          archivo: string
+          commit?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          version: string
+        }
+        Update: {
+          archivo?: string
+          commit?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          version?: string
+        }
+        Relationships: []
       }
       app_allowances: {
         Row: {
@@ -670,6 +1915,45 @@ export type Database = {
         }
         Relationships: []
       }
+      app_imprevistos: {
+        Row: {
+          created_at: string | null
+          descripcion: string
+          fecha_hora: string
+          foto_url: string | null
+          id: string
+          monto: number | null
+          personal_id: string | null
+          tarea_id: string | null
+          tenant_id: string
+          ubicacion_gps: Json | null
+        }
+        Insert: {
+          created_at?: string | null
+          descripcion: string
+          fecha_hora: string
+          foto_url?: string | null
+          id?: string
+          monto?: number | null
+          personal_id?: string | null
+          tarea_id?: string | null
+          tenant_id: string
+          ubicacion_gps?: Json | null
+        }
+        Update: {
+          created_at?: string | null
+          descripcion?: string
+          fecha_hora?: string
+          foto_url?: string | null
+          id?: string
+          monto?: number | null
+          personal_id?: string | null
+          tarea_id?: string | null
+          tenant_id?: string
+          ubicacion_gps?: Json | null
+        }
+        Relationships: []
+      }
       app_kpi_snapshots: {
         Row: {
           checklists_count: number | null
@@ -1007,6 +2291,7 @@ export type Database = {
       app_releases: {
         Row: {
           activo: boolean
+          apk_filename: string | null
           apk_url: string
           build_number: number
           created_at: string
@@ -1014,10 +2299,12 @@ export type Database = {
           forzar_actualizacion: boolean
           id: string
           notas_cambios: string
+          platform: string
           version: string
         }
         Insert: {
           activo?: boolean
+          apk_filename?: string | null
           apk_url: string
           build_number: number
           created_at?: string
@@ -1025,10 +2312,12 @@ export type Database = {
           forzar_actualizacion?: boolean
           id?: string
           notas_cambios?: string
+          platform?: string
           version: string
         }
         Update: {
           activo?: boolean
+          apk_filename?: string | null
           apk_url?: string
           build_number?: number
           created_at?: string
@@ -1036,6 +2325,7 @@ export type Database = {
           forzar_actualizacion?: boolean
           id?: string
           notas_cambios?: string
+          platform?: string
           version?: string
         }
         Relationships: []
@@ -1507,7 +2797,7 @@ export type Database = {
           razon_social: string | null
           ruc: string | null
           telefono: string | null
-          timezone: string
+          timezone: string | null
           trial_expires_at: string | null
           trial_start_at: string | null
           trial_status: string | null
@@ -1535,7 +2825,7 @@ export type Database = {
           razon_social?: string | null
           ruc?: string | null
           telefono?: string | null
-          timezone?: string
+          timezone?: string | null
           trial_expires_at?: string | null
           trial_start_at?: string | null
           trial_status?: string | null
@@ -1563,7 +2853,7 @@ export type Database = {
           razon_social?: string | null
           ruc?: string | null
           telefono?: string | null
-          timezone?: string
+          timezone?: string | null
           trial_expires_at?: string | null
           trial_start_at?: string | null
           trial_status?: string | null
@@ -1996,7 +3286,7 @@ export type Database = {
           aprobado_por: string | null
           aprobado_por_id: string | null
           bubble_id: string | null
-          cliente_id: string | null
+          cliente_id: string
           comentarios_cliente: string | null
           condiciones_id: string | null
           contacto_id: string | null
@@ -2021,15 +3311,15 @@ export type Database = {
           moneda: string | null
           notas_internas: string | null
           notas_precios: string | null
-          numero: string | null
+          numero: string
           observaciones_cliente: string | null
           pdf_generado_at: string | null
           pdf_url: string | null
-          periodo: number | null
+          periodo: string | null
           periodo_cantidad: number | null
           periodo_unidad: string | null
           pin_aprobacion: string | null
-          pin_attempts: number
+          pin_attempts: number | null
           pin_locked_until: string | null
           plazo_pago: string | null
           sitio_id: string | null
@@ -2050,7 +3340,7 @@ export type Database = {
           aprobado_por?: string | null
           aprobado_por_id?: string | null
           bubble_id?: string | null
-          cliente_id?: string | null
+          cliente_id: string
           comentarios_cliente?: string | null
           condiciones_id?: string | null
           contacto_id?: string | null
@@ -2075,15 +3365,15 @@ export type Database = {
           moneda?: string | null
           notas_internas?: string | null
           notas_precios?: string | null
-          numero?: string | null
+          numero: string
           observaciones_cliente?: string | null
           pdf_generado_at?: string | null
           pdf_url?: string | null
-          periodo?: number | null
+          periodo?: string | null
           periodo_cantidad?: number | null
           periodo_unidad?: string | null
           pin_aprobacion?: string | null
-          pin_attempts?: number
+          pin_attempts?: number | null
           pin_locked_until?: string | null
           plazo_pago?: string | null
           sitio_id?: string | null
@@ -2104,7 +3394,7 @@ export type Database = {
           aprobado_por?: string | null
           aprobado_por_id?: string | null
           bubble_id?: string | null
-          cliente_id?: string | null
+          cliente_id?: string
           comentarios_cliente?: string | null
           condiciones_id?: string | null
           contacto_id?: string | null
@@ -2129,15 +3419,15 @@ export type Database = {
           moneda?: string | null
           notas_internas?: string | null
           notas_precios?: string | null
-          numero?: string | null
+          numero?: string
           observaciones_cliente?: string | null
           pdf_generado_at?: string | null
           pdf_url?: string | null
-          periodo?: number | null
+          periodo?: string | null
           periodo_cantidad?: number | null
           periodo_unidad?: string | null
           pin_aprobacion?: string | null
-          pin_attempts?: number
+          pin_attempts?: number | null
           pin_locked_until?: string | null
           plazo_pago?: string | null
           sitio_id?: string | null
@@ -2154,13 +3444,6 @@ export type Database = {
           version?: number | null
         }
         Relationships: [
-          {
-            foreignKeyName: "cotizaciones_aprobado_por_id_fkey"
-            columns: ["aprobado_por_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
           {
             foreignKeyName: "cotizaciones_cliente_id_fkey"
             columns: ["cliente_id"]
@@ -2190,27 +3473,6 @@ export type Database = {
             referencedColumns: ["cotizacion_id"]
           },
           {
-            foreignKeyName: "cotizaciones_maquinaria_id_fkey"
-            columns: ["maquinaria_id"]
-            isOneToOne: false
-            referencedRelation: "maquinarias"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "cotizaciones_maquinaria_id_fkey"
-            columns: ["maquinaria_id"]
-            isOneToOne: false
-            referencedRelation: "view_valoraciones_compras"
-            referencedColumns: ["maquinaria_id"]
-          },
-          {
-            foreignKeyName: "cotizaciones_maquinaria_id_fkey"
-            columns: ["maquinaria_id"]
-            isOneToOne: false
-            referencedRelation: "view_valoraciones_ventas"
-            referencedColumns: ["maquinaria_id"]
-          },
-          {
             foreignKeyName: "cotizaciones_sitio_id_fkey"
             columns: ["sitio_id"]
             isOneToOne: false
@@ -2231,13 +3493,6 @@ export type Database = {
             referencedRelation: "companies"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "cotizaciones_vendedor_id_fkey"
-            columns: ["vendedor_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
         ]
       }
       cotizaciones_configuracion: {
@@ -2247,12 +3502,15 @@ export type Database = {
           created_at: string | null
           created_by: string | null
           despedida: string | null
+          firma_autorizada_usuario_id: string | null
           firma_autorizado_url: string | null
           firma_gerente_url: string | null
+          firma_imagen_url: string | null
           forma_pago1: string | null
           forma_pago2: string | null
           id: string
           imagen_banco: string | null
+          imagen_banco_url: string | null
           imagen_firma: string | null
           introduccion: string | null
           is_active: boolean | null
@@ -2261,6 +3519,11 @@ export type Database = {
           saludo: string | null
           tenant_id: string
           terminos_condiciones: string | null
+          texto_aceptacion: string | null
+          texto_forma_pago_1: string | null
+          texto_forma_pago_2: string | null
+          texto_introduccion: string | null
+          texto_notas_precios: string | null
           updated_at: string | null
           updated_by: string | null
         }
@@ -2270,12 +3533,15 @@ export type Database = {
           created_at?: string | null
           created_by?: string | null
           despedida?: string | null
+          firma_autorizada_usuario_id?: string | null
           firma_autorizado_url?: string | null
           firma_gerente_url?: string | null
+          firma_imagen_url?: string | null
           forma_pago1?: string | null
           forma_pago2?: string | null
           id?: string
           imagen_banco?: string | null
+          imagen_banco_url?: string | null
           imagen_firma?: string | null
           introduccion?: string | null
           is_active?: boolean | null
@@ -2284,6 +3550,11 @@ export type Database = {
           saludo?: string | null
           tenant_id: string
           terminos_condiciones?: string | null
+          texto_aceptacion?: string | null
+          texto_forma_pago_1?: string | null
+          texto_forma_pago_2?: string | null
+          texto_introduccion?: string | null
+          texto_notas_precios?: string | null
           updated_at?: string | null
           updated_by?: string | null
         }
@@ -2293,12 +3564,15 @@ export type Database = {
           created_at?: string | null
           created_by?: string | null
           despedida?: string | null
+          firma_autorizada_usuario_id?: string | null
           firma_autorizado_url?: string | null
           firma_gerente_url?: string | null
+          firma_imagen_url?: string | null
           forma_pago1?: string | null
           forma_pago2?: string | null
           id?: string
           imagen_banco?: string | null
+          imagen_banco_url?: string | null
           imagen_firma?: string | null
           introduccion?: string | null
           is_active?: boolean | null
@@ -2307,6 +3581,11 @@ export type Database = {
           saludo?: string | null
           tenant_id?: string
           terminos_condiciones?: string | null
+          texto_aceptacion?: string | null
+          texto_forma_pago_1?: string | null
+          texto_forma_pago_2?: string | null
+          texto_introduccion?: string | null
+          texto_notas_precios?: string | null
           updated_at?: string | null
           updated_by?: string | null
         }
@@ -2361,7 +3640,7 @@ export type Database = {
       cotizaciones_detalle: {
         Row: {
           bubble_id: string | null
-          cantidad: number
+          cantidad: number | null
           cotizacion_id: string
           created_at: string | null
           created_by: string | null
@@ -2390,7 +3669,7 @@ export type Database = {
         }
         Insert: {
           bubble_id?: string | null
-          cantidad: number
+          cantidad?: number | null
           cotizacion_id: string
           created_at?: string | null
           created_by?: string | null
@@ -2419,7 +3698,7 @@ export type Database = {
         }
         Update: {
           bubble_id?: string | null
-          cantidad?: number
+          cantidad?: number | null
           cotizacion_id?: string
           created_at?: string | null
           created_by?: string | null
@@ -2581,7 +3860,7 @@ export type Database = {
       }
       cotizaciones_matriz_responsabilidad: {
         Row: {
-          actividad: string
+          actividad: string | null
           bubble_id: string | null
           cotizacion_bubble_id: string | null
           cotizacion_id: string | null
@@ -2590,13 +3869,13 @@ export type Database = {
           descripcion: string | null
           id: string
           observacion: string | null
-          orden: number
-          responsable: string
+          orden: number | null
+          responsable: string | null
           tenant_bubble_id: string | null
-          tenant_id: string | null
+          tenant_id: string
         }
         Insert: {
-          actividad: string
+          actividad?: string | null
           bubble_id?: string | null
           cotizacion_bubble_id?: string | null
           cotizacion_id?: string | null
@@ -2605,13 +3884,13 @@ export type Database = {
           descripcion?: string | null
           id?: string
           observacion?: string | null
-          orden: number
-          responsable: string
+          orden?: number | null
+          responsable?: string | null
           tenant_bubble_id?: string | null
-          tenant_id?: string | null
+          tenant_id: string
         }
         Update: {
-          actividad?: string
+          actividad?: string | null
           bubble_id?: string | null
           cotizacion_bubble_id?: string | null
           cotizacion_id?: string | null
@@ -2620,10 +3899,10 @@ export type Database = {
           descripcion?: string | null
           id?: string
           observacion?: string | null
-          orden?: number
-          responsable?: string
+          orden?: number | null
+          responsable?: string | null
           tenant_bubble_id?: string | null
-          tenant_id?: string | null
+          tenant_id?: string
         }
         Relationships: [
           {
@@ -2722,7 +4001,7 @@ export type Database = {
           servicio_bubble_id: string | null
           servicio_id: string | null
           tenant_bubble_id: string | null
-          tenant_id: string | null
+          tenant_id: string
           updated_at: string | null
           updated_by: string | null
         }
@@ -2743,7 +4022,7 @@ export type Database = {
           servicio_bubble_id?: string | null
           servicio_id?: string | null
           tenant_bubble_id?: string | null
-          tenant_id?: string | null
+          tenant_id: string
           updated_at?: string | null
           updated_by?: string | null
         }
@@ -2764,18 +4043,11 @@ export type Database = {
           servicio_bubble_id?: string | null
           servicio_id?: string | null
           tenant_bubble_id?: string | null
-          tenant_id?: string | null
+          tenant_id?: string
           updated_at?: string | null
           updated_by?: string | null
         }
         Relationships: [
-          {
-            foreignKeyName: "cotizaciones_ofertas_items_cotizacion_detalle_id_fkey"
-            columns: ["cotizacion_detalle_id"]
-            isOneToOne: false
-            referencedRelation: "cotizaciones_detalle"
-            referencedColumns: ["id"]
-          },
           {
             foreignKeyName: "cotizaciones_ofertas_items_cotizacion_oferta_id_fkey"
             columns: ["cotizacion_oferta_id"]
@@ -2816,14 +4088,14 @@ export type Database = {
           moneda: string | null
           observaciones: string | null
           plazo_pago: string | null
-          precio: number
+          precio: number | null
           proveedor_bubble_id: string | null
           proveedor_id: string | null
-          proveedor_nombre: string
+          proveedor_nombre: string | null
           servicio_bubble_id: string | null
           servicio_id: string | null
           tenant_bubble_id: string | null
-          tenant_id: string | null
+          tenant_id: string
         }
         Insert: {
           bubble_id?: string | null
@@ -2841,14 +4113,14 @@ export type Database = {
           moneda?: string | null
           observaciones?: string | null
           plazo_pago?: string | null
-          precio: number
+          precio?: number | null
           proveedor_bubble_id?: string | null
           proveedor_id?: string | null
-          proveedor_nombre: string
+          proveedor_nombre?: string | null
           servicio_bubble_id?: string | null
           servicio_id?: string | null
           tenant_bubble_id?: string | null
-          tenant_id?: string | null
+          tenant_id: string
         }
         Update: {
           bubble_id?: string | null
@@ -2866,14 +4138,14 @@ export type Database = {
           moneda?: string | null
           observaciones?: string | null
           plazo_pago?: string | null
-          precio?: number
+          precio?: number | null
           proveedor_bubble_id?: string | null
           proveedor_id?: string | null
-          proveedor_nombre?: string
+          proveedor_nombre?: string | null
           servicio_bubble_id?: string | null
           servicio_id?: string | null
           tenant_bubble_id?: string | null
-          tenant_id?: string | null
+          tenant_id?: string
         }
         Relationships: [
           {
@@ -2965,6 +4237,20 @@ export type Database = {
         }
         Relationships: [
           {
+            foreignKeyName: "document_types_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "document_types_modified_by_fkey"
+            columns: ["modified_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "document_types_tenant_id_fkey"
             columns: ["tenant_id"]
             isOneToOne: false
@@ -2983,10 +4269,13 @@ export type Database = {
           factura_venta_id: string | null
           fecha_cobro: string | null
           id: string
+          id_editor: string | null
+          id_empresa: string | null
           moneda: string | null
+          moneda_id: string | null
           monto_sol: number | null
           monto_usd: number | null
-          tenant_id: string
+          tenant_id: string | null
           tipo_pago: string | null
           updated_at: string | null
           updated_by: string | null
@@ -3000,10 +4289,13 @@ export type Database = {
           factura_venta_id?: string | null
           fecha_cobro?: string | null
           id?: string
+          id_editor?: string | null
+          id_empresa?: string | null
           moneda?: string | null
+          moneda_id?: string | null
           monto_sol?: number | null
           monto_usd?: number | null
-          tenant_id: string
+          tenant_id?: string | null
           tipo_pago?: string | null
           updated_at?: string | null
           updated_by?: string | null
@@ -3017,34 +4309,23 @@ export type Database = {
           factura_venta_id?: string | null
           fecha_cobro?: string | null
           id?: string
+          id_editor?: string | null
+          id_empresa?: string | null
           moneda?: string | null
+          moneda_id?: string | null
           monto_sol?: number | null
           monto_usd?: number | null
-          tenant_id?: string
+          tenant_id?: string | null
           tipo_pago?: string | null
           updated_at?: string | null
           updated_by?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "factura_venta_pagos_factura_venta_id_fkey"
-            columns: ["factura_venta_id"]
+            foreignKeyName: "factura_venta_pagos_tenant_id_fkey"
+            columns: ["tenant_id"]
             isOneToOne: false
-            referencedRelation: "facturas_venta"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "factura_venta_pagos_factura_venta_id_fkey"
-            columns: ["factura_venta_id"]
-            isOneToOne: false
-            referencedRelation: "view_valoraciones_ventas"
-            referencedColumns: ["valoracion_fv_id"]
-          },
-          {
-            foreignKeyName: "factura_venta_pagos_updated_by_fkey"
-            columns: ["updated_by"]
-            isOneToOne: false
-            referencedRelation: "profiles"
+            referencedRelation: "companies"
             referencedColumns: ["id"]
           },
         ]
@@ -3227,29 +4508,7 @@ export type Database = {
           total_usd?: number | null
           updated_at?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "facturas_compra_maquinaria_id_fkey"
-            columns: ["maquinaria_id"]
-            isOneToOne: false
-            referencedRelation: "maquinarias"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "facturas_compra_maquinaria_id_fkey"
-            columns: ["maquinaria_id"]
-            isOneToOne: false
-            referencedRelation: "view_valoraciones_compras"
-            referencedColumns: ["maquinaria_id"]
-          },
-          {
-            foreignKeyName: "facturas_compra_maquinaria_id_fkey"
-            columns: ["maquinaria_id"]
-            isOneToOne: false
-            referencedRelation: "view_valoraciones_ventas"
-            referencedColumns: ["maquinaria_id"]
-          },
-        ]
+        Relationships: []
       }
       facturas_compra_item: {
         Row: {
@@ -3327,10 +4586,12 @@ export type Database = {
           factura_compra_id: string | null
           fecha_cobro: string | null
           id: string
+          id_editor: string | null
           moneda: string | null
+          moneda_id: string | null
           monto_sol: number | null
           monto_usd: number | null
-          tenant_id: string
+          tenant_id: string | null
           tipo_pago: string | null
           updated_at: string | null
           updated_by: string | null
@@ -3344,10 +4605,12 @@ export type Database = {
           factura_compra_id?: string | null
           fecha_cobro?: string | null
           id?: string
+          id_editor?: string | null
           moneda?: string | null
+          moneda_id?: string | null
           monto_sol?: number | null
           monto_usd?: number | null
-          tenant_id: string
+          tenant_id?: string | null
           tipo_pago?: string | null
           updated_at?: string | null
           updated_by?: string | null
@@ -3361,23 +4624,17 @@ export type Database = {
           factura_compra_id?: string | null
           fecha_cobro?: string | null
           id?: string
+          id_editor?: string | null
           moneda?: string | null
+          moneda_id?: string | null
           monto_sol?: number | null
           monto_usd?: number | null
-          tenant_id?: string
+          tenant_id?: string | null
           tipo_pago?: string | null
           updated_at?: string | null
           updated_by?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "facturas_compra_pagos_factura_compra_id_fkey"
-            columns: ["factura_compra_id"]
-            isOneToOne: false
-            referencedRelation: "facturas_compra"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       facturas_venta: {
         Row: {
@@ -3527,15 +4784,7 @@ export type Database = {
           varias_valoraciones?: boolean | null
           vendedor_id?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "facturas_venta_vendedor_id_fkey"
-            columns: ["vendedor_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       facturas_venta_item: {
         Row: {
@@ -3604,22 +4853,7 @@ export type Database = {
           tenant_id?: string | null
           updated_at?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "facturas_venta_item_factura_venta_id_fkey"
-            columns: ["factura_venta_id"]
-            isOneToOne: false
-            referencedRelation: "facturas_venta"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "facturas_venta_item_factura_venta_id_fkey"
-            columns: ["factura_venta_id"]
-            isOneToOne: false
-            referencedRelation: "view_valoraciones_ventas"
-            referencedColumns: ["valoracion_fv_id"]
-          },
-        ]
+        Relationships: []
       }
       file_migration_log: {
         Row: {
@@ -3676,26 +4910,35 @@ export type Database = {
         Row: {
           bubble_id: string | null
           created_at: string | null
+          created_by: string | null
           id: string
           is_active: boolean | null
           nombre: string
           tenant_id: string
+          updated_at: string | null
+          updated_by: string | null
         }
         Insert: {
           bubble_id?: string | null
           created_at?: string | null
+          created_by?: string | null
           id?: string
           is_active?: boolean | null
           nombre: string
           tenant_id: string
+          updated_at?: string | null
+          updated_by?: string | null
         }
         Update: {
           bubble_id?: string | null
           created_at?: string | null
+          created_by?: string | null
           id?: string
           is_active?: boolean | null
           nombre?: string
           tenant_id?: string
+          updated_at?: string | null
+          updated_by?: string | null
         }
         Relationships: [
           {
@@ -4888,32 +6131,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "inspecciones_cliente_id_fkey"
-            columns: ["cliente_id"]
-            isOneToOne: false
-            referencedRelation: "terceros"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "inspecciones_conductor_id_fkey"
             columns: ["conductor_id"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "inspecciones_cotizacion_id_fkey"
-            columns: ["cotizacion_id"]
-            isOneToOne: false
-            referencedRelation: "cotizaciones"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "inspecciones_cotizacion_id_fkey"
-            columns: ["cotizacion_id"]
-            isOneToOne: false
-            referencedRelation: "view_valoraciones_ventas"
-            referencedColumns: ["cotizacion_id"]
           },
           {
             foreignKeyName: "inspecciones_maquinaria_id_fkey"
@@ -5065,13 +6287,6 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: [
-          {
-            foreignKeyName: "inspecciones_detalles_created_by_fkey"
-            columns: ["created_by"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
           {
             foreignKeyName: "inspecciones_detalles_inspeccion_id_fkey"
             columns: ["inspeccion_id"]
@@ -5515,7 +6730,7 @@ export type Database = {
           marca: string | null
           modelo: string | null
           modelo_id: string | null
-          nombre: string | null
+          nombre: string
           placa: string | null
           propiedad_proveedor: boolean | null
           propietario:
@@ -5546,7 +6761,7 @@ export type Database = {
           marca?: string | null
           modelo?: string | null
           modelo_id?: string | null
-          nombre?: string | null
+          nombre: string
           placa?: string | null
           propiedad_proveedor?: boolean | null
           propietario?:
@@ -5577,7 +6792,7 @@ export type Database = {
           marca?: string | null
           modelo?: string | null
           modelo_id?: string | null
-          nombre?: string | null
+          nombre?: string
           placa?: string | null
           propiedad_proveedor?: boolean | null
           propietario?:
@@ -5596,13 +6811,6 @@ export type Database = {
             columns: ["modelo_id"]
             isOneToOne: false
             referencedRelation: "maquinaria_modelos"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "maquinarias_propietario_id_fkey"
-            columns: ["propietario_id"]
-            isOneToOne: false
-            referencedRelation: "terceros"
             referencedColumns: ["id"]
           },
           {
@@ -5853,7 +7061,7 @@ export type Database = {
           id?: string
           is_active?: boolean
           nombre: string
-          tenant_id: string
+          tenant_id?: string
           updated_at?: string
           updated_by?: string | null
         }
@@ -5971,69 +7179,6 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "inspecciones"
             referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "planes_accion_maquinaria_id_fkey"
-            columns: ["maquinaria_id"]
-            isOneToOne: false
-            referencedRelation: "maquinarias"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "planes_accion_maquinaria_id_fkey"
-            columns: ["maquinaria_id"]
-            isOneToOne: false
-            referencedRelation: "view_valoraciones_compras"
-            referencedColumns: ["maquinaria_id"]
-          },
-          {
-            foreignKeyName: "planes_accion_maquinaria_id_fkey"
-            columns: ["maquinaria_id"]
-            isOneToOne: false
-            referencedRelation: "view_valoraciones_ventas"
-            referencedColumns: ["maquinaria_id"]
-          },
-          {
-            foreignKeyName: "planes_accion_plantilla_id_fkey"
-            columns: ["plantilla_id"]
-            isOneToOne: false
-            referencedRelation: "plantillas"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "planes_accion_reporte_maquinaria_id_fkey"
-            columns: ["reporte_maquinaria_id"]
-            isOneToOne: false
-            referencedRelation: "reportes_maquinaria"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "planes_accion_reporte_maquinaria_id_fkey"
-            columns: ["reporte_maquinaria_id"]
-            isOneToOne: false
-            referencedRelation: "view_valoraciones_compras"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "planes_accion_reporte_maquinaria_id_fkey"
-            columns: ["reporte_maquinaria_id"]
-            isOneToOne: false
-            referencedRelation: "view_valoraciones_compras"
-            referencedColumns: ["reporte_id"]
-          },
-          {
-            foreignKeyName: "planes_accion_reporte_maquinaria_id_fkey"
-            columns: ["reporte_maquinaria_id"]
-            isOneToOne: false
-            referencedRelation: "view_valoraciones_ventas"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "planes_accion_reporte_maquinaria_id_fkey"
-            columns: ["reporte_maquinaria_id"]
-            isOneToOne: false
-            referencedRelation: "view_valoraciones_ventas"
-            referencedColumns: ["reporte_id"]
           },
           {
             foreignKeyName: "planes_accion_responsable_id_fkey"
@@ -6174,29 +7319,38 @@ export type Database = {
         Row: {
           bubble_id: string | null
           created_at: string | null
+          created_by: string | null
           dias: number | null
           id: string
           is_active: boolean | null
           nombre: string
           tenant_id: string
+          updated_at: string | null
+          updated_by: string | null
         }
         Insert: {
           bubble_id?: string | null
           created_at?: string | null
+          created_by?: string | null
           dias?: number | null
           id?: string
           is_active?: boolean | null
           nombre: string
           tenant_id: string
+          updated_at?: string | null
+          updated_by?: string | null
         }
         Update: {
           bubble_id?: string | null
           created_at?: string | null
+          created_by?: string | null
           dias?: number | null
           id?: string
           is_active?: boolean | null
           nombre?: string
           tenant_id?: string
+          updated_at?: string | null
+          updated_by?: string | null
         }
         Relationships: [
           {
@@ -6414,7 +7568,7 @@ export type Database = {
           created_by: string | null
           direccion: string | null
           doc_number: string | null
-          email: string
+          email: string | null
           first_name: string | null
           gender: string | null
           id: string
@@ -6441,7 +7595,7 @@ export type Database = {
           created_by?: string | null
           direccion?: string | null
           doc_number?: string | null
-          email: string
+          email?: string | null
           first_name?: string | null
           gender?: string | null
           id: string
@@ -6468,7 +7622,7 @@ export type Database = {
           created_by?: string | null
           direccion?: string | null
           doc_number?: string | null
-          email?: string
+          email?: string | null
           first_name?: string | null
           gender?: string | null
           id?: string
@@ -6568,6 +7722,7 @@ export type Database = {
       }
       reportes_combustible: {
         Row: {
+          bubble_id: string | null
           created_at: string | null
           created_by: string | null
           fecha_reporte: string
@@ -6591,6 +7746,7 @@ export type Database = {
           updated_at: string | null
         }
         Insert: {
+          bubble_id?: string | null
           created_at?: string | null
           created_by?: string | null
           fecha_reporte: string
@@ -6614,6 +7770,7 @@ export type Database = {
           updated_at?: string | null
         }
         Update: {
+          bubble_id?: string | null
           created_at?: string | null
           created_by?: string | null
           fecha_reporte?: string
@@ -6903,27 +8060,6 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "reportes_maquinaria_cliente_id_fkey"
-            columns: ["cliente_id"]
-            isOneToOne: false
-            referencedRelation: "terceros"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "reportes_maquinaria_factura_compra_item_id_fkey"
-            columns: ["factura_compra_item_id"]
-            isOneToOne: false
-            referencedRelation: "facturas_compra_item"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "reportes_maquinaria_factura_venta_item_id_fkey"
-            columns: ["factura_venta_item_id"]
-            isOneToOne: false
-            referencedRelation: "facturas_venta_item"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "reportes_maquinaria_maquinaria_id_fkey"
             columns: ["maquinaria_id"]
             isOneToOne: false
@@ -6949,13 +8085,6 @@ export type Database = {
             columns: ["operador_id"]
             isOneToOne: false
             referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "reportes_maquinaria_proveedor_id_fkey"
-            columns: ["proveedor_id"]
-            isOneToOne: false
-            referencedRelation: "terceros"
             referencedColumns: ["id"]
           },
           {
@@ -7013,20 +8142,6 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "view_valoraciones_ventas"
             referencedColumns: ["tarea_id"]
-          },
-          {
-            foreignKeyName: "reportes_maquinaria_valorizacion_compra_id_fkey"
-            columns: ["valorizacion_compra_id"]
-            isOneToOne: false
-            referencedRelation: "valorizaciones"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "reportes_maquinaria_valorizacion_venta_id_fkey"
-            columns: ["valorizacion_venta_id"]
-            isOneToOne: false
-            referencedRelation: "valorizaciones"
-            referencedColumns: ["id"]
           },
         ]
       }
@@ -7406,7 +8521,7 @@ export type Database = {
         Row: {
           bubble_id: string | null
           cantidad_precios: number | null
-          codigo: string
+          codigo: string | null
           created_at: string | null
           created_by: string | null
           id: string
@@ -7414,13 +8529,13 @@ export type Database = {
           is_active: boolean | null
           moneda: string | null
           nombre: string | null
-          precio_1_campo_adicional: number | null
+          precio_1_campo_adicional: string | null
           precio_1_tipo: string | null
           precio_1_valor: number | null
-          precio_2_campo_adicional: number | null
+          precio_2_campo_adicional: string | null
           precio_2_tipo: string | null
           precio_2_valor: number | null
-          precio_3_campo_adicional: number | null
+          precio_3_campo_adicional: string | null
           precio_3_no_aplica: boolean | null
           precio_3_tipo: string | null
           precio_3_valor: number | null
@@ -7433,7 +8548,7 @@ export type Database = {
         Insert: {
           bubble_id?: string | null
           cantidad_precios?: number | null
-          codigo: string
+          codigo?: string | null
           created_at?: string | null
           created_by?: string | null
           id?: string
@@ -7441,13 +8556,13 @@ export type Database = {
           is_active?: boolean | null
           moneda?: string | null
           nombre?: string | null
-          precio_1_campo_adicional?: number | null
+          precio_1_campo_adicional?: string | null
           precio_1_tipo?: string | null
           precio_1_valor?: number | null
-          precio_2_campo_adicional?: number | null
+          precio_2_campo_adicional?: string | null
           precio_2_tipo?: string | null
           precio_2_valor?: number | null
-          precio_3_campo_adicional?: number | null
+          precio_3_campo_adicional?: string | null
           precio_3_no_aplica?: boolean | null
           precio_3_tipo?: string | null
           precio_3_valor?: number | null
@@ -7460,7 +8575,7 @@ export type Database = {
         Update: {
           bubble_id?: string | null
           cantidad_precios?: number | null
-          codigo?: string
+          codigo?: string | null
           created_at?: string | null
           created_by?: string | null
           id?: string
@@ -7468,13 +8583,13 @@ export type Database = {
           is_active?: boolean | null
           moneda?: string | null
           nombre?: string | null
-          precio_1_campo_adicional?: number | null
+          precio_1_campo_adicional?: string | null
           precio_1_tipo?: string | null
           precio_1_valor?: number | null
-          precio_2_campo_adicional?: number | null
+          precio_2_campo_adicional?: string | null
           precio_2_tipo?: string | null
           precio_2_valor?: number | null
-          precio_3_campo_adicional?: number | null
+          precio_3_campo_adicional?: string | null
           precio_3_no_aplica?: boolean | null
           precio_3_tipo?: string | null
           precio_3_valor?: number | null
@@ -7484,36 +8599,7 @@ export type Database = {
           updated_at?: string | null
           updated_by?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "fk_servicios_precio_1_tipo"
-            columns: ["precio_1_tipo"]
-            isOneToOne: false
-            referencedRelation: "servicios_tipo_precios"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "fk_servicios_precio_2_tipo"
-            columns: ["precio_2_tipo"]
-            isOneToOne: false
-            referencedRelation: "servicios_tipo_precios"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "fk_servicios_precio_3_tipo"
-            columns: ["precio_3_tipo"]
-            isOneToOne: false
-            referencedRelation: "servicios_tipo_precios"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "servicios_tenant_id_fkey"
-            columns: ["tenant_id"]
-            isOneToOne: false
-            referencedRelation: "companies"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       servicios_tipo: {
         Row: {
@@ -7595,6 +8681,42 @@ export type Database = {
           },
         ]
       }
+      servicios_tipos: {
+        Row: {
+          bubble_id: string | null
+          created_at: string | null
+          created_by: string | null
+          id: string
+          is_active: boolean | null
+          nombre: string | null
+          tenant_id: string
+          updated_at: string | null
+          updated_by: string | null
+        }
+        Insert: {
+          bubble_id?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          is_active?: boolean | null
+          nombre?: string | null
+          tenant_id: string
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+        Update: {
+          bubble_id?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          is_active?: boolean | null
+          nombre?: string | null
+          tenant_id?: string
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
       sistema_recursos: {
         Row: {
           created_at: string | null
@@ -7639,7 +8761,7 @@ export type Database = {
           id?: string
           is_active?: boolean
           nombre: string
-          tenant_id: string
+          tenant_id?: string
           updated_at?: string
           updated_by?: string | null
         }
@@ -7961,11 +9083,11 @@ export type Database = {
           bubble_id: string | null
           created_at: string | null
           dias_renovacion: number | null
-          epp_nombre: string | null
+          epp_nombre: string
           id: string
           is_active: boolean
           nivel_riesgo: string | null
-          tenant_id: string | null
+          tenant_id: string
           tipo: string
           updated_at: string | null
         }
@@ -7973,11 +9095,11 @@ export type Database = {
           bubble_id?: string | null
           created_at?: string | null
           dias_renovacion?: number | null
-          epp_nombre?: string | null
+          epp_nombre: string
           id?: string
           is_active?: boolean
           nivel_riesgo?: string | null
-          tenant_id?: string | null
+          tenant_id: string
           tipo?: string
           updated_at?: string | null
         }
@@ -7985,11 +9107,11 @@ export type Database = {
           bubble_id?: string | null
           created_at?: string | null
           dias_renovacion?: number | null
-          epp_nombre?: string | null
+          epp_nombre?: string
           id?: string
           is_active?: boolean
           nivel_riesgo?: string | null
-          tenant_id?: string | null
+          tenant_id?: string
           tipo?: string
           updated_at?: string | null
         }
@@ -8099,6 +9221,7 @@ export type Database = {
       sst_epp_item: {
         Row: {
           admin_que_respondio_id: string | null
+          bubble_id: string | null
           cantidad: number
           catalogo_id: string
           created_at: string | null
@@ -8119,6 +9242,7 @@ export type Database = {
         }
         Insert: {
           admin_que_respondio_id?: string | null
+          bubble_id?: string | null
           cantidad: number
           catalogo_id: string
           created_at?: string | null
@@ -8139,6 +9263,7 @@ export type Database = {
         }
         Update: {
           admin_que_respondio_id?: string | null
+          bubble_id?: string | null
           cantidad?: number
           catalogo_id?: string
           created_at?: string | null
@@ -8158,13 +9283,6 @@ export type Database = {
           tenant_id?: string
         }
         Relationships: [
-          {
-            foreignKeyName: "sst_epp_item_admin_que_respondio_id_fkey"
-            columns: ["admin_que_respondio_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
           {
             foreignKeyName: "sst_epp_item_catalogo_id_fkey"
             columns: ["catalogo_id"]
@@ -8204,6 +9322,7 @@ export type Database = {
       }
       sst_epp_movimiento: {
         Row: {
+          bubble_id: string | null
           cantidad: number
           catalogo_id: string
           colaborador_id: string
@@ -8217,6 +9336,7 @@ export type Database = {
           tipo: string
         }
         Insert: {
+          bubble_id?: string | null
           cantidad: number
           catalogo_id: string
           colaborador_id: string
@@ -8230,6 +9350,7 @@ export type Database = {
           tipo: string
         }
         Update: {
+          bubble_id?: string | null
           cantidad?: number
           catalogo_id?: string
           colaborador_id?: string
@@ -8282,6 +9403,7 @@ export type Database = {
       }
       sst_epp_reporte: {
         Row: {
+          bubble_id: string | null
           created_at: string | null
           created_by: string | null
           enviado: boolean
@@ -8293,6 +9415,7 @@ export type Database = {
           tenant_id: string
         }
         Insert: {
+          bubble_id?: string | null
           created_at?: string | null
           created_by?: string | null
           enviado?: boolean
@@ -8304,6 +9427,7 @@ export type Database = {
           tenant_id: string
         }
         Update: {
+          bubble_id?: string | null
           created_at?: string | null
           created_by?: string | null
           enviado?: boolean
@@ -8916,6 +10040,7 @@ export type Database = {
       }
       team_members: {
         Row: {
+          bubble_id: string | null
           created_at: string | null
           created_by: string | null
           id: string
@@ -8929,6 +10054,7 @@ export type Database = {
           updated_by: string | null
         }
         Insert: {
+          bubble_id?: string | null
           created_at?: string | null
           created_by?: string | null
           id?: string
@@ -8942,6 +10068,7 @@ export type Database = {
           updated_by?: string | null
         }
         Update: {
+          bubble_id?: string | null
           created_at?: string | null
           created_by?: string | null
           id?: string
@@ -8980,6 +10107,7 @@ export type Database = {
       }
       teams: {
         Row: {
+          bubble_id: string | null
           code: string | null
           created_at: string | null
           created_by: string | null
@@ -8993,6 +10121,7 @@ export type Database = {
           updated_by: string | null
         }
         Insert: {
+          bubble_id?: string | null
           code?: string | null
           created_at?: string | null
           created_by?: string | null
@@ -9006,6 +10135,7 @@ export type Database = {
           updated_by?: string | null
         }
         Update: {
+          bubble_id?: string | null
           code?: string | null
           created_at?: string | null
           created_by?: string | null
@@ -9161,13 +10291,6 @@ export type Database = {
             referencedRelation: "ubigeo"
             referencedColumns: ["codigo"]
           },
-          {
-            foreignKeyName: "terceros_vendedor_asignado_id_fkey"
-            columns: ["vendedor_asignado_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
         ]
       }
       terceros_contactos: {
@@ -9226,20 +10349,6 @@ export type Database = {
           updated_by?: string | null
         }
         Relationships: [
-          {
-            foreignKeyName: "terceros_contactos_area_id_fkey"
-            columns: ["area_id"]
-            isOneToOne: false
-            referencedRelation: "contactos_area"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "terceros_contactos_cargo_id_fkey"
-            columns: ["cargo_id"]
-            isOneToOne: false
-            referencedRelation: "contactos_cargo"
-            referencedColumns: ["id"]
-          },
           {
             foreignKeyName: "terceros_contactos_tenant_id_fkey"
             columns: ["tenant_id"]
@@ -9424,6 +10533,7 @@ export type Database = {
       }
       terceros_sitios_rel: {
         Row: {
+          bubble_id: string | null
           created_at: string
           created_by: string | null
           id: string
@@ -9432,14 +10542,16 @@ export type Database = {
           tercero_id: string
         }
         Insert: {
+          bubble_id?: string | null
           created_at?: string
           created_by?: string | null
           id?: string
           sitio_id: string
-          tenant_id: string
+          tenant_id?: string
           tercero_id: string
         }
         Update: {
+          bubble_id?: string | null
           created_at?: string
           created_by?: string | null
           id?: string
@@ -9466,6 +10578,7 @@ export type Database = {
       }
       terceros_tipos: {
         Row: {
+          bubble_id: string | null
           created_at: string | null
           created_by: string | null
           id: string
@@ -9476,6 +10589,7 @@ export type Database = {
           updated_by: string | null
         }
         Insert: {
+          bubble_id?: string | null
           created_at?: string | null
           created_by?: string | null
           id?: string
@@ -9486,6 +10600,7 @@ export type Database = {
           updated_by?: string | null
         }
         Update: {
+          bubble_id?: string | null
           created_at?: string | null
           created_by?: string | null
           id?: string
@@ -9627,6 +10742,7 @@ export type Database = {
       }
       tiempo_unidades: {
         Row: {
+          bubble_id: string | null
           created_at: string | null
           created_by: string | null
           id: string
@@ -9637,6 +10753,7 @@ export type Database = {
           updated_by: string | null
         }
         Insert: {
+          bubble_id?: string | null
           created_at?: string | null
           created_by?: string | null
           id?: string
@@ -9647,6 +10764,7 @@ export type Database = {
           updated_by?: string | null
         }
         Update: {
+          bubble_id?: string | null
           created_at?: string | null
           created_by?: string | null
           id?: string
@@ -9692,7 +10810,15 @@ export type Database = {
           requiere_campo_adicional?: boolean | null
           tenant_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "tipos_precio_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       trial_emails_log: {
         Row: {
@@ -9807,10 +10933,24 @@ export type Database = {
         }
         Relationships: [
           {
+            foreignKeyName: "user_documents_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "user_documents_document_type_id_fkey"
             columns: ["document_type_id"]
             isOneToOne: false
             referencedRelation: "document_types"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_documents_modified_by_fkey"
+            columns: ["modified_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
           {
@@ -10258,6 +11398,16 @@ export type Database = {
       }
       current_tenant_id: { Args: never; Returns: string }
       fn_refresh_planificacion_if_pending: { Args: never; Returns: undefined }
+      generate_epp_alerts: {
+        Args: { p_tenant_id?: string }
+        Returns: {
+          inserted_d15: number
+          inserted_d30: number
+          inserted_vencido: number
+          items_marked_pronto: number
+          items_marked_vencido: number
+        }[]
+      }
       get_auth_company_slug: { Args: never; Returns: string }
       get_auth_role: { Args: never; Returns: string }
       get_auth_tenant_id: { Args: never; Returns: string }
@@ -10271,6 +11421,13 @@ export type Database = {
         Args: { p_tenant_id: string }
         Returns: number
       }
+      postgres_fdw_disconnect: { Args: { "": string }; Returns: boolean }
+      postgres_fdw_disconnect_all: { Args: never; Returns: boolean }
+      postgres_fdw_get_connections: {
+        Args: never
+        Returns: Record<string, unknown>[]
+      }
+      postgres_fdw_handler: { Args: never; Returns: unknown }
       refresh_mv_planificacion: { Args: never; Returns: undefined }
       toggle_app_release_activo: {
         Args: { p_activo: boolean; p_id: string }
@@ -10281,11 +11438,11 @@ export type Database = {
       app_role:
         | "reporta_admin"
         | "admin_tenant"
+        | "supervisor"
+        | "member"
         | "planner"
         | "viewer"
         | "customer"
-        | "supervisor"
-        | "member"
       doc_aplica_a: "vehiculo" | "maquinaria" | "todos"
       doc_type: "DNI" | "CE" | "PASSPORT" | "RUC" | "OTHER"
       document_category: "seguro" | "con_vencimiento" | "sin_vencimiento"
@@ -10432,11 +11589,11 @@ export const Constants = {
       app_role: [
         "reporta_admin",
         "admin_tenant",
+        "supervisor",
+        "member",
         "planner",
         "viewer",
         "customer",
-        "supervisor",
-        "member",
       ],
       doc_aplica_a: ["vehiculo", "maquinaria", "todos"],
       doc_type: ["DNI", "CE", "PASSPORT", "RUC", "OTHER"],
