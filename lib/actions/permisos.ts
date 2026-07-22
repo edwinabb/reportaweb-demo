@@ -23,15 +23,6 @@ export type CargoPermiso = {
 
 export type ViedCampo = 'puede_ver' | 'puede_ingresar' | 'puede_editar' | 'puede_eliminar'
 
-export async function getSistemaRecursos(): Promise<SistemaRecurso[]> {
-    const supabase = await createClient()
-    const { data } = await supabase
-        .from('sistema_recursos')
-        .select('id, nombre, ruta_base, seccion, orden')
-        .order('orden')
-    return (data as SistemaRecurso[]) ?? []
-}
-
 export async function getPermisosParaCargo(cargoId: string): Promise<CargoPermiso[]> {
     const supabase = await createClient()
     const { data } = await supabase

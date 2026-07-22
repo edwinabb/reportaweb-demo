@@ -51,36 +51,6 @@ export async function getTasasCambio(
     return data as TasaCambio[]
 }
 
-export async function getTasaCambioVigente(
-    monedaOrigen: Moneda,
-    monedaDestino: Moneda,
-    fecha?: string
-): Promise<TasaCambio | null> {
-    const { adminClient, tenantId } = await getSupabaseContext()
-    if (!adminClient || !tenantId) return null
-
-    const fechaConsulta = fecha || new Date().toISOString().split('T')[0]
-
-    const { data, error } = await adminClient
-        .from('tasas_cambio')
-        .select('*')
-        .eq('tenant_id', tenantId)
-        .eq('moneda_origen', monedaOrigen)
-        .eq('moneda_destino', monedaDestino)
-        .lte('fecha_vigencia', fechaConsulta)
-        .eq('is_active', true)
-        .order('fecha_vigencia', { ascending: false })
-        .limit(1)
-        .single()
-
-    if (error) {
-        console.error('Error fetching tasa cambio vigente:', error)
-        return null
-    }
-
-    return data as TasaCambio
-}
-
 export async function createTasaCambio(prevState: any, formData: FormData) {
     const { adminClient, tenantId, user } = await getSupabaseContext()
     if (!adminClient || !tenantId || !user) return { message: 'No autorizado' }

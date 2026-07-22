@@ -3,7 +3,6 @@
 import { revalidatePath } from 'next/cache'
 import { getSupabaseContext } from '@/lib/action-context'
 import type {
-    Tarea,
     TareaWithRelations,
     TareaRecurso,
     CreateTareaPayload,
@@ -512,17 +511,6 @@ async function rollbackTarea(
     tareaId: string,
 ) {
     await adminClient.from('tareas').delete().eq('id', tareaId)
-}
-
-export async function updateTarea(id: string, data: Partial<Tarea>) {
-    const { adminClient, tenantId } = await getSupabaseContext()
-    if (!adminClient || !tenantId) return { success: false, message: 'No autorizado' }
-
-    const { error } = await adminClient.from('tareas').update(data).eq('id', id).eq('tenant_id', tenantId)
-    if (error) return { success: false, message: error.message }
-
-    revalidatePath('/planificacion')
-    return { success: true, message: 'Tarea actualizada' }
 }
 
 /**

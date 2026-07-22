@@ -715,34 +715,6 @@ export async function updatePreciosDetalle(
     return { message: 'Precios actualizados', success: true }
 }
 
-export async function getHistoricoCotizaciones(cliente_id: string, servicio_id: string) {
-    const { adminClient, tenantId } = await getSupabaseContext()
-    if (!adminClient || !tenantId) return []
-
-    const { data, error } = await adminClient
-        .from('cotizaciones_detalle')
-        .select(`
-            *,
-            cotizacion:cotizaciones(numero, fecha_emision, estado, moneda)
-        `)
-        .eq('tenant_id', tenantId)
-        .eq('servicio_id', servicio_id)
-        .order('created_at', { ascending: false })
-        .limit(10)
-
-    if (error) {
-        console.error('Error fetching historico:', error)
-        return []
-    }
-
-    // Filter by cliente_id in the cotizacion
-    return data.filter(() => {
-        // We need to join with cotizaciones to filter by cliente_id
-        // For now, return all
-        return true
-    })
-}
-
 // ============================================
 // OFERTAS PROVEEDORES ACTIONS
 // ============================================
@@ -896,49 +868,6 @@ export async function updateNotasPrecios(cotizacion_id: string, notas: string) {
 
     safeRevalidatePath(`/cotizaciones/${cotizacion_id}`)
     return { message: 'Notas actualizadas', success: true }
-}
-
-export async function updateNotasInternas(cotizacion_id: string, notas_internas: string) {
-    const { adminClient, tenantId } = await getSupabaseContext()
-    if (!adminClient || !tenantId) return { message: 'No autorizado' }
-
-    const { error } = await adminClient
-        .from('cotizaciones')
-        .update({ notas_internas })
-        .eq('id', cotizacion_id)
-        .eq('tenant_id', tenantId)
-
-    if (error) {
-        console.error('Error updating notas_internas:', error)
-        return { message: 'Error al actualizar notas internas' }
-    }
-
-    safeRevalidatePath(`/cotizaciones/${cotizacion_id}`)
-    return { message: 'Notas internas actualizadas', success: true }
-}
-
-export async function markPDFGenerated(cotizacion_id: string, pdf_url: string) {
-    const { adminClient, tenantId } = await getSupabaseContext()
-    if (!adminClient || !tenantId) return { message: 'No autorizado' }
-
-    const { error } = await adminClient
-        .from('cotizaciones')
-        .update({
-            pdf_url,
-            pdf_generado_at: new Date().toISOString(),
-            estado: 'ENVIADA'
-        })
-        .eq('id', cotizacion_id)
-        .eq('tenant_id', tenantId)
-
-    if (error) {
-        console.error('Error marking PDF:', error)
-        return { message: 'Error al marcar PDF generado' }
-    }
-
-    safeRevalidatePath(`/cotizaciones/${cotizacion_id}`)
-    safeRevalidatePath('/cotizaciones')
-    return { message: 'PDF generado correctamente', success: true }
 }
 
 // ============================================
@@ -1489,59 +1418,6 @@ export async function getCotizacionTareaInfo(cotizacion_id: string) {
     return tarea ?? null
 }
 
-export async function notificarPlanner(cotizacion_id: string, plannerEmail: string): Promise<ActionResponse> {
-    const { adminClient, tenantId } = await getSupabaseContext()
-    if (!adminClient || !tenantId) return { message: 'No autorizado' }
-
-    const tareaInfo = await getCotizacionTareaInfo(cotizacion_id)
-    if (!tareaInfo) return { message: 'No hay tarea generada para esta cotización' }
-
-    const { sendEmail } = await import('@/lib/email')
-
-    const webUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://web.reportar.app'
-    const planLink = `${webUrl}/planificacion?tarea=${tareaInfo.id}`
-
-    const escapeHtml = (str: string) =>
-        str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
-
-    const result = await sendEmail({
-        to: plannerEmail,
-        subject: `[Reporta] Nueva tarea para planificar: ${tareaInfo.codigo ?? tareaInfo.id.slice(0, 8)}`,
-        html: `
-            <p>Hola,</p>
-            <p>La cotización generó una tarea en estado <strong>BORRADOR</strong> que requiere fechas y recursos:</p>
-            <ul>
-                <li><strong>Tarea:</strong> ${escapeHtml(tareaInfo.codigo ?? tareaInfo.id.slice(0, 8))} — ${escapeHtml(tareaInfo.titulo)}</li>
-            </ul>
-            <p><a href="${planLink}">Ir a Planificación →</a></p>
-            <p style="color:#6b7280;font-size:12px">Este correo fue enviado automáticamente por Reporta.</p>
-        `,
-    })
-
-    if (!result.success) return { message: result.error ?? 'Error al enviar email' }
-    return { success: true, message: 'Planner notificado por correo' }
-}
-
-export async function updateCotizacionPDFConfig(cotizacion_id: string, config: Record<string, unknown>) {
-    const { adminClient } = await getSupabaseContext()
-    if (!adminClient) return { success: false, message: 'No autorizado' }
-
-    const { error } = await adminClient
-        .from('cotizaciones')
-        .update({
-            pdf_config: config,
-            updated_at: new Date().toISOString()
-        })
-        .eq('id', cotizacion_id)
-
-    if (error) {
-        console.error('Error updating PDF config:', error)
-        return { success: false, message: 'Error al actualizar configuración' }
-    }
-
-    safeRevalidatePath(`/cotizaciones/${cotizacion_id}`)
-    return { success: true, message: 'Configuración guardada' }
-}
 // ============================================
 // HISTORICAL DATA ACTIONS
 // ============================================
@@ -1792,26 +1668,6 @@ export async function getCotizacionRespuesta(cotizacion_id: string) {
 }
 
 /**
- * Guarda el precio negociado de un item de cotización.
- */
-export async function guardarPrecioNegociado(
-    detalle_id: string,
-    precio_negociado: number | null
-): Promise<ActionResponse> {
-    const { adminClient, tenantId } = await getSupabaseContext()
-    if (!adminClient || !tenantId) return { message: 'No autorizado' }
-
-    const { error } = await adminClient
-        .from('cotizaciones_detalle')
-        .update({ precio_negociado })
-        .eq('id', detalle_id)
-        .eq('tenant_id', tenantId)
-
-    if (error) return { message: error.message }
-    return { message: 'Precio guardado', success: true }
-}
-
-/**
  * Crea una tarea por cada detalle con estado_aprobacion = 'APROBADA' que no
  * tenga tarea_id ya asignado. Hereda cliente, sitio, contacto y cotizacion de
  * la cotización padre.
@@ -1924,24 +1780,3 @@ export async function crearTareasAprobadas(cotizacion_id: string): Promise<Actio
     }
 }
 
-/**
- * Guarda los precios de varios detalles de una cotización en lote (paso 3).
- */
-export async function guardarPreciosDetalleLote(
-    updates: { detalle_id: string; precio_valor: number }[]
-): Promise<ActionResponse> {
-    const { adminClient, tenantId } = await getSupabaseContext()
-    if (!adminClient || !tenantId) return { message: 'No autorizado' }
-
-    for (const u of updates) {
-        const { error } = await adminClient
-            .from('cotizaciones_detalle')
-            .update({ precio_valor: u.precio_valor })
-            .eq('id', u.detalle_id)
-            .eq('tenant_id', tenantId)
-
-        if (error) return { message: `Error en ${u.detalle_id}: ${error.message}` }
-    }
-
-    return { message: 'Precios actualizados', success: true }
-}

@@ -1187,48 +1187,4 @@ export async function deshabilitarReporteMaquinaria(reporteId: string) {
     return { success: true as const, message: 'Reporte deshabilitado' }
 }
 
-/**
- * Override del precio unitario de facturación de un reporte (Precio por Día).
- * Útil cuando el cliente acepta un precio distinto del Precio 1 de la
- * cotización — se guarda en `reportes_maquinaria.horas_facturar` manteniendo
- * la referencia al servicio original.
- */
-export async function setPrecioPorDiaReporte(reporteId: string, precioUnitario: number, cantidadFacturar: number) {
-    const { adminClient, tenantId } = await getTenantContext()
-    if (!adminClient || !tenantId) return { success: false as const, message: 'No autorizado' }
-
-    if (!(precioUnitario > 0) || !(cantidadFacturar > 0)) {
-        return { success: false as const, message: 'Valores inválidos' }
-    }
-
-    // Solo permite override en PENDIENTE (aún no valorizado)
-    const { data: reporte } = await adminClient
-        .from('reportes_maquinaria')
-        .select('estado_venta, valorizacion_venta')
-        .eq('id', reporteId)
-        .eq('tenant_id', tenantId)
-        .maybeSingle()
-    if (!reporte) return { success: false as const, message: 'Reporte no encontrado' }
-    if (reporte.estado_venta && reporte.estado_venta !== 'PENDIENTE') {
-        return { success: false as const, message: 'Solo se puede ajustar precio en reportes PENDIENTE' }
-    }
-
-    const { error } = await adminClient
-        .from('reportes_maquinaria')
-        .update({ horas_facturar: cantidadFacturar, updated_at: new Date().toISOString() })
-        .eq('id', reporteId)
-        .eq('tenant_id', tenantId)
-
-    if (error) return { success: false as const, message: error.message }
-
-    // NOTA: el precio unitario vive en cotizaciones_detalle a través del
-    // cotizacion_venta_item_id. Un override real del precio requeriría
-    // registrar un "precio_override" en reportes_maquinaria (columna no
-    // existente aún). Por ahora solo actualizamos la cantidad a facturar.
-    void precioUnitario
-
-    revalidatePath('/ventas/valoraciones')
-    return { success: true as const, message: 'Cantidad a facturar actualizada' }
-}
-
 // End of file

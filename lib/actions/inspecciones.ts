@@ -216,26 +216,3 @@ export async function deleteInspeccion(id: string) {
     return { success: true, message: 'Inspección eliminada' }
 }
 
-export async function getInspeccionesByTarea(tareaId: string) {
-    const { adminClient, tenantId } = await getSupabaseContext()
-    if (!adminClient || !tenantId) return []
-
-    const { data, error } = await adminClient
-        .from('inspecciones')
-        .select(`
-            *,
-            maquinaria:maquinarias(id, nombre, codigo_interno, marca, modelo),
-            supervisor:profiles!inspecciones_supervisor_id_fkey(id, email, full_name, avatar_url)
-        `)
-        .eq('tenant_id', tenantId)
-        .eq('tarea_id', tareaId)
-        .eq('is_active', true)
-        .order('created_at', { ascending: false })
-
-    if (error) {
-        console.error('Error fetching inspecciones by tarea:', error)
-        return []
-    }
-
-    return data as InspeccionWithRelations[]
-}

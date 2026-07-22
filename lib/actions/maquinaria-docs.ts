@@ -5,35 +5,6 @@ import { MaquinariaDocumento } from '@/types/maquinaria'
 import { revalidatePath } from 'next/cache'
 
 
-// Helper to get ALL documents for the global view
-export async function getGlobalDocuments(onlyActive = true) {
-    const { adminClient, tenantId } = await getSupabaseContext()
-    if (!adminClient || !tenantId) return []
-
-    let query = adminClient
-        .from('maquinaria_documentos')
-        .select(`
-            *,
-            maquinaria:maquinarias (id, codigo_interno, modelo, modelo_ref:maquinaria_modelos(modelo)),
-            tipo_doc:maquinaria_tipos_docs (nombre)
-        `)
-        .eq('tenant_id', tenantId)
-
-    if (onlyActive) {
-        query = query.eq('is_active', true)
-    }
-
-    const { data, error } = await query
-        .order('fecha_vencimiento', { ascending: true })
-
-    if (error) {
-        console.error('Error fetching global docs:', error)
-        return []
-    }
-
-    return data as MaquinariaDocumento[]
-}
-
 
 export async function getMaquinariaDocumentos(maquinariaId: string) {
     const { adminClient, tenantId } = await getSupabaseContext()

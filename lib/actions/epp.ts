@@ -687,24 +687,6 @@ export async function getDashboardEppMetrics() {
 // Exportable para reusar en forms (client) o en server actions.
 // ─────────────────────────────────────────────────────────────
 
-export async function calcularFechaVencimiento(catalogoId: string, fechaEntrega: string) {
-    const { adminClient, tenantId } = await getSupabaseContext()
-    if (!adminClient || !tenantId) return null
-
-    const { data, error } = await adminClient
-        .from('sst_epp_config')
-        .select('dias_renovacion')
-        .eq('id', catalogoId)
-        .eq('tenant_id', tenantId)
-        .maybeSingle()
-
-    if (error || !data?.dias_renovacion) return null
-
-    const base = new Date(fechaEntrega)
-    base.setDate(base.getDate() + data.dias_renovacion)
-    return base.toISOString().slice(0, 10)
-}
-
 // ─────────────────────────────────────────────────────────────
 // Envío de emails de alertas EPP (Fase J — Resend)
 // ─────────────────────────────────────────────────────────────

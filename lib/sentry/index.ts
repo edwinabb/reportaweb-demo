@@ -40,11 +40,6 @@ export function setSentryRouteContext(pathname: string) {
 // ── Encabezado legible para mensajes manuales ─────────────────────────────────
 // Formato: "[Reporta Web | SECCION | /ruta]"
 
-export function sentryHeader(pathname: string): string {
-    const section = seccionDesdePath(pathname)
-    return `[Reporta Web | ${section} | ${pathname}]`
-}
-
 // ── Captura de excepción con contexto completo ────────────────────────────────
 
 export function captureWithContext(

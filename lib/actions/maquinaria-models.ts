@@ -62,37 +62,6 @@ export async function createMaquinariaModelo(prevState: any, formData: FormData)
     return { message: 'Modelo creado', success: true, data: data }
 }
 
-export async function updateMaquinariaModelo(prevState: any, formData: FormData) {
-    const { adminClient, tenantId, user } = await getSupabaseContext()
-    if (!adminClient || !tenantId || !user) return { message: 'No autorizado' }
-
-    const id = formData.get('id') as string
-    const tipo_equipo = formData.get('tipo_equipo') as string
-    const marca = formData.get('marca') as string
-    const modelo = formData.get('modelo') as string
-    const capacidad = formData.get('capacidad') as string
-
-    if (!id || !modelo || !marca) return { message: 'Datos incompletos' }
-
-    const { error } = await adminClient
-        .from('maquinaria_modelos')
-        .update({
-            tipo_equipo,
-            marca,
-            modelo,
-            capacidad,
-            updated_by: user.id,
-            updated_at: new Date().toISOString()
-        })
-        .eq('id', id)
-        .eq('tenant_id', tenantId)
-
-    if (error) return { message: 'Error al actualizar: ' + error.message }
-
-    revalidatePath('/maquinarias/modelos')
-    return { message: 'Modelo actualizado', success: true }
-}
-
 export async function deleteMaquinariaModelo(id: string) {
     const { adminClient, tenantId } = await getSupabaseContext()
     if (!adminClient || !tenantId) return { message: 'No autorizado' }

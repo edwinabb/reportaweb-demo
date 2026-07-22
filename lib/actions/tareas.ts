@@ -94,57 +94,6 @@ export async function createTarea(prevState: any, formData: FormData) {
     return { message: 'Tarea creada', success: true }
 }
 
-export async function updateTareaEstado(id: string, estado: TareaEstado) {
-    const { adminClient, tenantId, user } = await getSupabaseContext()
-    if (!adminClient || !tenantId || !user) return { message: 'No autorizado' }
-
-    const { error } = await adminClient
-        .from('tareas')
-        .update({
-            estado,
-            updated_by: user.id,
-            updated_at: new Date().toISOString()
-        })
-        .eq('id', id)
-        .eq('tenant_id', tenantId)
-
-    if (error) {
-        console.error('Error updating tarea:', error)
-        return { message: 'Error al actualizar tarea' }
-    }
-
-    revalidatePath('/tareas')
-    return { message: 'Estado actualizado', success: true }
-}
-
-export async function updateTareaProgreso(id: string, progreso_porcentaje: number) {
-    const { adminClient, tenantId, user } = await getSupabaseContext()
-    if (!adminClient || !tenantId || !user) return { message: 'No autorizado' }
-
-    // Validate progress is between 0-100
-    if (progreso_porcentaje < 0 || progreso_porcentaje > 100) {
-        return { message: 'El progreso debe estar entre 0 y 100%' }
-    }
-
-    const { error } = await adminClient
-        .from('tareas')
-        .update({
-            progreso_porcentaje,
-            updated_by: user.id,
-            updated_at: new Date().toISOString()
-        })
-        .eq('id', id)
-        .eq('tenant_id', tenantId)
-
-    if (error) {
-        console.error('Error updating tarea progress:', error)
-        return { message: 'Error al actualizar progreso' }
-    }
-
-    revalidatePath('/tareas')
-    return { message: 'Progreso actualizado', success: true }
-}
-
 export async function deleteTarea(id: string) {
     const { adminClient, tenantId } = await getSupabaseContext()
     if (!adminClient || !tenantId) return { message: 'No autorizado' }

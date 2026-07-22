@@ -118,36 +118,6 @@ export async function upsertDocumentType(
 }
 
 /**
- * Soft delete a Document Type
- */
-export async function deleteDocumentType(id: string): Promise<ActionState> {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-
-    if (!user) return { message: 'No autenticado', success: false }
-
-    try {
-        const { error } = await supabase
-            .from('document_types')
-            .update({
-                is_active: false,
-                modified_by: user.id,
-                modified_at: new Date().toISOString()
-            })
-            .eq('id', id)
-
-        if (error) {
-            return { message: `Error al eliminar: ${error.message}`, success: false }
-        }
-
-        revalidatePath('/settings/document-types')
-        return { message: 'Tipo de documento eliminado', success: true }
-    } catch (error: unknown) {
-        const message = error instanceof Error ? error.message : 'Unknown error'
-        return { message: `Error: ${message}`, success: false }
-    }
-}
-/**
  * Toggle active status of a Document Type
  */
 export async function toggleDocumentTypeStatus(id: string, currentStatus: boolean): Promise<ActionState> {

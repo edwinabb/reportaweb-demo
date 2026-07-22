@@ -1044,37 +1044,3 @@ export async function deshabilitarReporteMaquinariaCompra(reporteId: string) {
     return { success: true as const, message: 'Reporte deshabilitado' };
 }
 
-export async function setPrecioPorDiaReporteCompra(reporteId: string, precioUnitario: number, cantidadFacturar: number) {
-    const { adminClient, tenantId } = await getTenantContext();
-    if (!adminClient || !tenantId) return { success: false as const, message: 'No autorizado' };
-
-    if (!(precioUnitario > 0) || !(cantidadFacturar > 0)) {
-        return { success: false as const, message: 'Valores inválidos' };
-    }
-
-    const { data: reporte } = await adminClient
-        .from('reportes_maquinaria')
-        .select('estado_compra')
-        .eq('id', reporteId)
-        .eq('tenant_id', tenantId)
-        .maybeSingle();
-    if (!reporte) return { success: false as const, message: 'Reporte no encontrado' };
-    if (reporte.estado_compra && reporte.estado_compra !== 'PENDIENTE') {
-        return { success: false as const, message: 'Solo se puede ajustar precio en reportes PENDIENTE' };
-    }
-
-    const { error } = await adminClient
-        .from('reportes_maquinaria')
-        .update({ horas_facturar: cantidadFacturar, updated_at: new Date().toISOString() })
-        .eq('id', reporteId)
-        .eq('tenant_id', tenantId);
-
-    if (error) return { success: false as const, message: error.message };
-
-    // Nota: el precio unitario vive en cotizaciones_detalle (via cotizacion_compra_item_id).
-    // Override real del precio requiere columna nueva en reportes_maquinaria. Por ahora solo cant.
-    void precioUnitario;
-
-    revalidatePath('/compras/valoraciones');
-    return { success: true as const, message: 'Cantidad a facturar actualizada' };
-}

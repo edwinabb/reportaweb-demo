@@ -1,7 +1,6 @@
 'use server'
 
 import { getSupabaseContext, safeRevalidatePath } from '@/lib/action-context'
-import { createAdminClient } from '@/utils/supabase/admin'
 
 // --- UPLOAD DE FOTOS (genérico para reportes) ---
 
@@ -38,38 +37,6 @@ export async function uploadReportePhoto(input: {
 }
 
 // --- TAREAS RECURSOS (Assignments) ---
-
-export async function createTareaRecurso(data: any) {
-    const { adminClient, tenantId, user } = await getSupabaseContext()
-    if (!adminClient || !tenantId) return { success: false, message: 'No autorizado' }
-
-    const { error } = await adminClient
-        .from('tareas_recursos')
-        .insert({
-            ...data,
-            tenant_id: tenantId,
-            created_by: user.id
-        })
-
-    if (error) return { success: false, message: error.message }
-    safeRevalidatePath('/tareas')
-    return { success: true, message: 'Recurso asignado correctamente' }
-}
-
-export async function deleteTareaRecurso(id: string) {
-    const { adminClient, tenantId } = await getSupabaseContext()
-    if (!adminClient || !tenantId) return { success: false, message: 'No autorizado' }
-
-    const { error } = await adminClient
-        .from('tareas_recursos')
-        .delete()
-        .eq('id', id)
-        .eq('tenant_id', tenantId)
-
-    if (error) return { success: false, message: error.message }
-    safeRevalidatePath('/tareas')
-    return { success: true, message: 'Asignación eliminada' }
-}
 
 // --- REPORTES PERSONAL ---
 

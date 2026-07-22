@@ -67,19 +67,6 @@ export async function getTercerosForSelect(): Promise<{ id: string; razon_social
     return (data ?? []) as { id: string; razon_social: string }[]
 }
 
-// Temporary fix helper to ensure consistency
-export async function fixTercerosConsistency() {
-    const { adminClient, tenantId } = await getSupabaseContext()
-    if (!adminClient || !tenantId) return
-
-    // Update any nil is_active to true
-    await adminClient
-        .from('terceros')
-        .update({ is_active: true })
-        .eq('tenant_id', tenantId)
-        .is('is_active', null)
-}
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function createTercero(prevState: any, formData: FormData) {
     const { adminClient, tenantId, user } = await getSupabaseContext()
