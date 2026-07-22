@@ -15,6 +15,7 @@
 | — | Migrar cron jobs de Vercel a Cloudflare | MEDIA | 🟡 Pendiente |
 | — | Crear entorno Cloudflare de prod (`reportar.app` apex) + rebind `demo`→`dev.reportar.app` (estándar dominios 2026-07-22) | ALTA | 🟡 Pendiente |
 | — | Plan Workers Paid ($5/mes, por cuenta) — worker remoto 4.86 MB gzip > Free 1 MB. Opt. a Free: matar source maps de CI (ver ARCHITECTURE) | BAJA | 🟡 Pendiente |
+| — | **Implementar Growth Engine** (leads→trial 15+7+3→pago→servicios, con IA en ventas+operación). Sub-proyectos A–E diseñados. Journey consolidado: [PLAN-GROWTH-ENGINE-JOURNEY.md](./PLAN-GROWTH-ENGINE-JOURNEY.md) · playbook [PLAYBOOK-GROWTH-ENGINE.md](./PLAYBOOK-GROWTH-ENGINE.md) · specs `docs/superpowers/specs/` · planes `docs/superpowers/plans/` | ALTA | 🟡 Diseñado (specs+planes), pendiente ejecución (orden A→C→D→B→E) |
 
 ---
 
