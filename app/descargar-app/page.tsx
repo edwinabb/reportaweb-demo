@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     openGraph: {
         title: 'REPORTAR.APP — Descarga tu APP y reporta tus actividades diarias online',
         description: 'Sistema de Gestión de Maquinaria Pesada.',
-        url: 'https://web.reportar.app/descargar-app',
+        url: `${process.env.NEXT_PUBLIC_SITE_URL ?? 'https://reportar.app'}/descargar-app`,
         siteName: 'REPORTAR.APP',
         images: [{ url: '/og-image.jpg', width: 510, height: 571, alt: 'REPORTAR.APP' }],
         locale: 'es_PE',

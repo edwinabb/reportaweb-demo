@@ -22,11 +22,11 @@ const montserrat = Montserrat({
 export const metadata: Metadata = {
   title: "REPORTAR.APP - Planifica, reporta y valoriza en minutos",
   description: "Sistema de Gestión de Maquinaria Pesada.",
-  metadataBase: new URL("https://web.reportar.app"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://reportar.app"),
   openGraph: {
     title: "REPORTAR.APP - Planifica, reporta y valoriza en minutos",
     description: "Sistema de Gestión de Maquinaria Pesada.",
-    url: "https://web.reportar.app",
+    url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://reportar.app",
     siteName: "REPORTAR.APP",
     images: [
       {

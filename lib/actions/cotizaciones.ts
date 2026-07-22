@@ -1062,8 +1062,8 @@ export async function sendCotizacionEmail(cotizacion_id: string, email?: string)
     }
 
     // 3. Prepare Email Content
-    const approvalUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://web.reportar.app'}/aprobacion/${token}`
-    const appUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://web.reportar.app'
+    const approvalUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://reportar.app'}/aprobacion/${token}`
+    const appUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://reportar.app'
 
     // Fetch tenant info for logo
     const { data: tenantData } = await adminClient

@@ -9,7 +9,7 @@ import {
     type DocPersonalRow,
 } from '@/lib/notificaciones-email-templates'
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://web.reportar.app'
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://reportar.app'
 const POR_VENCER_DIAS = 15
 
 export async function GET(req: NextRequest) {

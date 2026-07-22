@@ -725,7 +725,7 @@ export async function sendEppAlertasEmails(opts?: { all_tenants?: boolean }) {
         tenantIds = [tenantId]
     }
 
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://web.reportar.app'
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://reportar.app'
     const resultados: Array<{ tenant_id: string; enviados: number; total_alertas: number }> = []
 
     for (const tId of tenantIds) {

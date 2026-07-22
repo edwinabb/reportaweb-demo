@@ -46,7 +46,7 @@ export function renderWelcomeEmailHtml(data: {
                 Hola <strong>${firstName}</strong>,
               </p>
               <p style="margin:0 0 16px;font-size:15px;color:#334155;line-height:1.6;">
-                El primer paso para ingresar a <strong>web.reportar.app</strong> es crear una contraseña segura.
+                El primer paso para ingresar a <strong>reportar.app</strong> es crear una contraseña segura.
                 Utiliza <strong>ocho (8) caracteres como mínimo</strong>, con al menos una letra, un número y un símbolo.
               </p>
               <p style="margin:0 0 28px;font-size:15px;color:#334155;line-height:1.6;">

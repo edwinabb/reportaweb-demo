@@ -407,9 +407,11 @@ WHERE tc.constraint_type = 'FOREIGN KEY'
 
 | Entorno | URL | Repo GitHub | Base de datos |
 |---|---|---|---|
-| **Demo** | `demo.reportar.app` | `reportaweb-demo` | Test (`oyrokyyaeaeqzlsgxtto`, Brazil) |
-| **Producción** | `live.reportar.app` | `reportaweb-live` | Prod (`fqwhagryqkkhbgznxtwf`, Brazil) |
+| **Dev (interno)** | `dev.reportar.app` | `reportaweb-demo` | Test (`oyrokyyaeaeqzlsgxtto`, Brazil) |
+| **Producción** | `reportar.app` (apex) | `reportaweb-live` | Prod (`fqwhagryqkkhbgznxtwf`, Brazil) |
 | **Local** | `localhost:3000` | — | Test (via `.env.local`) |
+
+> **Renombrado 2026-07-22:** `demo.reportar.app` → `dev.reportar.app` (entorno interno, no "demo" para clientes); prod pasa de `live.reportar.app`/`web.reportar.app` al apex `reportar.app`. Requiere rebinding de dominios en Cloudflare.
 
 **Stack de deployment:**
 - **Adapter:** `@opennextjs/cloudflare` (Next.js 16 → Cloudflare Workers)
@@ -419,18 +421,38 @@ WHERE tc.constraint_type = 'FOREIGN KEY'
 - **Middleware:** debe ser Edge-compatible (`middleware.ts` con `updateSession` de Supabase; Node middleware NO soportado)
 - **Sentry:** solo client-side (instrumentation server-side incompatible con OpenNext worker)
 - **Secrets:** Cloudflare Dashboard → Worker → Settings → Variables and Secrets (`SUPABASE_SERVICE_ROLE_KEY`, `RESEND_API_KEY`, `CRON_SECRET`)
+- **Tamaño real medido (v3.11.5):** worker remoto **4.86 MB gzip** (el build remoto es ~6.5x el local por source maps de CI) → **excede Free (1 MB), requiere Workers Paid** (10 MB). Paid es **por cuenta** ($5/mes), cubre dev + prod. Ver [PLAYBOOK-DOMAIN-STRATEGY.md](./PLAYBOOK-DOMAIN-STRATEGY.md).
+
+### Domain & Routing Standard (2026-07-22)
+
+**Principio: un solo dominio de cara al cliente** — landing + login + app conviven en `reportar.app`, sin subdominio `app.` (evita la percepción de "doble app").
+
+| Ruta (`reportar.app`) | Qué | Público/Auth |
+|---|---|---|
+| `/` | Home: **login embebido** + novedades + CTA trial | Público |
+| `/login` | 301 → `/` (compat: bookmarks, APK, reset, sesión expirada) | Público |
+| `/novedades` | Changelog para clientes y leads | Público |
+| `/<pfx>-<campaña>` | Landings de campaña (planificacion, valoracion, preventivo, cauchos). **Prefijo pendiente de marca/marketing** — candidatos: `soluciones/`, `conoce-`, `guia-` | Público |
+| `/registro` | Alta de trial (secuencial, sin forzar) | Público |
+| `/planificacion`, `/valoraciones`, … | Módulos de la app | Auth |
+
+- **`www.reportar.app`** → 301 → apex.
+- **Namespace de campañas (locked como constraint):** las landings van bajo un prefijo/carpeta propia para no colisionar con rutas de módulos (`/planificacion`, …) — así no hay que mover la app. **El prefijo exacto lo define marca/marketing** (candidatos: `soluciones/`, `conoce-`, `guia-`); es cosmético, no técnico.
+- **Login en la home** (no `/login` aislado): evita que el usuario bookmarkee `/login` y no vuelva a ver novedades. Middleware redirige no-autenticados a `/` (no a `/login`).
+- **URL base por entorno** (`NEXT_PUBLIC_SITE_URL` / `NEXT_PUBLIC_APP_URL`): `reportar.app` (prod) · `dev.reportar.app` (dev). **Nunca hardcodear** el dominio en código (usar la env var con fallback a `reportar.app`).
+- **Diseño de home/landings/novedades + UX de trial = Growth Engine** (track de ventas). Enganche técnico: `app/page.tsx`, `app/novedades/`, `app/<pfx>-*/` (campañas) → CTAs a `/registro` y `/login`.
 
 ### Production Deployment (Cloudflare)
 
 1. Push a `master` del repo `reportaweb-live`
-2. Cloudflare (GitHub integration) auto-builds + deploys a `live.reportar.app`
+2. Cloudflare (GitHub integration) auto-builds + deploys a `reportar.app` (apex)
 3. Monitor Sentry for new errors (1h window)
 4. Check Cloudflare Analytics (latency, cache hit ratio, errors)
 
 ### Demo Deployment (Cloudflare)
 
 1. Push al repo `reportaweb-demo`
-2. Cloudflare auto-builds + deploys a `demo.reportar.app` (apunta a BD de test)
+2. Cloudflare auto-builds + deploys a `dev.reportar.app` (apunta a BD de test)
 3. Test auth + E2E flows en demo
 4. Approve PR
 

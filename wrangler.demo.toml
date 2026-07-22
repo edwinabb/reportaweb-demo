@@ -19,3 +19,5 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOi
 SUPABASE_API_URL = "https://oyrokyyaeaeqzlsgxtto.supabase.co"
 SUPABASE_PROJECT_ID = "oyrokyyaeaeqzlsgxtto"
 GOTENBERG_URL = "https://infrastructure-gotenberg.0vt9eo.easypanel.host"
+NEXT_PUBLIC_SITE_URL = "https://dev.reportar.app"
+NEXT_PUBLIC_APP_URL = "https://dev.reportar.app"

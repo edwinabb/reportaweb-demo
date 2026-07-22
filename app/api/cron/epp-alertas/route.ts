@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
     }
     const admin = createClient(url, key, { auth: { persistSession: false } })
 
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://web.reportar.app'
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://reportar.app'
 
     // 1) Obtener todos los tenants activos
     const { data: tenants, error: errTenants } = await admin

@@ -183,7 +183,7 @@ export async function createUser(prevState: CreateUserState, formData: FormData)
 
         // 5. Send welcome email with password setup link
         try {
-            const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://web.reportar.app'
+            const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://reportar.app'
             const { data: linkData } = await supabase.auth.admin.generateLink({
                 type: 'recovery',
                 email,

@@ -12,7 +12,9 @@
 
 **Tenants:** CISE `1cb97ec7-326c-4376-93ee-ed317d3da51b` · GRUAS `6f4c923a-c3b7-47c2-9dea-2a187f274f73`
 
-**Infra:** Cloudflare Workers + OpenNext (demo.reportar.app → BD test · live.reportar.app → BD prod) · Repos deploy: `reportaweb-demo` / `reportaweb-live` (GitHub integration) · Gotenberg (PDF) · Resend (dominio verificado: `reportar.app`, from: `noreply@reportar.app`) · Sentry (solo client-side) · Cloudflare DNS
+**Infra:** Cloudflare Workers + OpenNext (**dev.reportar.app** → BD test · **reportar.app** apex → BD prod) · Repos deploy: `reportaweb-demo` / `reportaweb-live` (GitHub integration) · Gotenberg (PDF) · Resend (dominio verificado: `reportar.app`, from: `noreply@reportar.app`) · Sentry (solo client-side) · Cloudflare DNS
+
+**Estándar de dominios (2026-07-22):** un solo dominio de cara al cliente — `reportar.app` (apex) = home con login embebido + `/novedades` + landings de campaña (prefijo por definir: marca/marketing) + `/registro` + app. `dev.reportar.app` = interno (BD test). `www` → 301 apex. `/login` → 301 a `/`. Nunca hardcodear dominio (usar `NEXT_PUBLIC_SITE_URL`). Detalle en [ARCHITECTURE.md § Domain & Routing Standard](./docs/ARCHITECTURE.md) · portable en [PLAYBOOK-DOMAIN-STRATEGY.md](./docs/PLAYBOOK-DOMAIN-STRATEGY.md). Home/landings/novedades = Growth Engine (track ventas).
 
 > Detalle de deployment: [ARCHITECTURE.md § Infrastructure](./docs/ARCHITECTURE.md). Vercel fue reemplazado el 2026-07-13; cron jobs pendientes de migrar.
 
@@ -33,7 +35,7 @@
 - Build: `npm run build:demo && npx opennextjs-cloudflare build` (usa `.env.demo` → BD TEST)
 - Deploy: `npx wrangler deploy --config wrangler.demo.toml`
 - Secrets del worker (dashboard): `SUPABASE_SERVICE_ROLE_KEY` (TEST)
-- live.reportar.app: ⚠️ deploy AÚN NO configurado (usar `wrangler.live.toml` + build normal)
+- **reportar.app** (prod): ⚠️ entorno Cloudflare AÚN NO creado (falta importar repo `reportaweb-live` a Workers Builds + secret `sb_secret_` + bindear apex). Rebinding pendiente: `demo.reportar.app`→`dev.reportar.app`.
 
 **Próximo paso:** Módulo 2 (Maquinaria) — plan en [docs/auditoria-ui/PLAN-2026-07-15-MAQUINARIA.md](./docs/auditoria-ui/PLAN-2026-07-15-MAQUINARIA.md)  
 **Deudas técnicas:** [docs/TECHNICAL_DEBTS.md](./docs/TECHNICAL_DEBTS.md) (rotar key PROD = ALTA)

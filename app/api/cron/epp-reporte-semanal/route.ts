@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
     if (!url || !key) return NextResponse.json({ error: 'Missing Supabase env' }, { status: 500 })
 
     const admin = createClient(url, key, { auth: { persistSession: false } })
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://web.reportar.app'
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://reportar.app'
 
     // Período: últimos 7 días
     const hoy = new Date()
