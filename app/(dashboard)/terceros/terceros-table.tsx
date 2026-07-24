@@ -99,7 +99,7 @@ export function TercerosTable({ data, isTrash = false }: TercerosTableProps) {
                                         'Ubicación': t.ubigeo
                                             ? `${t.ubigeo.distrito}, ${t.ubigeo.departamento}`
                                             : (t.ubicacion_ciudad ?? ''),
-                                        'Estado SUNAT': t.estado ?? '',
+                                        'Estado SUNAT': t.estadosunat ?? '',
                                         'Estado': t.is_active ? 'Activo' : 'Inactivo',
                                     }
                                 })

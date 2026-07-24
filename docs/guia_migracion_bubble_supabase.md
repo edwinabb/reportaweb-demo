@@ -301,9 +301,31 @@ Al finalizar cada fase, verifica:
 
 | # | Descripción | Impacto | Script / Acción |
 |---|---|---|---|
-| 1 | `valorizacion_compra_id` / `valorizacion_venta_id` en `reportes_maquinaria` con 0 matches | Medio — FKs NULL en valoraciones | Investigar discrepancia de IDs entre tablas |
+| 1 | `valorizacion_compra_id` / `valorizacion_venta_id` en `reportes_maquinaria` con 0 matches | **Bajo** (ver diagnóstico) | Ver "Diagnóstico X2" abajo |
 | 2 | `patch-tarea-id-links.ts` — re-ejecutar sobre `reportes_personal` post-migración | Bajo — mayoría ya tiene tarea_id | `npx tsx scripts/patch-tarea-id-links.ts --table=reportes_personal` |
 | 3 | Verificar `contactos_cargo` / `contactos_area` seeds | Bajo — dropdowns vacíos en UI | Ver `plan-post-cutover.md` DT-MIG01 |
+
+### Diagnóstico X2 — FK valorizaciones (2026-07-23, sondeo Bubble LIVE)
+
+**Causa raíz encontrada:** la migración intentó mapear desde un campo `reportes_maquinaria.valorizacion_venta`
+(TEXT) que **no existe en el tipo Bubble** `Maquinaria_reporte_horas_new` (sus keys no incluyen
+valorizacion_venta/compra). El vínculo real es **inverso**: el tipo `maquinaria_horas-valorizaciones`
+(758 registros, todos `estado=ENVIADO`, de ~2021) tiene el campo **`id_maquinaria_horas`** que apunta
+al reporte. Por eso el match por `valorizaciones.bubble_id` daba 0.
+
+**Segundo hallazgo:** esos 758 `id_maquinaria_horas` apuntan a reportes que **ya no existen en Bubble
+live** (GET → 404; no hay tipo legacy `Maquinaria_reporte_horas`). Son valorizaciones huérfanas de 2021.
+No hay distinción venta/compra en los datos (todo un solo flujo; `tipo_precio` es la base de precio:
+Por Hora/Jornada/Servicio/etc., no venta vs compra).
+
+**Impacto: BAJO.** Solo 758 valorizaciones, antiguas y huérfanas. La tabla `valorizaciones` de Supabase
+sí tiene los datos; lo único ausente es el FK `reportes_maquinaria.valorizacion_*_id` para esas filas.
+
+**Recomendación:** NO bloquear el cutover. Si se quiere el link, hacerlo **del lado Supabase**:
+`UPDATE reportes_maquinaria rm SET valorizacion_venta_id = v.id FROM valorizaciones v
+WHERE v.id_maquinaria_horas = rm.bubble_id` (Supabase puede conservar reportes históricos que Bubble
+live ya borró, así que algunos resolverán aunque el GET live falle). Correr como dry-run/conteo primero.
+Requiere que `valorizaciones` tenga la columna `id_maquinaria_horas` migrada (verificar).
 
 ### 🟡 Deuda técnica (no bloquea cutover)
 

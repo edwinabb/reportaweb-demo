@@ -284,6 +284,52 @@
 
 ---
 
+## ✅ Resolución con Bubble LIVE (2026-07-23)
+
+Sondeo de solo lectura contra Bubble producción (`https://reporta.la/api/1.1/obj`, token de
+`.env.local`), filtrado a CISE + GRUAS. **Los "gaps críticos" del módulo NO son pérdida de
+datos: el dato existe en Bubble y es re-migrable — la migración quedó incompleta a nivel campo.**
+⚠️ Bubble omite campos vacíos en la API → conteos sobre unión de claves de toda la tabla.
+
+| Tipo Bubble | Filas CISE+GRUAS | Campo | Bubble LIVE | Supabase hoy | Veredicto |
+|---|---:|---|---|---|---|
+| `Terceros` | 639 | `rubro` (Bubble ID → rubros) | **516 (81%)** | 0/678 | ✅ **DUDA-TER-004: re-migrable** |
+| `Terceros` | 639 | `ubicacion_departamento` (texto) | **550 (86%)** | 0/678 | ✅ **DUDA-TER-003: re-migrable** |
+| `Terceros` | 639 | `ubicacion_ciudad` (texto) | 264 (41%) | 0/678 | ✅ DUDA-TER-003: re-migrable (parcial) |
+| `Terceros` | 639 | `condicion_seniat` = HABIDO | **441 (69%)** | 0/678 | ✅ **DUDA-TER-002: re-migrable** (nombre real `_seniat`) |
+| `Terceros` | 639 | `estado_seniat` = ACTIVO | 441 (69%) | 678='ACTIVO' | ⚠️ el 100% en Supabase era **default de migración**, no dato real |
+| `Terceros` | 639 | `tipo` (array multi-valor) | 629 (98%) | enum plano | ✅ **DUDA-TER-001: Bubble es multi-select**; decidir si el catálogo se usa |
+| `terceros_contactos` | 844 | `cargo` (**texto**, no FK) | **804 (95%)** | 0/734 | ✅ **DUDA-TER-005: re-migrable como texto** |
+| `terceros_contactos` | 844 | `area` (**texto**, no FK) | **727 (86%)** | 0/734 | ✅ DUDA-TER-005: re-migrable como texto |
+| `Terceros_Sitios` | 1739 | `codigo` | **1733 (100%)** | 7/1696 | ✅ **DUDA-TER-008: re-migrable** |
+| `Terceros_Sitios` | 1739 | `tipo_id` (Bubble ID → sitios_tipo) | **1733 (100%)** | 0/1696 | ✅ **DUDA-TER-008: re-migrable** |
+| `Terceros_Sitios` | 1739 | `latitud`/`longitud` | 303 (17%) | 0/1696 | ✅ **DUDA-TER-007: parcial (17%)**; hay campo `Ubicación Geografica` (address) |
+
+**⚠️ Corrección (2026-07-23, tras dry-run):** los campos `cargo`/`area` de Bubble **NO son texto
+sino IDs de opción de lista** (ej. `1596725183268x…`). Idem `rubro` (Terceros) y `tipo_id` (Sitios).
+Para migrarlos hay que **resolver el Bubble option-ID → texto** contra el catálogo de opciones de
+Bubble (tipo aún por identificar; `configuracion_opciones_listas` está casi vacío) y luego, según el
+campo, guardar el texto (`cargo`/`area`) o matchear el catálogo Supabase por **nombre** (`rubro_id`
+vía `rubros.nombre`, `tipo` vía `sitios_tipo.nombre`) — **no** por `bubble_id` (en TEST da 0 match
+para rubros y `sitios_tipo.bubble_id` ni existe; validar en PROD). Los campos que SÍ son copia
+directa (validados en dry-run): `ubicacion_ciudad`/`ubicacion_departamento`, `estadosunat`/`condicionsunat`.
+
+**IDs de tenant en Bubble:** CISE `1596035803087x371442079041323000` · GRUAS
+`1691779382086x534175713862630160`. Campo tenant: `Terceros`/`Terceros_Sitios` = `tenant_id`;
+`terceros_contactos` **sin** tenant propio (se filtra por `tercero_id` → mapa de terceros).
+
+### Cambio de esquema aplicado (2026-07-23, decisión del usuario)
+
+Para desambiguar el estado del contribuyente vs activo/inactivo (parte de TK-T14 + DUDA-TER-002):
+- **RENAME** `terceros.estado` → **`estadosunat`** · `terceros.condicion` → **`condicionsunat`**.
+- **DROP** duplicados vacíos `estado_sunat` / `condicion_sunat` (0/678) + redundante `activo` (0 uso).
+- **Activo/inactivo** del tercero queda en **`is_active`** (sin campo nuevo).
+- Migración: `supabase/migrations/20260723120000_terceros_rename_estado_condicion_sunat.sql`
+  (con guarda: aborta si las columnas a borrar tuvieran datos). Código actualizado
+  (`columns.tsx`, `terceros-table.tsx`) + `types/supabase.ts`. ⏳ **Pendiente aplicar** a TEST→PROD.
+
+---
+
 ## DUDAs Abiertas (DUDA-TER-001 a 014)
 
 | ID | Pregunta | Impacto |

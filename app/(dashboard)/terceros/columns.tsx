@@ -89,10 +89,10 @@ export const getColumns = (filters: TerceroFilterOptions): ColumnDef<Tercero>[] 
     {
         // Estado del contribuyente (SUNAT) — campo de negocio, distinto de is_active;
         // no cae bajo la regla 6b del template (docs/auditoria-ui/03-terceros.md)
-        accessorKey: "estado",
+        accessorKey: "estadosunat",
         header: "Estado SUNAT",
         cell: ({ row }) => {
-            const estado = row.getValue("estado") as string | null
+            const estado = row.getValue("estadosunat") as string | null
             return estado ? <Badge variant="outline">{estado}</Badge> : "—"
         }
     },

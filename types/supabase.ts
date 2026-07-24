@@ -10167,17 +10167,14 @@ export type Database = {
       }
       terceros: {
         Row: {
-          activo: boolean | null
           bubble_id: string | null
           con_informe: boolean | null
-          condicion: string | null
-          condicion_sunat: string | null
+          condicionsunat: string | null
           created_at: string | null
           created_by: string | null
           direccion: string | null
           email: string | null
-          estado: string | null
-          estado_sunat: string | null
+          estadosunat: string | null
           id: string
           is_active: boolean | null
           logo_url: string | null
@@ -10199,17 +10196,14 @@ export type Database = {
           vendedor_asignado_id: string | null
         }
         Insert: {
-          activo?: boolean | null
           bubble_id?: string | null
           con_informe?: boolean | null
-          condicion?: string | null
-          condicion_sunat?: string | null
+          condicionsunat?: string | null
           created_at?: string | null
           created_by?: string | null
           direccion?: string | null
           email?: string | null
-          estado?: string | null
-          estado_sunat?: string | null
+          estadosunat?: string | null
           id?: string
           is_active?: boolean | null
           logo_url?: string | null
@@ -10231,17 +10225,14 @@ export type Database = {
           vendedor_asignado_id?: string | null
         }
         Update: {
-          activo?: boolean | null
           bubble_id?: string | null
           con_informe?: boolean | null
-          condicion?: string | null
-          condicion_sunat?: string | null
+          condicionsunat?: string | null
           created_at?: string | null
           created_by?: string | null
           direccion?: string | null
           email?: string | null
-          estado?: string | null
-          estado_sunat?: string | null
+          estadosunat?: string | null
           id?: string
           is_active?: boolean | null
           logo_url?: string | null
