@@ -14,8 +14,8 @@ export interface Tercero {
     rubro_id?: string
     pais_id?: string
     ubigeo_codigo?: string
-    condicion?: string
-    estado?: string
+    condicionsunat?: string
+    estadosunat?: string
     logo_url?: string
     ubicacion_ciudad?: string
     ubicacion_departamento?: string
