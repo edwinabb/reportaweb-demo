@@ -325,8 +325,17 @@ Para desambiguar el estado del contribuyente vs activo/inactivo (parte de TK-T14
 - **DROP** duplicados vacíos `estado_sunat` / `condicion_sunat` (0/678) + redundante `activo` (0 uso).
 - **Activo/inactivo** del tercero queda en **`is_active`** (sin campo nuevo).
 - Migración: `supabase/migrations/20260723120000_terceros_rename_estado_condicion_sunat.sql`
-  (con guarda: aborta si las columnas a borrar tuvieran datos). Código actualizado
-  (`columns.tsx`, `terceros-table.tsx`) + `types/supabase.ts`. ⏳ **Pendiente aplicar** a TEST→PROD.
+  (con guarda). Código actualizado (`columns.tsx`, `terceros-table.tsx`) + `types/supabase.ts`.
+  ✅ **APLICADA a TEST + PROD (2026-07-23)** vía Management API. En prod `activo` estaba poblado
+  pero era constante `true` (714/714, sin señal; `is_active` es el flag real) → se borró igual.
+
+### Re-migración de campos APLICADA (2026-07-23, PROD)
+
+Vía `scripts/migrate-terceros-fields.ts --apply` (Bubble LIVE → prod, scope CISE+GRUAS):
+- ✅ **ubicacion:** 595 filas — `ubicacion_ciudad` 0→264, `ubicacion_departamento` 0→590.
+- ✅ **sunat:** 441 filas — `estadosunat`/`condicionsunat` desde `estado_seniat`/`condicion_seniat`.
+- ⏳ **Pendientes (3 steps):** `rubro`, `contactos cargo/area`, `sitios codigo/tipo/geodata` — requieren
+  resolver el catálogo de opciones de Bubble (los valores son IDs de opción) + match por nombre.
 
 ---
 
