@@ -26,7 +26,7 @@
 **Web Version:** v3.12.0 — ✅ demo · live: anon rotada a `sb_publishable_` en `.env.production`/`wrangler.live.toml`; deploy en curso. **Pendiente dashboard (usuario):** cargar secret `SUPABASE_SERVICE_ROLE_KEY=sb_secret_` en worker `reportaweb-live` + bindear dominio live.reportar.app (sigue 522 hasta entonces) + deshabilitar legacy keys (cierra DUDA-SEC-001)  
 **App Version:** v1.8.14  
 **Foco activo (2026-07-23):** 🔀 **Cutover CISE/GRUAS (Bubble → v3)** — sacar a los 2 únicos clientes reales de Bubble. Plan: [docs/superpowers/plans/2026-07-22-cutover-cise-gruas.md](./docs/superpowers/plans/2026-07-22-cutover-cise-gruas.md) · handoff del día: [HANDOFF-2026-07-23.md](./docs/HANDOFF-2026-07-23.md). Migración ~95% a nivel tabla; bloqueante = **gaps de migración a nivel campo** que revela la auditoría UI. Acceso a Bubble LIVE confirmado (token de `.env.local` funciona). **Growth Engine PAUSADO** (specs+planes A–E ✅; ver [PLAN-GROWTH-ENGINE-JOURNEY.md](./docs/PLAN-GROWTH-ENGINE-JOURNEY.md) + [HANDOFF-2026-07-18.md](./docs/HANDOFF-2026-07-18.md) para retomar).  
-**Auditoría UI:** Módulo **4/15** (Planificación) ✅ matriz en [docs/auditoria-ui/04-planificacion.md](./docs/auditoria-ui/04-planificacion.md) (DUDAs PLAN-001/002/003 resueltas; DUDA-PLAN-001 espera aprobación para TK-P1). Terceros (3/15): 5 DUDAs resueltas con datos de Bubble LIVE (03-terceros.md §Resolución).  
+**Auditoría UI:** Módulo **4/15** (Planificación) ✅ matriz en [docs/auditoria-ui/04-planificacion.md](./docs/auditoria-ui/04-planificacion.md) (DUDAs resueltas; DUDA-PLAN-001 espera aprobación para TK-P1). **Terceros (3/15): CERRADO en PROD** — esquema (`estadosunat`/`condicionsunat`) + re-migración de campos aplicada (rubro/ubicación/SUNAT/cargo-área/sitios·código/tipo/geodata) vía Management API (03-terceros.md).  
 **Template listados:** v1.2 aplicado a Usuarios, Maquinaria y Terceros  
 **E2E Suite:** ⚠️ desactualizada tras template v1.2 + cambio personal externo (DUDA-E2E-001 · TESTING.md § TEST-003)
 
@@ -37,7 +37,7 @@
 - Secrets del worker (dashboard): `SUPABASE_SERVICE_ROLE_KEY` (TEST)
 - **reportar.app** (prod): ⚠️ entorno Cloudflare AÚN NO creado (falta importar repo `reportaweb-live` a Workers Builds + secret `sb_secret_` + bindear apex). Rebinding pendiente: `demo.reportar.app`→`dev.reportar.app`.
 
-**Próximo paso (usuario):** aplicar migración esquema Terceros `20260723120000` (test→prod) + `npm run types:supabase` · cargar service-role PROD en `.env.local` (o instalar MCP Supabase read-only) para validar steps de catálogo contra PROD · screenshots módulos 5–15. Detalle en [HANDOFF-2026-07-23.md](./docs/HANDOFF-2026-07-23.md).  
+**Próximo paso:** regenerar `types/supabase.ts` (`npm run types:supabase`, hoy hand-edit) + build local antes de deploy · aprobar DUDA-PLAN-001 → TK-P1 Planificación · seguir auditoría módulos 5–15 (faltan screenshots) · delta-sync final desde Bubble LIVE. Detalle en [HANDOFF-2026-07-23.md](./docs/HANDOFF-2026-07-23.md).  
 **Deudas técnicas:** [docs/TECHNICAL_DEBTS.md](./docs/TECHNICAL_DEBTS.md) (rotar key PROD = ALTA)
 
 ---

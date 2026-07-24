@@ -1,9 +1,15 @@
 # Technical Debts & DUDAs — Reporta Web 3
 
-**Última revisión:** 2026-07-22 (remediación de secretos expuestos — ver [plan-2026-07-22.md](./plan-2026-07-22.md))
+**Última revisión:** 2026-07-23 (cutover CISE/GRUAS: re-migración de campos Terceros aplicada a PROD — ver [HANDOFF-2026-07-23.md](./HANDOFF-2026-07-23.md))
 
 | ID | Tema | Prioridad | Estado |
 |----|------|-----------|--------|
+| DT-TYPES-001 | Regenerar `types/supabase.ts` desde la BD (`npm run types:supabase`) — hoy quedó hand-edit tras el rename `estadosunat`/`condicionsunat` + drops en `terceros` | MEDIA | 🟡 Pendiente |
+| DT-BUILD-001 | Correr `npm run build` local ANTES de deployar a demo — el rename de columnas rompió el build por un tipo de dominio (`types/terceros.ts`) que el hand-edit de `types/supabase.ts` no cubría | BAJA | 🟡 Proceso |
+| DT-CAT-001 | `personal_cargos` sin editor central en `/settings` (solo alta inline en `personal-dialog`); inconsistente con el resto de catálogos (que tienen tab en settings) | BAJA | 🟡 Pendiente |
+| DT-CAT-002 | `terceros_tipos` = catálogo muerto: la UI usa enum fijo cliente/proveedor/ambos, el catálogo (5 valores, incl. Socio/Subcontratista) no se usa (DUDA-TER-001) | BAJA | 🟡 Pendiente |
+| DT-VAL-001 | FK valorizaciones en `reportes_maquinaria` (X2): 758 valorizaciones ~2021 huérfanas; backfill opcional Supabase-side `WHERE v.id_maquinaria_horas = rm.bubble_id`. Bajo impacto, no bloquea cutover (ver guia_migracion §Diagnóstico X2) | BAJA | 🟡 Opcional |
+| DT-MIG-DELTA | Delta-sync final desde Bubble LIVE antes del cutover (Bubble sigue en uso: ~25.7k reportes maq. live vs ~20.7k migrados) — re-correr migraciones idempotentes | ALTA | 🟡 Pendiente |
 | DUDA-SEC-001 | Rotar SERVICE_ROLE_KEY de PROD (estuvo en git) | ALTA | 🟢 En progreso (anon→`sb_publishable` ✅ v3.11.5; falta `sb_secret_` en worker + deshabilitar legacy) |
 | DUDA-SEC-002 | Tokens Bubble filtrados a git + 4 docs (rotar + limpiar) | ALTA | 🟡 Pendiente |
 | DUDA-SEC-003 | Revocar en dashboard PATs Supabase ya removidos de settings | ALTA | 🟡 Pendiente |

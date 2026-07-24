@@ -1,11 +1,46 @@
-# Roadmap — REPORTA Post-Cutover
+# Roadmap — REPORTA
 
 Priorities, deuda técnica, and timeline for stakeholders and product.
 
-**Last Updated:** 2026-06-08  
-**Current State:** v3.10.41 (PROD), E2E 347/374 (92.8%)
+**Last Updated:** 2026-07-23  
+**Current State:** v3.12.0 · **Foco: Cutover CISE/GRUAS (Bubble → v3)**
 
 ---
+
+## 🔀 FOCO ACTUAL — Cutover CISE/GRUAS (2026-07-23)
+
+Sacar a los **2 únicos clientes reales** (CISE + GRUAS) de Bubble a la v3. La migración está
+~95% a nivel tabla; el bloqueante son **gaps de migración a nivel campo** que revela la auditoría
+UI ↔ datos módulo por módulo. Plan maestro: [superpowers/plans/2026-07-22-cutover-cise-gruas.md](./superpowers/plans/2026-07-22-cutover-cise-gruas.md) · handoff: [HANDOFF-2026-07-23.md](./HANDOFF-2026-07-23.md).
+
+### Progreso
+
+| Área | Estado |
+|------|--------|
+| Acceso a BD (Management API vía `SUPABASE_ACCESS_TOKEN`) | ✅ Resuelto |
+| Auditoría UI: Usuarios·Maquinaria·Terceros·**Planificación (4/15)** | 🟢 Auditados |
+| **Terceros: esquema + re-migración de campos a PROD** | ✅ **Cerrado** (rubro/ubicación/SUNAT/cargo-área/sitios) |
+| Módulos 5–15 (Cotizaciones, Ventas, Compras, Informes, EPP, Config, …) | ⬜ Pendiente (faltan screenshots) |
+| Planificación TK-P1 (recursos invisibles) | ⏳ Espera aprobación DUDA-PLAN-001 |
+| Delta-sync final desde Bubble LIVE | ⬜ Pendiente (DT-MIG-DELTA) |
+| Suite E2E actualizada (template v1.2) | ⬜ Pendiente (DUDA-E2E-001) |
+| Deploy prod (`reportar.app` apex + worker live) | ⬜ Pendiente |
+
+### Próximos pasos
+
+1. Regenerar `types/supabase.ts` (DT-TYPES-001) + build local antes de deploy (DT-BUILD-001).
+2. Aprobar DUDA-PLAN-001 → ejecutar TK-P1 de Planificación.
+3. Seguir auditoría por módulos (5+) resolviendo gaps de campo con re-migraciones idempotentes.
+4. Delta-sync final + E2E verde + entorno Cloudflare prod → **corte comunicado a CISE/GRUAS**.
+
+> **Growth Engine** (leads→trial→pago) queda **pausado**: specs+planes A–E ✅, sin implementar.
+> Ver [PLAN-GROWTH-ENGINE-JOURNEY.md](./PLAN-GROWTH-ENGINE-JOURNEY.md).
+
+---
+
+## 📦 Histórico — P1-P5 (2026-Q2, pre-cutover)
+
+> Sección de referencia; muchos ítems mencionan Vercel (reemplazado 2026-07-13 por Cloudflare) y v3.10.x.
 
 ## P1-P5 Items (Critical Path)
 
