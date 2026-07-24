@@ -6,7 +6,7 @@
 
 | Repo | Ruta | Stack | Versión |
 |------|------|-------|---------|
-| Web admin | `c:\Proyectos\reportaweb3` | Next.js 16, React 19, TypeScript, Tailwind, Radix | **3.11.5** |
+| Web admin | `c:\Proyectos\reportaweb3` | Next.js 16, React 19, TypeScript, Tailwind, Radix | **3.12.0** |
 | App móvil | `c:\Proyectos\reporta-app` | Expo 54, expo-router, SQLite/Drizzle, React Native | **1.8.14** |
 | DB / Backend | Supabase test `oyrokyyaeaeqzlsgxtto` (Brazil) / prod `fqwhagryqkkhbgznxtwf` (Brazil) | PostgreSQL + Auth + Storage | — |
 
@@ -23,7 +23,7 @@
 ## Estado Actual
 
 **Date:** 2026-07-23  
-**Web Version:** v3.11.6 — ✅ demo · live: anon rotada a `sb_publishable_` en `.env.production`/`wrangler.live.toml`; deploy en curso. **Pendiente dashboard (usuario):** cargar secret `SUPABASE_SERVICE_ROLE_KEY=sb_secret_` en worker `reportaweb-live` + bindear dominio live.reportar.app (sigue 522 hasta entonces) + deshabilitar legacy keys (cierra DUDA-SEC-001)  
+**Web Version:** v3.12.0 — ✅ demo · live: anon rotada a `sb_publishable_` en `.env.production`/`wrangler.live.toml`; deploy en curso. **Pendiente dashboard (usuario):** cargar secret `SUPABASE_SERVICE_ROLE_KEY=sb_secret_` en worker `reportaweb-live` + bindear dominio live.reportar.app (sigue 522 hasta entonces) + deshabilitar legacy keys (cierra DUDA-SEC-001)  
 **App Version:** v1.8.14  
 **Foco activo (2026-07-23):** 🔀 **Cutover CISE/GRUAS (Bubble → v3)** — sacar a los 2 únicos clientes reales de Bubble. Plan: [docs/superpowers/plans/2026-07-22-cutover-cise-gruas.md](./docs/superpowers/plans/2026-07-22-cutover-cise-gruas.md) · handoff del día: [HANDOFF-2026-07-23.md](./docs/HANDOFF-2026-07-23.md). Migración ~95% a nivel tabla; bloqueante = **gaps de migración a nivel campo** que revela la auditoría UI. Acceso a Bubble LIVE confirmado (token de `.env.local` funciona). **Growth Engine PAUSADO** (specs+planes A–E ✅; ver [PLAN-GROWTH-ENGINE-JOURNEY.md](./docs/PLAN-GROWTH-ENGINE-JOURNEY.md) + [HANDOFF-2026-07-18.md](./docs/HANDOFF-2026-07-18.md) para retomar).  
 **Auditoría UI:** Módulo **4/15** (Planificación) ✅ matriz en [docs/auditoria-ui/04-planificacion.md](./docs/auditoria-ui/04-planificacion.md) (DUDAs PLAN-001/002/003 resueltas; DUDA-PLAN-001 espera aprobación para TK-P1). Terceros (3/15): 5 DUDAs resueltas con datos de Bubble LIVE (03-terceros.md §Resolución).  
